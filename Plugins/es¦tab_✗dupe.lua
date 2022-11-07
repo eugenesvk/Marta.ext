@@ -1,3 +1,7 @@
+-- 2do: remove my fix (activate our original active tab) when this bug is fixed https://github.com/marta-file-manager/marta-issues/issues/969
+-- "Cmd+W"	"es¦tab.✗tab_n_dupe"
+  -- to ✗close the current tab, select 1 tab to the ←, ✗close all duplicate tabs in the active view
+  -- current tab has priority over tabs with lower index (to the left)
 marta.expose()
 marta.plugin({id="es¦tab", name="Close Duplicated Tabs", apiVersion="2.1"})
 
@@ -6,8 +10,11 @@ marta.action({id="✗tab_n_dupe", name="Tab: ✗Close Current & Duplicates",
 marta.action({id="✗dupe" , name="Tab: ✗Close Duplicates"  , apply = function(ctxA) tabCloseDupe({ctxA=ctxA,saveCur=true}); end})
 -- marta.action({id="✗tab_cur←" , name="Tab: ✗Close Current and switch to the ←Left",
 --   apply = function(ctxA) tabClose(ctxA); tabLeft(ctxA); end})
+-- marta.action({id="✗tab_cur"  , name="Tab: ✗Close Current"     , apply = function(ctxA) tabClose    (ctxA); end})
+-- marta.action({id="tab←"      , name="Tab: Switch to the ←Left", apply = function(ctxA) tabLeft     (ctxA); end})
 
 function tabLeft(ctxA)
+  -- martax.alert("@tabLeft")
   local ctxW   	= ctxA.window
   local tabMan 	= ctxW.tabs
   local paneMan	= ctxW.panes
@@ -21,10 +28,12 @@ function tabLeft(ctxA)
 end
 
 function tabClose(ctxA)
+  -- martax.alert("@tabClose")
   local ctxW   	= ctxA.window
   local tabMan 	= ctxW.tabs
   local paneMan	= ctxW.panes
   local tabA   	= paneMan.activePane
+  -- martax.alert("@tabClose Active tab's ID=\n" .. tabA_id .. "\nwith path@=" .. tabA_path)
   tabMan:close(tabA)
 end
 
@@ -44,6 +53,7 @@ function tabCloseDupe(arg)
   local t        	= {}
   local i        	= 0
   if saveCur then t[tabA_path]={true,tabA_id} end -- save current tab's path/ID to not close it later
+  -- martax.alert("Active tab's ID=\n" .. tabA_id .. "\nwith path@=" .. tabA_path)
 
   while (i < tabCount) do
     local tab   	 = tabMan:getTab(tabPos, i)
@@ -51,8 +61,10 @@ function tabCloseDupe(arg)
     local path  	 = tab.model.folder.path
     if (t[path] 	~= nil) then
       if saveCur and ( tab_id == tabA_id) then -- don't close if current tab is our original active tab
+        -- martax.alert("Saving active tab ID=\n" .. tabA_id .. "\npath=" .. tabA_path)
         i	= i + 1
       else
+        -- martax.alert("Closing tab with ID=\n" .. tab_id)
         tabMan:close(tab)
         tabCount	 = tabCount - 1
       end
