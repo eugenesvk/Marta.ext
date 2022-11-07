@@ -1,0 +1,321 @@
+environment {
+  terminal  	"iTerm"
+  textEditor	"Sublime Text"
+}
+behavior {
+  theme "esWhite"
+  style {
+    forceOverlayScrollBars	true
+    density               	"normal"
+  }
+  layout {
+    alwaysShowTabBar	true
+    showActionBar   	true
+  }
+  setCurrentPathAsWindowTitle	true
+
+  actions {
+    "es¦file.link.affixSym"         	"🔗"
+    "es¦file.link.affixAlias"       	"⤻"
+    "es¦file.link.affixHard"        	"⤑"
+    "es¦file.link.spot"             	"stem"
+    "es¦file.link.maxLinkNo"        	1
+    "es¦file.link.maxIterNo"        	0
+    "es¦file.link.binAlias"         	"/usr/local/bin/alisma"
+    "es¦file.link.binHard"          	"/usr/local/opt/coreutils/libexec/gnubin/ln"
+    core.trash.confirm              	true
+    core.delete.confirm             	true
+    core.preferences.use.text.editor	false
+  }
+
+  relativeDate true
+  sizeFormat "adaptive"
+  dateFormat  {normal "‘%y %b %e"}
+  timeFormat  {normal "%k:%M"   separator " "}
+  volumeSpace {format "${availableSpace}🆓${availablePercent}"  show "always"}
+
+  table {
+    showIcons      	true
+    iconSize       	18
+    verticalPadding	0
+
+    useAlternateColor	true
+    colorHighlighting	false
+
+    circularSelection	false
+
+    showGoUpFolder         	false
+    selectGoUpFolderOnEnter	false
+
+    maxItemCount    	-1
+    rightClickSelect	false
+
+    defaults {
+      columns        	"extension:65,>size:80,>modified:110,permissionsCompact:32"
+      showHiddenFiles	true
+      ordering {
+        column          	"fileName"
+        isAscending     	true
+        showFoldersOnTop	true
+      }
+    }
+  }
+  quickSelect {
+    activateOnAnyCharacter false
+    defaultMode       	"substring"
+    filterMatchedItems	false
+    matchOnlyPrefix   	false
+  }
+}
+
+gadgets [
+  {id "gadget.action.my.application.runner"
+    name       	"My Application Runner"
+    type       	"application"
+    application	"iTerm"
+    "files"    	["${active.selection.paths}"]
+  }
+  {id "gadget.action.my.executable.runner"
+    name            	"My Executable Runner"
+    type            	"executable"
+    executable      	"/usr/local/bin/marta1"
+    args            	["${active.selection.paths}" "--some-option" ]
+    workingDirectory	"${user.home}"
+  }
+  {id "gadget.help" name "ghelp" type "executable" executable "/" args [
+    "Variable name              "    "Description"
+    "${active.selection.paths}  "    "Selected item   paths (active   pane) (*)"
+    "${active.selection.names}  "    "Selected item   names (active   pane) (*)"
+    "${inactive.selection.paths}"    "Selected item   paths (inactive pane) (*)"
+    "${inactive.selection.names}"    "Selected item   names (inactive pane) (*)"
+    "${current.file.path}       "    "Current  file   path  (active   pane)    "
+    "${current.file.name}       "    "Current  file   name  (active   pane)    "
+    "${active.folder.path}      "    "Current  folder path  (active   pane)    "
+    "${inactive.folder.path}    "    "Current  folder path  (inactive pane)    "
+    "${user.home}               "    "User home directory" ]}
+]
+
+setup {
+  actionBar [
+    "core.open.with"
+    "core.rename"
+    "core.edit"
+    "core.copy"
+    "core.move"
+    "core.new.file"
+    "core.new.folder"
+    "core.delete"
+  ]
+  menu {
+    marta [
+      "core.about"
+      "core.updates"
+      "core.preferences"
+    ]
+    File [
+      "core.new.file"
+      "core.new.folder"
+      "separator"
+      "core.open"
+      "core.open.with"
+      "core.edit"
+      "core.preview"
+      "separator"
+      "core.rename"
+      "core.copy"
+      "core.move"
+      "separator"
+      "core.delete"
+      "core.trash"
+    ]
+    Edit [
+      "core.clipboard.copy"
+      "core.clipboard.paste"
+      "separator"
+      "core.select.all"
+      "core.select.none"
+      "core.selection.invert"
+      "separator"
+      "core.select.group"
+      "core.deselect.group"
+    ]
+    "👁    " [
+      "core.refresh"
+      "separator"
+      "core.display.mode"
+      "core.display.columns"
+      "core.ordering"
+      "separator"
+      "core.display.hidden"
+    ]
+    "⛗    " [
+      "core.back"
+      "core.forward"
+      "separator"
+      "core.go.up"
+      "core.hierarchy"
+      "separator"
+      "core.favorites"
+      "core.favorites.add"
+      "separator"
+      "core.volumes"
+      "core.recent"
+      "separator"
+      "core.go"
+    ]
+    "🛠    " [
+      "core.actions"
+      "separator"
+      "separator"
+      "Left" "core.terminal.activate"
+      "separator"
+      "separator"
+      "core.terminal.activate"
+      "core.terminal.toggle"
+      "separator"
+      "core.path"
+      "core.path.folder"
+      "separator"
+      "core.disk.usage.folder"
+      "separator"
+      "core.finder.reveal"
+      "core.ext.terminal.open"
+    ]
+    Window [
+      "core.window.new"
+      "core.tab.new"
+      "separator"
+      "core.window.close"
+      "core.tab.close"
+      "separator"
+      "core.tab.previous"
+      "core.tab.next"
+      "core.pane.swap"
+    ]
+    Help [
+      "core.documentation"
+      "core.changelog"
+      "core.tutorial"
+      "separator"
+      "core.feedback"
+    ]
+  }
+}
+
+fonts {
+  tabs       	[ "Garamond Premier Pro"        	16 ]
+  virtualTabs	[ "Garamond Premier Pro Bold"   	16 ]
+  breadcrumbs	[ "Garamond Premier Pro"        	16 ]
+  tableHeader	[ "Garamond Premier Pro Caption"	14 ]
+  files      	[ "Garamond Premier Pro"        	16 ]
+  statusBar  	[ "Garamond Premier Pro"        	14 ]
+  actionBar  	[ "Default"                     	12 ]
+  preferences	[ "Monaco"                      	12 ]
+}
+
+keyBindings {
+  "Alt+Cmd+q" {id "core.run.actions" actions ["core.tab.new" "core.tab.new"]}
+
+  "e"	"core.actions"	"a"	"core.actions"	"Cmd+E"	"core.actions"	"Shift+Cmd+P"	null
+
+  "Alt+Cmd+N"	"core.window.new"
+  "t"        	"core.tab.new"	"Cmd+T"	"core.tab.new"	"Shift+Cmd+W"	"core.tab.close"
+  "Cmd+W"    	"es¦tab.✗tab_n_dupe"
+
+  "Tab"	"core.change.current.pane"
+
+  "Ctrl+H" {id "core.open.directory" src "~"}
+
+  "k"               	"core.move.up"                   	"j"                 	"core.move.down"
+  "l"               	"core.move.left"                 	";"                 	"core.move.right"
+  "Up"              	"core.move.up"                   	"Down"              	"core.move.down"
+  "Alt+Up"          	"core.move.left"                 	"Alt+Down"          	"core.move.right"
+  "Left"            	"core.move.left"                 	"Right"             	"core.move.right"
+  "PageUp"          	"core.move.page.up"              	"PageDown"          	"core.move.page.down"
+  "Cmd+Up"          	"core.move.page.up"              	"Cmd+Down"          	"core.move.page.down"
+  "Opt+PageDown"    	"core.move.half.page.down"       	"Opt+PageUp"        	"core.move.half.page.up"
+  "m"               	"core.move.half.page.down"       	","                 	"core.move.half.page.up"
+  "Home"            	"core.move.home"                 	"End"               	"core.move.end"
+  "Shift+k"         	"core.select.move.up"            	"Shift+j"           	"core.select.move.down"
+  "Shift+l"         	"core.select.move.left"          	"Shift+;"           	"core.select.move.right"
+  "Shift+Up"        	"core.select.move.up"            	"Shift+Down"        	"core.select.move.down"
+  "Shift+Left"      	"core.select.move.left"          	"Shift+Right"       	"core.select.move.right"
+  "Shift+PageUp"    	"core.select.move.page.up"       	"Shift+PageDown"    	"core.select.move.page.down"
+  "Opt+Shift+PageUp"	"core.select.move.half.page.up"  	"Opt+Shift+PageDown"	"core.select.move.half.page.down"
+  "Shift+m"         	"core.select.move.half.page.down"	"Shift+,"           	"core.select.move.half.page.up"
+  "Shift+Home"      	"core.select.move.home"          	"Shift+End"         	"core.select.move.end"
+  "Shift+Opt+Up"    	"core.select.all.before"         	"Shift+Opt+Down"    	"core.select.all.after"
+  "Cmd+A"           	"core.select.all"                	"Escape"            	"core.select.none"
+
+  "1"          	"core.tab.previous" 	"2"          	"core.tab.next"
+  "Cmd+1"      	"core.tab.previous" 	"Cmd+2"      	"core.tab.next"
+  "Cmd+3"      	"core.recent"       	"3"          	"core.recent"
+  "Cmd+4"      	"core.hierarchy"    	"4"          	"core.hierarchy"	"Opt+0"	"core.hierarchy"	"Cmd+0"	"core.hierarchy"
+  "Cmd+5"      	"core.volumes"      	"5"          	"core.volumes"
+  "Cmd+d"      	"core.favorites"    	"d"          	"core.favorites"
+  "Shift+Cmd+0"	"core.favorites.add"	"Shift+Opt+2"	null
+
+  "Cmd+Shift+]"	null	"Cmd+Shift+["   	null
+  "Ctrl+Tab"   	null	"Ctrl+Shift+Tab"	null
+  "Cmd+6" null "Cmd+7" null "Cmd+8" null "Cmd+9" null
+
+  "Cmd+Left"      	"core.clone.left"       	"Cmd+Right"      	"core.clone.right"
+  "Shift+Cmd+Left"	"core.clone.left.folder"	"Shift+Cmd+Right"	"core.clone.right.folder"
+
+  "o"           	"core.open" 	"Return"   	"core.open"	"Cmd+Return"	"core.open.with"
+  "h"           	"core.go.up"	"Backspace"	"core.go.up"
+  "Cmd+["       	"core.back" 	"Cmd+]"    	"core.forward"
+  "Cmd+G"       	"core.go"   	"G"        	"core.go"
+  "Shift+o"     	{id "core.open.folder" mode "newTab"}
+  "Shift+Return"	{id "core.open.folder" mode "newTab"}
+  "Alt+o"       	{id "core.open.folder" mode "newTabBackground"}
+  "Alt+Return"  	{id "core.open.folder" mode "newTabBackground"}
+
+  "Cmd+I"	"core.finder.showInfo"
+  "Cmd+Y"	"core.preview"
+  "Space"	"core.preview"
+
+  "Cmd+N"        	"core.new.file"	"Shift+Cmd+N"	"core.new.folder"
+  "Shift+Cmd+D"  	"core.duplicate"
+  "Cmd+Backspace"	"core.trash"	"Alt+Cmd+Backspace"	"core.delete"
+  "Cmd+l" "core.navigate.original.tab"
+
+        "Ctrl+Cmd+l"	"es¦file.symlink"	      "Opt+Cmd+l"	"es¦file.alias"	      "Ctrl+Opt+l"	"es¦file.hardlink"
+  "Shift+Ctrl+Cmd+l"	"core.symlink"   	"Shift+Opt+Cmd+l"	"es¦file.alias"	"Shift+Ctrl+Opt+l"	"es¦file.hardlink"
+
+
+  "Cmd+Opt+P"	"core.lookup.here"	"Cmd+P"	"core.lookup"
+  "F"        	"core.lookup.here"	"Cmd+F"	"core.lookup"
+
+  "Cmd+C"  	"core.clipboard.copy"	"Cmd+V"      	"core.clipboard.paste"
+  "C"      	"core.path"          	"Shift+Cmd+C"	"core.path"
+  "Shift+C"	"core.path.folder"   	"Alt+Cmd+C"  	"core.path.folder"
+
+  "Shift+s"	{id "core.select.group" pattern "\\.txt"}
+
+  "Cmd+'"	"core.ext.terminal.open"
+
+  "Opt+1"	{id "core.display.mode"	mode "1column"}
+  "Opt+2"	{id "core.display.mode"	mode "2columns"}
+  "Opt+3"	{id "core.display.mode"	mode "3columns"}
+  "Opt+4"	{id "core.display.mode"	mode "table"}
+
+  "F1" 	null
+  "F2" 	"core.rename"
+  "F3" 	"core.refresh"	"Cmd+R"   	"core.refresh"
+  "F4" 	"core.edit"   	"Shift+F4"	"core.edit.folder"
+  "F5" 	"core.copy"
+  "F6" 	"core.move" 	"Shift+F6"	"core.rename"
+  "F7" 	null        	"Shift+F7"	null
+  "F8" 	"core.trash"	"Shift+F8"	null
+  "F11"	"core.ext.terminal.open"
+  "F12"	"core.path.folder"	"Cmd+F12"	"core.path"
+
+  "Cmd+Ctrl+O"	"core.terminal.activate"
+  "Cmd+Opt+O" 	"core.terminal.toggle"
+
+  "="          	"core.queue"	"Shift+="	"core.queue"
+  "Shift+Cmd+."	"core.display.hidden"
+
+  "Cmd+,"	"core.preferences"
+}
