@@ -1,9 +1,7 @@
 <p align="center">
 Plugins, themes, and keybinds for
-<div id=wrapper class=full style=display:flex;justify-content:center;><div style=display:flex;float:middle;>
-  <img src="https://marta.sh/images/icon_128.png" width=48 height=48 style=align-self:center;>
-  <h1 style=vertical-align:middle;border-bottom:none;padding-bottom:0;color:#eb3c31;font-weight:300;>Mar<span style=display:inline-block;width:3px>&#8203;</span>ta</h1>
-</div></div>
+<br>
+<img src="https://marta.sh/images/icon_128.png" alt="Marta logo" width="48" height="48"/><strong>Marta</strong>
 </p>
 <p align="center">  
 File Manager for macOS
