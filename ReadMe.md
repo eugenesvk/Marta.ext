@@ -47,7 +47,7 @@ Close all duplicate tabs (except for the currently active one):
 
 ## Theme
 
-![Pane colors](<./Marta Pane.png>)
+![Pane colors](<./img/Marta Pane.png>)
 
 [Theme file](https://github.com/eugenesvk/Marta.ext/blob/main/Themes/esWhite.theme)
 
