@@ -42,6 +42,7 @@ local illegalFS = "[*:\"\\|<>/?^]" -- Win+Mac, remove these from user string inp
 function symlink(arg)
   local ctxA    	= arg.ctxA             	-- holds refs to PaneContext instances for active+inactive panes
   local ctxG    	= marta.globalContext  	--
+  local fsL     	= marta.localFileSystem	--
   local ctxPA   	= ctxA.activePane      	--
   local model   	= ctxPA.model          	-- Active pane list model
   local viewP   	= ctxPA.view           	--
@@ -151,11 +152,11 @@ function symlink(arg)
         if err then viewP:showNotification("✗@link: " .. err.description,plugID,"long")
         else        break; end
       elseif linkT == "alias" then
-        if tgtFI.fileSystem:get(binAlias):exists() then
+        if fsL:get(binAlias):exists() then
           martax.execute(binAlias,{"-a",tgtPath,lnkPath}); break
         else viewP:showNotification("✗@link: missing binary @ " .. binAlias,plugID,"long"); return; end
       elseif linkT == "hard"  then
-        if tgtFI.fileSystem:get(binHard):exists() then
+        if fsL:get(binHard):exists() then
           martax.execute(binHard,{     tgtPath,lnkPath}); break
         else viewP:showNotification("✗@link: missing binary @ " .. binHard,plugID,"long"); return; end
       end
