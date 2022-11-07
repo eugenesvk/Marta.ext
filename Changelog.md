@@ -21,18 +21,10 @@ All notable changes to this project will be documented in this file
   <!-- - __Security__ -->
     <!-- + :lock:  -->
     <!-- vulnerabilities -->
+
   - __Added__
-    + :sparkles: 
-  - __Changed__
-    +  
-  - __Fixed__
-    + :beetle: 
-  - __Deprecated__
-    + :poop: 
-  - __Removed__
-    + :wastebasket: 
-  - __Security__
-    + :lock: 
+    + :sparkles: Tab Deduplication plugin
+    + :sparkles: Link plugin
 
 [0.1.0]: https://github.com/eugenesvk/Marta.ext/releases/tag/0.1.0
 ## [0.1.0]
