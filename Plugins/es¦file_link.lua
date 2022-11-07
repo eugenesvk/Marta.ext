@@ -1,3 +1,15 @@
+-- 2do: validation of configs on load to use the proper icons https://github.com/marta-file-manager/marta-issues/issues/983
+-- 2DO: add a 2-view version, creating the link in the 2nd view
+-- 2do: add a command to choose the type of link and location from the gui not to remember all keybinds
+-- 2DO: missing API to create a hard link, using `ln` in the interim
+-- 2DO: missing API to create an alias, use [alisma](https://eclecticlight.co/taccy-signet-precize-alifix-utiutility-alisma/) in the interim
+-- 2Do: missing API, remove the replacement↓ when it's added
+  -- tgtStem	= tgtFI.nameWithoutExtension                    -- fails
+  -- tgtStem	= parentFd:append(tgtName).nameWithoutExtension -- temp replacement
+-- 2Do: unicode examples bug https://github.com/marta-file-manager/marta-issues/issues/975
+-- 2DO: ?add an option to skip hardlinks like sym/alias (no point?)?
+-- 2DO: ?create a symlink by calling Marta action instead (currently can't pass args to marta actions)
+  -- ctxW:runAction(actG:getById("core.symlink"),ctxPA)
 marta.expose()
 local plugID = "es¦file"
 marta.plugin({id=plugID, name="File actions", apiVersion="2.1"})
@@ -104,6 +116,8 @@ function symlink(arg)
     binHard = cfgDef['binHard']  ; viewP:showNotification("✗@link: wrong '".. cfgKeyPre..".binHard' argument, using the default '"  ..cfgDef['binHard'].."'",plugID,"short") end
   affix_ref	= {["sym"]=affixSym,["alias"]=affixAlias,["hard"]=affixHard} -- all possible affix values
   affix    	= affix_ref[linkT] -- set affix to the matching link type
+  -- martax.alert("Config vs Validated",(cfgSym or '✗') ..'|'.. (cfgAls or '✗') ..'|'.. (cfgSpot or '✗') ..'|'.. (cfgLnkMax or '✗')
+    -- .."\n".. (affixSym or 'a') ..'|'.. (affixAlias or 'l') ..'|'.. (spot or 's') ..'|'.. (tostring(lnkMax) or 'l'))
 
   local countFI = #filesInf
   if      countFI == 0 then return                 -- skip an empty dir (no files)
@@ -124,13 +138,16 @@ function symlink(arg)
       viewP:showNotification("✗@link: Item already a link: "..affixSym,plugID,"short"); return
     elseif tgtFI.isAlias           then      -- ...       and aliases
       viewP:showNotification("✗@link: Item already a link: "..affixAlias,plugID,"short"); return; end
+    -- elseif tgtFI.hardLinkCount > 1 then      -- ...       and hardlinks
+      -- viewP:showNotification("✗@link: Item already a link: "..affixHard,plugID,"short"); return; end
 
     local tgtPath,tgtName,tgtStem,tgtExt
     local lnkPath,lnkName,lnkStem,lnkExt
-    tgtPath	= tgtFI.path
-    tgtName	= tgtFI.name
-    tgtStem	= parentFd:append(tgtName).nameWithoutExtension
-    tgtExt 	= tgtFI.pathExtension
+    tgtPath   	= tgtFI.path
+    tgtName   	= tgtFI.name
+    -- tgtStem	= tgtFI.nameWithoutExtension
+    tgtStem   	= parentFd:append(tgtName).nameWithoutExtension
+    tgtExt    	= tgtFI.pathExtension
 
     local isFail	= nil
     local last  	= iterMax + 1                   -- add one more step to signal failure
@@ -143,7 +160,12 @@ function symlink(arg)
       elseif (spot == 'stem') then lnkF = parentFd:append(          tgtStem..affix..n..'.'.. tgtExt)
       elseif (spot == 'post') then lnkF = parentFd:append(          tgtName..affix..n)
       else viewP:showNotification("✗@link: wrong 'spot' validation",plugID,"short"); return; end
-      lnkPath	= lnkF.path
+      lnkPath   	= lnkF.path
+      -- lnkName	= lnkF.name
+      -- lnkStem	= lnkF.nameWithoutExtension
+      -- lnkExt 	= lnkF.pathExtension
+      -- martax.alert("Target vs Link", '\ntgtPath='..tgtPath .. '\ntgtName='..tgtName .. '\ntgtStem='..tgtStem .. '\ntgtExt='..tgtExt
+      --   ..'\n'.. '\nlnkPath='..lnkPath .. '\nlnkName='..lnkName .. '\nlnkStem='..lnkStem .. '\nlnkExt='..lnkExt)
       if lnkF:exists() then goto continue; end -- try a new name skipping link creation
 
       if     linkT == "sym"   then
