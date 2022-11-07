@@ -20,7 +20,8 @@ Create 🔗Symbolic Links, ⤻Aliases, or ⤑Hard Links __in the same pane__ wit
 To customize the plugin behavior, paste the following configuration lines to you `behavior { actions {` section and change them; the built-in [config editor](https://marta.sh/docs/configuration/editor/)[^1] contains helpful tips on what each option does and what values it accepts
 <details>
   <summary>Click to expand config</summary>
-  ```
+
+```
   "es¦file.link.affixSym"  	"🔗"
   "es¦file.link.affixAlias"	"⤻"
   "es¦file.link.affixHard" 	"⤑"
@@ -29,10 +30,11 @@ To customize the plugin behavior, paste the following configuration lines to you
   "es¦file.link.maxIterNo" 	0
   "es¦file.link.binAlias"  	"/usr/local/bin/alisma"
   "es¦file.link.binHard"   	"/usr/local/opt/coreutils/libexec/gnubin/ln"
-  ```
+```
+
 </details>
 
-['Link' plugin file](https://github.com/eugenesvk/Marta.ext/Plugins/es¦file_link.lua)
+['Link' plugin file](https://github.com/eugenesvk/Marta.ext/blob/main/Plugins/es¦file_link.lua)
 
 #### Tab deduplication
 Close all duplicate tabs (except for the currently active one): 
@@ -43,28 +45,28 @@ Close all duplicate tabs (except for the currently active one):
     + ✗close all dupe tabs
   - manually: by running the `Tab: ✗Close Duplicates` action[^2] 
 
-['Tab deduplication' plugin file](https://github.com/eugenesvk/Marta.ext/Plugins/es¦tab_✗dupe.lua)
+['Tab deduplication' plugin file](https://github.com/eugenesvk/Marta.ext/blob/main/Plugins/es¦tab_✗dupe.lua)
 
 ## Theme
 
 ![Pane colors](<./Marta Pane.png>)
 
-[Theme file](https://github.com/eugenesvk/Marta.ext/Themes/esWhite.theme)
+[Theme file](https://github.com/eugenesvk/Marta.ext/blob/main/Themes/esWhite.theme)
 
 ## Keybinds
 TBD
 
 ## Installation
 
-__Plugins__: copy files from the [Plugins](https://github.com/eugenesvk/Marta.ext/Plugins) folder to the same folder in your config folder[^3]
+__Plugins__: copy files from the [Plugins](https://github.com/eugenesvk/Marta.ext/blob/main/Plugins) folder to the same folder in your config folder[^3]
 
-__Theme__: copy files from the [Themes](https://github.com/eugenesvk/Marta.ext/Themes) folder to the same folder in your config folder[^3], then
+__Theme__: copy files from the [Themes](https://github.com/eugenesvk/Marta.ext/blob/main/Themes) folder to the same folder in your config folder[^3], then
 
   - either run the `Switch Theme` action and select `esWhite`
   - or set `theme "esWhite"` in the `behavior {}` section of your `conf.marco` file
 
 
-__Keybinds__: copy the `keyBindings` section from the [conf.marco](https://github.com/eugenesvk/Marta.ext/conf.marco) file to the same file in your config folder[^3]
+__Keybinds__: copy the `keyBindings` section from the [conf.marco](https://github.com/eugenesvk/Marta.ext/blob/main/conf.marco) file to the same file in your config folder[^3]
 
 [^1]: open via `Preferences` action
 [^2]: in the [Actions Panel](https://marta.sh/docs/core/actions/#actions-panel)
@@ -79,13 +81,13 @@ __Keybinds__: copy the `keyBindings` section from the [conf.marco](https://githu
     - [alisma 2 (Intel-only for El Capitan to Catalina)](https://eclecticlightdotcom.files.wordpress.com/2019/06/alisma2.zip)
   - Configuration tips don't display unicode values properly, [see this bug](https://github.com/marta-file-manager/marta-issues/issues/975 )
   - After a hardlink is created the file list is not refreshed like it's when a sylink/alias is created, refresh manually to see the new file
-  - Action names have the default icons even if the user specified custom ones, can't load user config on plugin load (see this [issue](https://github.com/marta-file-manager/marta-issues/issues/983)). Workaround: manually replace the icons in the `marta.action(` lines of your copy of the ['Link' plugin file](https://github.com/eugenesvk/Marta.ext/Plugins/es¦file_link.lua)
+  - Action names have the default icons even if the user specified custom ones, can't load user config on plugin load (see this [issue](https://github.com/marta-file-manager/marta-issues/issues/983)). Workaround: manually replace the icons in the `marta.action(` lines of your copy of the ['Link' plugin file](https://github.com/eugenesvk/Marta.ext/blob/main/Plugins/es¦file_link.lua)
 
-[Tab deduplication](<https://github.com/eugenesvk/Marta.ext#Tab deduplication>)
+[Tab deduplication](<https://github.com/eugenesvk/Marta.ext#Tab-deduplication>)
 
   - Closing a tab with a mouse doesn't trigger anything; it also doesn't activate the left tab (see [this issue](https://github.com/marta-file-manager/marta-issues/issues/969))
 
 ## Credits
 
-https://github.com/yanex for creating this highly customizable native macOS file manager;
-https://github.com/page-down for his help with the _Tab deduplication_ plugin
+[@yanex](https://github.com/yanex) for creating this highly customizable native macOS file manager;
+[@page-down](https://github.com/page-down) for his help with the _Tab deduplication_ plugin
