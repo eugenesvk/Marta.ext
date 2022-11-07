@@ -1,20 +1,91 @@
 <p align="center">
-Brief description
-<br>
-(description continued)
+Plugins, themes, and keybinds for
+<div id=wrapper class=full style=display:flex;justify-content:center;><div style=display:flex;float:middle;>
+  <img src="https://marta.sh/images/icon_128.png" width=48 height=48 style=align-self:center;>
+  <h1 style=vertical-align:middle;border-bottom:none;padding-bottom:0;color:#eb3c31;font-weight:300;>Mar<span style=display:inline-block;width:3px>&#8203;</span>ta</h1>
+</div></div>
 </p>
-
 <p align="center">  
-description continued
+File Manager for macOS
 </p>
 
+## Plugins
 
-## Introduction
+#### Link
+Create 🔗Symbolic Links, ⤻Aliases, or ⤑Hard Links __in the same pane__ with automatically generated names with:
+
+  - user-configurable affixes (__Symlink🔗.txt__, __Alias⤻.app__, __Hardlink⤑.md__), single-char by default to delete easier when you move the links elsewhere
+  - user-configurable affix location (__⎀pre.ext__, __stem⎀.ext__,  __post.ext⎀__)
+
+To customize the plugin behavior, paste the following configuration lines to you `behavior { actions {` section and change them; the built-in [config editor](https://marta.sh/docs/configuration/editor/)[^1] contains helpful tips on what each option does and what values it accepts
+<details>
+  <summary>Click to expand config</summary>
+  ```
+  "es¦file.link.affixSym"  	"🔗"
+  "es¦file.link.affixAlias"	"⤻"
+  "es¦file.link.affixHard" 	"⤑"
+  "es¦file.link.spot"      	"stem"
+  "es¦file.link.maxLinkNo" 	1
+  "es¦file.link.maxIterNo" 	0
+  "es¦file.link.binAlias"  	"/usr/local/bin/alisma"
+  "es¦file.link.binHard"   	"/usr/local/opt/coreutils/libexec/gnubin/ln"
+  ```
+</details>
+
+['Link' plugin file](https://github.com/eugenesvk/Marta.ext/Plugins/es¦file_link.lua)
+
+#### Tab deduplication
+Close all duplicate tabs (except for the currently active one): 
+
+  - semi-automatically: by remapping <kbd>⌘</kbd><kbd>W</kbd> (`"Cmd+W" "es¦tab.✗tab_n_dupe"`) to
+    + ✗close the current tab
+    + select 1 tab to the ←left (fixing [this issue](https://github.com/marta-file-manager/marta-issues/issues/967))
+    + ✗close all dupe tabs
+  - manually: by running the `Tab: ✗Close Duplicates` action[^2] 
+
+['Tab deduplication' plugin file](https://github.com/eugenesvk/Marta.ext/Plugins/es¦tab_✗dupe.lua)
+
+## Theme
+
+![Pane colors](<./Marta Pane.png>)
+
+[Theme file](https://github.com/eugenesvk/Marta.ext/Themes/esWhite.theme)
+
+## Keybinds
+TBD
 
 ## Installation
 
-## Usage
+__Plugins__: copy files from the [Plugins](https://github.com/eugenesvk/Marta.ext/Plugins) folder to the same folder in your config folder[^3]
+
+__Theme__: copy files from the [Themes](https://github.com/eugenesvk/Marta.ext/Themes) folder to the same folder in your config folder[^3], then
+
+  - either run the `Switch Theme` action and select `esWhite`
+  - or set `theme "esWhite"` in the `behavior {}` section of your `conf.marco` file
+
+
+__Keybinds__: copy the `keyBindings` section from the [conf.marco](https://github.com/eugenesvk/Marta.ext/conf.marco) file to the same file in your config folder[^3]
+
+[^1]: open via `Preferences` action
+[^2]: in the [Actions Panel](https://marta.sh/docs/core/actions/#actions-panel)
+[^3]: _~/Library/Application Support/org.yanex.marta_ by default, open via `Open Configuration Folder` action
 
 ## Known issues
 
+[Link](<https://github.com/eugenesvk/Marta.ext#Link>)
+
+  - Due to a lack of Marta alias/hardlink creation APIs (upvote the corresponding issues [alias](https://github.com/marta-file-manager/marta-issues/issues/351), [hardlink](https://github.com/marta-file-manager/marta-issues/issues/981)) you should install [alisma](https://eclecticlight.co/taccy-signet-precize-alifix-utiutility-alisma/) to create aliases (hardlinks are using the system `ln`)
+    - [alisma 3a (Universal binary for El Capitan to Monterey)](https://eclecticlightdotcom.files.wordpress.com/2022/02/alisma3a.zip) or 
+    - [alisma 2 (Intel-only for El Capitan to Catalina)](https://eclecticlightdotcom.files.wordpress.com/2019/06/alisma2.zip)
+  - Configuration tips don't display unicode values properly, [see this bug](https://github.com/marta-file-manager/marta-issues/issues/975 )
+  - After a hardlink is created the file list is not refreshed like it's when a sylink/alias is created, refresh manually to see the new file
+  - Action names have the default icons even if the user specified custom ones, can't load user config on plugin load (see this [issue](https://github.com/marta-file-manager/marta-issues/issues/983)). Workaround: manually replace the icons in the `marta.action(` lines of your copy of the ['Link' plugin file](https://github.com/eugenesvk/Marta.ext/Plugins/es¦file_link.lua)
+
+[Tab deduplication](<https://github.com/eugenesvk/Marta.ext#Tab deduplication>)
+
+  - Closing a tab with a mouse doesn't trigger anything; it also doesn't activate the left tab (see [this issue](https://github.com/marta-file-manager/marta-issues/issues/969))
+
 ## Credits
+
+https://github.com/yanex for creating this highly customizable native macOS file manager;
+https://github.com/page-down for his help with the _Tab deduplication_ plugin
