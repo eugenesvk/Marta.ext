@@ -311,8 +311,8 @@ keyBindings {
   "F11"	"core.ext.terminal.open"
   "F12"	"core.path.folder"	"Cmd+F12"	"core.path"
 
-  "Cmd+Ctrl+O"	"core.terminal.activate"
-  "Cmd+Opt+O" 	"core.terminal.toggle"
+  "Shift+Ctrl+Cmd+O"	"core.terminal.activate"
+  "Opt+Cmd+O"       	"core.terminal.toggle"
 
   "="          	"core.queue"	"Shift+="	"core.queue"
   "Shift+Cmd+."	"core.display.hidden"
