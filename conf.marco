@@ -224,7 +224,7 @@ keyBindings {
 
   "Tab"	"core.change.current.pane"
 
-  "Ctrl+H" {id "core.open.directory" src "~"}
+  "Ctrl+Opt+H" {id "core.open.directory" src "~"}
 
   "k"               	"core.move.up"                   	"j"                 	"core.move.down"
   "l"               	"core.move.left"                 	";"                 	"core.move.right"
