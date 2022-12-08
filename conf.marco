@@ -262,10 +262,10 @@ keyBindings {
   "Cmd+Left"      	"core.clone.left"       	"Cmd+Right"      	"core.clone.right"
   "Shift+Cmd+Left"	"core.clone.left.folder"	"Shift+Cmd+Right"	"core.clone.right.folder"
 
-  "o"           	"core.open" 	"Return"   	"core.open"	"Cmd+Return"	"core.open.with"
-  "h"           	"core.go.up"	"Backspace"	"core.go.up"
-  "Cmd+["       	"core.back" 	"Cmd+]"    	"core.forward"
-  "Cmd+G"       	"core.go"   	"G"        	"core.go"
+  "o"           	"core.open" 	"i"    	"core.open"	"Return"   	"core.open"	"Cmd+Return"	"core.open.with"
+  "h"           	"core.go.up"	       	           	"Backspace"	"core.go.up"
+  "Cmd+["       	"core.back" 	"Cmd+]"	"core.forward"
+  "Cmd+G"       	"core.go"   	"G"    	"core.go"
   "Shift+o"     	{id "core.open.folder" mode "newTab"}
   "Shift+Return"	{id "core.open.folder" mode "newTab"}
   "Alt+o"       	{id "core.open.folder" mode "newTabBackground"}
