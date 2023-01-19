@@ -22,7 +22,7 @@ behavior {
     "es¦file.link.maxLinkNo"        	1
     "es¦file.link.maxIterNo"        	0
     "es¦file.link.binAlias"         	"/usr/local/bin/alisma"
-    "es¦file.link.binHard"          	"/usr/local/opt/coreutils/libexec/gnubin/ln"
+    "es¦file.link.binHard"          	"/opt/local/libexec/gnubin/ln"
     core.trash.confirm              	true
     core.delete.confirm             	true
     core.preferences.use.text.editor	false
