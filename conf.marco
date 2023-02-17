@@ -236,6 +236,7 @@ keyBindings {
   "Opt+PageDown"    	"core.move.half.page.down"       	"Opt+PageUp"        	"core.move.half.page.up"
   "m"               	"core.move.half.page.down"       	","                 	"core.move.half.page.up"
   "Home"            	"core.move.home"                 	"End"               	"core.move.end"
+  "Cmd+Left"        	"core.move.home"                 	"Cmd+Right"         	"core.move.end"
   "Shift+k"         	"core.select.move.up"            	"Shift+j"           	"core.select.move.down"
   "Shift+l"         	"core.select.move.left"          	"Shift+;"           	"core.select.move.right"
   "Shift+Up"        	"core.select.move.up"            	"Shift+Down"        	"core.select.move.down"
@@ -259,7 +260,7 @@ keyBindings {
   "Ctrl+Tab"   	null	"Ctrl+Shift+Tab"	null
   "Cmd+6" null "Cmd+7" null "Cmd+8" null "Cmd+9" null
 
-  "Cmd+Left"      	"core.clone.left"       	"Cmd+Right"      	"core.clone.right"
+  "Alt+Cmd+Left"  	"core.clone.left"       	"Alt+Cmd+Right"  	"core.clone.right"
   "Shift+Cmd+Left"	"core.clone.left.folder"	"Shift+Cmd+Right"	"core.clone.right.folder"
 
   "o"           	"core.open" 	"i"    	"core.open"	"Return"   	"core.open"	"Cmd+Return"	"core.open.with"
