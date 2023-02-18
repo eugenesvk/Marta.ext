@@ -278,7 +278,7 @@ keyBindings {
 
   "Cmd+N"        	"core.new.file"	"Shift+Cmd+N"	"core.new.folder"
   "Shift+Cmd+D"  	"core.duplicate"
-  "Cmd+Backspace"	"core.trash"	"Alt+Cmd+Backspace"	"core.delete"
+  "Cmd+Backspace"	"core.trash"	"Delete"	"core.trash"	"Alt+Cmd+Backspace"	"core.delete"
   "Cmd+l" "core.navigate.original.tab"
 
         "Ctrl+Cmd+l"	"es¦file.symlink"	      "Opt+Cmd+l"	"es¦file.alias"	      "Ctrl+Opt+l"	"es¦file.hardlink"
