@@ -224,7 +224,7 @@ keyBindings {
 
   "Tab"	"core.change.current.pane"
 
-  "Ctrl+Opt+H" {id "core.open.directory" src "~"}
+  "Ctrl+Alt+H" {id "core.open.directory" src "~"}
 
   "k"               	"core.move.up"                   	"j"                 	"core.move.down"
   "l"               	"core.move.left"                 	";"                 	"core.move.right"
@@ -233,7 +233,7 @@ keyBindings {
   "Left"            	"core.move.left"                 	"Right"             	"core.move.right"
   "PageUp"          	"core.move.page.up"              	"PageDown"          	"core.move.page.down"
   "Cmd+Up"          	"core.move.page.up"              	"Cmd+Down"          	"core.move.page.down"
-  "Opt+PageDown"    	"core.move.half.page.down"       	"Opt+PageUp"        	"core.move.half.page.up"
+  "Alt+PageDown"    	"core.move.half.page.down"       	"Alt+PageUp"        	"core.move.half.page.up"
   "m"               	"core.move.half.page.down"       	","                 	"core.move.half.page.up"
   "Home"            	"core.move.home"                 	"End"               	"core.move.end"
   "Cmd+Left"        	"core.move.home"                 	"Cmd+Right"         	"core.move.end"
@@ -242,19 +242,19 @@ keyBindings {
   "Shift+Up"        	"core.select.move.up"            	"Shift+Down"        	"core.select.move.down"
   "Shift+Left"      	"core.select.move.left"          	"Shift+Right"       	"core.select.move.right"
   "Shift+PageUp"    	"core.select.move.page.up"       	"Shift+PageDown"    	"core.select.move.page.down"
-  "Opt+Shift+PageUp"	"core.select.move.half.page.up"  	"Opt+Shift+PageDown"	"core.select.move.half.page.down"
+  "Alt+Shift+PageUp"	"core.select.move.half.page.up"  	"Alt+Shift+PageDown"	"core.select.move.half.page.down"
   "Shift+m"         	"core.select.move.half.page.down"	"Shift+,"           	"core.select.move.half.page.up"
   "Shift+Home"      	"core.select.move.home"          	"Shift+End"         	"core.select.move.end"
-  "Shift+Opt+Up"    	"core.select.all.before"         	"Shift+Opt+Down"    	"core.select.all.after"
+  "Shift+Alt+Up"    	"core.select.all.before"         	"Shift+Alt+Down"    	"core.select.all.after"
   "Cmd+A"           	"core.select.all"                	"Escape"            	"core.select.none"
 
   "1"          	"core.tab.previous" 	"2"          	"core.tab.next"
   "Cmd+1"      	"core.tab.previous" 	"Cmd+2"      	"core.tab.next"
   "Cmd+3"      	"core.recent"       	"3"          	"core.recent"
-  "Cmd+4"      	"core.hierarchy"    	"4"          	"core.hierarchy"	"Opt+0"	"core.hierarchy"	"Cmd+0"	"core.hierarchy"
+  "Cmd+4"      	"core.hierarchy"    	"4"          	"core.hierarchy"	"Alt+0"	"core.hierarchy"	"Cmd+0"	"core.hierarchy"
   "Cmd+5"      	"core.volumes"      	"5"          	"core.volumes"
   "Cmd+d"      	"core.favorites"    	"d"          	"core.favorites"
-  "Shift+Cmd+0"	"core.favorites.add"	"Shift+Opt+2"	null
+  "Shift+Cmd+0"	"core.favorites.add"	"Shift+Alt+2"	null
 
   "Cmd+Shift+]"	null	"Cmd+Shift+["   	null
   "Ctrl+Tab"   	null	"Ctrl+Shift+Tab"	null
@@ -281,11 +281,11 @@ keyBindings {
   "Cmd+Backspace"	"core.trash"	"Delete"	"core.trash"	"Alt+Cmd+Backspace"	"core.delete"
   "Cmd+l" "core.navigate.original.tab"
 
-        "Ctrl+Cmd+l"	"es¦file.symlink"	      "Opt+Cmd+l"	"es¦file.alias"	      "Ctrl+Opt+l"	"es¦file.hardlink"
-  "Shift+Ctrl+Cmd+l"	"core.symlink"   	"Shift+Opt+Cmd+l"	"es¦file.alias"	"Shift+Ctrl+Opt+l"	"es¦file.hardlink"
+        "Ctrl+Cmd+l"	"es¦file.symlink"	      "Alt+Cmd+l"	"es¦file.alias"	      "Ctrl+Alt+l"	"es¦file.hardlink"
+  "Shift+Ctrl+Cmd+l"	"core.symlink"   	"Shift+Alt+Cmd+l"	"es¦file.alias"	"Shift+Ctrl+Alt+l"	"es¦file.hardlink"
 
 
-  "Cmd+Opt+P"	"core.lookup.here"	"Cmd+P"	"core.lookup"
+  "Cmd+Alt+P"	"core.lookup.here"	"Cmd+P"	"core.lookup"
   "F"        	"core.lookup.here"	"Cmd+F"	"core.lookup"
 
   "Cmd+C"  	"core.clipboard.copy"	"Cmd+V"      	"core.clipboard.paste"
@@ -296,10 +296,10 @@ keyBindings {
 
   "Cmd+'"	"core.ext.terminal.open"
 
-  "Opt+1"	{id "core.display.mode"	mode "1column"}
-  "Opt+2"	{id "core.display.mode"	mode "2columns"}
-  "Opt+3"	{id "core.display.mode"	mode "3columns"}
-  "Opt+4"	{id "core.display.mode"	mode "table"}
+  "Alt+1"	{id "core.display.mode"	mode "1column"}
+  "Alt+2"	{id "core.display.mode"	mode "2columns"}
+  "Alt+3"	{id "core.display.mode"	mode "3columns"}
+  "Alt+4"	{id "core.display.mode"	mode "table"}
 
   "F1" 	null
   "F2" 	"core.rename"
@@ -313,7 +313,7 @@ keyBindings {
   "F12"	"core.path.folder"	"Cmd+F12"	"core.path"
 
   "Shift+Ctrl+Cmd+O"	"core.terminal.activate"
-  "Opt+Cmd+O"       	"core.terminal.toggle"
+  "Alt+Cmd+O"       	"core.terminal.toggle"
 
   "="          	"core.queue"	"Shift+="	"core.queue"
   "Shift+Cmd+."	"core.display.hidden"
