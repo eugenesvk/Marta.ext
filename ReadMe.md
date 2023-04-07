@@ -78,7 +78,7 @@ __Keybinds__: copy the `keyBindings` section from the [conf.marco](https://githu
     - [alisma 3a (Universal binary for El Capitan to Monterey)](https://eclecticlightdotcom.files.wordpress.com/2022/02/alisma3a.zip) or 
     - [alisma 2 (Intel-only for El Capitan to Catalina)](https://eclecticlightdotcom.files.wordpress.com/2019/06/alisma2.zip)
   - Configuration tips don't display unicode values properly, [see this bug](https://github.com/marta-file-manager/marta-issues/issues/975 )
-  - After a hardlink is created the file list is not refreshed like it's when a sylink/alias is created, refresh manually to see the new file
+  - After a hardlink is created the file list is not refreshed like it's when a symlink/alias is created, refresh manually to see the new file
   - Action names have the default icons even if the user specified custom ones, can't load user config on plugin load (see this [issue](https://github.com/marta-file-manager/marta-issues/issues/983)). Workaround: manually replace the icons in the `marta.action(` lines of your copy of the ['Link' plugin file](https://github.com/eugenesvk/Marta.ext/blob/main/Plugins/es¦file_link.lua)
 
 [Tab deduplication](<https://github.com/eugenesvk/Marta.ext#Tab-deduplication>)
