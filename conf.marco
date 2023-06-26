@@ -276,9 +276,9 @@ keyBindings {
   "Cmd+Y"	"core.preview"
   "Space"	"core.preview"
 
-  "Cmd+N"        	"core.new.file"	"Shift+Cmd+N"	"core.new.folder"
-  "Shift+Cmd+D"  	"core.duplicate"
-  "Cmd+Backspace"	"core.trash"	"Delete"	"core.trash"	"Alt+Cmd+Backspace"	"core.delete"
+  "Cmd+N"      	"core.new.file"	"Shift+Cmd+N"	"core.new.folder"
+  "Shift+Cmd+D"	"core.duplicate"
+  "Shift+x"    	"core.trash"	"Cmd+Backspace"	"core.trash"	"Delete"	"core.trash"	"Alt+Cmd+Backspace"	"core.delete"
   "Cmd+l" "core.navigate.original.tab"
 
         "Ctrl+Cmd+l"	"es¦file.symlink"	      "Alt+Cmd+l"	"es¦file.alias"	      "Ctrl+Alt+l"	"es¦file.hardlink"
