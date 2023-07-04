@@ -10,7 +10,7 @@ File Manager for macOS
 ## Plugins
 
 #### Link
-Create 🔗Symbolic Links, ⤻Aliases, or ⤑Hard Links __in the same pane__ with automatically generated names with:
+Create 🔗Symbolic Links, ⤻Aliases, or ⤑Hard Links __in the same pane__ or __at the opposite/inactive pane__ with automatically generated names with:
 
   - user-configurable affixes (__Symlink🔗.txt__, __Alias⤻.app__, __Hardlink⤑.md__), single-char by default to delete easier when you move the links elsewhere
   - user-configurable affix location (__⎀pre.ext__, __stem⎀.ext__,  __post.ext⎀__)
