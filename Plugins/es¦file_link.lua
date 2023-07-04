@@ -4,13 +4,22 @@ marta.plugin({id=plugID, name="File actions", apiVersion="2.1"})
 
 marta.action({id="symlink",name="Symlink🔗 to the currently selected items in-place"  ,
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
-  apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="sym"})  ; end})
+  apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="sym"  ,target="self"})  ; end})
+marta.action({id="symlink_op",name="Symlink🔗 to the currently selected items @ the opposite tab"  ,
+  isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
+  apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="sym"  ,target="opp"})  ; end})
 marta.action({id="alias"  ,name="Alias⤻ to the currently selected items in-place"  ,
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
-  apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="alias"}); end})
+  apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="alias",target="self"}); end})
+marta.action({id="alias_op",name="Alias⤻ to the currently selected items @ the opposite tab"  ,
+  isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
+  apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="alias",target="opp"}); end})
 marta.action({id="hardlink",name="Hardlink⤑ to the currently selected items in-place"  ,
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
-  apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="hard"}) ; end})
+  apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="hard" ,target="self"}) ; end})
+marta.action({id="hardlink_op",name="Hardlink⤑ to the currently selected items @ the opposite tab"  ,
+  isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
+  apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="hard" ,target="opp"}) ; end})
 
 local cfgID	= "link"
 marta.configurationKey("behavior","actions",plugID ..'.'.. cfgID .. ".affixSym", {
@@ -44,20 +53,27 @@ function symlink(arg)
   local ctxG    	= marta.globalContext  	--
   local fsL     	= marta.localFileSystem	--
   local ctxPA   	= ctxA.activePane      	--
+  local ctxP_inA	= ctxA.inactivePane    	--
   local model   	= ctxPA.model          	-- Active pane list model
   local viewP   	= ctxPA.view           	--
   local filesInf	= model.activeFileInfos	-- array of FileInfo with all the attributes, gathered on folder load (so cached) (ZIP fs doesn't store macOS extended attributes)
   local parentFd	= model.folder         	--
 
+  -- Get info about InActive pane
+  local model_inA,parentFd_inA
+  if ctxP_inA   	~= nil then
+    model_inA   	= ctxP_inA.model  -- InActive pane list model
+    parentFd_inA	= model_inA.folder end
+
   local ctxW	= ctxA.window
   local actG	= ctxG.actions
 
   -- Get and validate user configuration values
-  local cfgDef,cfgPath,cfgBeh,cfgAct,cfgSym,cfgAls,cfgSpot,cfgMaxLnk,cfgIterMax,cfgAlsP,cfgHrdP,linkT,affix
+  local cfgDef,cfgPath,cfgBeh,cfgAct,cfgSym,cfgAls,cfgSpot,cfgMaxLnk,cfgIterMax,cfgAlsP,cfgHrdP,linkT,target,affix
   local affixSym,affixAlias,maxLnk,binAlias,binHard,spot_ref                           ,linkT_ref,affix_ref
 
   cfgDef      	 = {["affixSym"]='🔗',["affixAlias"]='⤻',["spot"]='stem',["lnkMax"]=3,["iterMax"]=5
-   ,          	   ["linkT"]="sym",["binAlias"]='/usr/local/bin/alisma',["binHard"]='/bin/ln',}
+   ,          	   ["linkT"]="sym",["target"]="self",["binAlias"]='/usr/local/bin/alisma',["binHard"]='/bin/ln',}
   spot_ref    	 = {["pre"]=true,["stem"] =true,["post"]=true} -- all possible spot values
   linkT_ref   	 = {["sym"]=true,["alias"]=true,["hard"]=true} -- all possible link values
   cfgKeyPre   	 = plugID ..'.'.. cfgID
@@ -65,23 +81,24 @@ function symlink(arg)
   if cfgBeh   	~= nil then
      cfgAct   	 = cfgBeh["actions"] end
   if cfgAct   	~= nil then
-    cfgSym    	 = cfgAct[cfgKeyPre .. ".affixSym"]
+    cfgSym    	 = cfgAct[cfgKeyPre .. ".affixSym"  ]
     cfgAls    	 = cfgAct[cfgKeyPre .. ".affixAlias"]
-    cfgHard   	 = cfgAct[cfgKeyPre .. ".affixHard"]
-    cfgSpot   	 = cfgAct[cfgKeyPre .. ".spot"]
-    cfgLnkMax 	 = cfgAct[cfgKeyPre .. ".maxLinkNo"]
-    cfgIterMax	 = cfgAct[cfgKeyPre .. ".maxIterNo"]
-    cfgAlsP   	 = cfgAct[cfgKeyPre .. ".binAlias"]
-    cfgHrdP   	 = cfgAct[cfgKeyPre .. ".binHard"] end
-  affixSym    	 = cfgSym     or cfgDef['affixSym']
+    cfgHard   	 = cfgAct[cfgKeyPre .. ".affixHard" ]
+    cfgSpot   	 = cfgAct[cfgKeyPre .. ".spot"      ]
+    cfgLnkMax 	 = cfgAct[cfgKeyPre .. ".maxLinkNo" ]
+    cfgIterMax	 = cfgAct[cfgKeyPre .. ".maxIterNo" ]
+    cfgAlsP   	 = cfgAct[cfgKeyPre .. ".binAlias"  ]
+    cfgHrdP   	 = cfgAct[cfgKeyPre .. ".binHard"   ] end
+  affixSym    	 = cfgSym     or cfgDef['affixSym'  ]
   affixAlias  	 = cfgAls     or cfgDef['affixAlias']
-  affixHard   	 = cfgHard    or cfgDef['affixHard']
-  spot        	 = cfgSpot    or cfgDef['spot']
-  lnkMax      	 = cfgLnkMax  or cfgDef['lnkMax']
-  iterMax     	 = cfgIterMax or cfgDef['iterMax']
-  binAlias    	 = cfgAlsP    or cfgDef['binAlias']
-  binHard     	 = cfgHrdP    or cfgDef['binHard']
-  linkT       	 = arg.linkT or cfgDef['linkT']
+  affixHard   	 = cfgHard    or cfgDef['affixHard' ]
+  spot        	 = cfgSpot    or cfgDef['spot'      ]
+  lnkMax      	 = cfgLnkMax  or cfgDef['lnkMax'    ]
+  iterMax     	 = cfgIterMax or cfgDef['iterMax'   ]
+  binAlias    	 = cfgAlsP    or cfgDef['binAlias'  ]
+  binHard     	 = cfgHrdP    or cfgDef['binHard'   ]
+  linkT       	 = arg.linkT  or cfgDef['linkT'     ]
+  target      	 = arg.target or cfgDef['target'    ]
   if (type(affixSym)   ~= "string")                              then
     affixSym = cfgDef['affixSym']; viewP:showNotification("✗@link: wrong '".. cfgKeyPre..".affixSym' argument, using the default '"  ..cfgDef['affixSym'].."'",plugID,"short")
   else affixSym = affixSym:gsub(illegalFS,"")     end
@@ -109,12 +126,15 @@ function symlink(arg)
   local countFI = #filesInf
   if      countFI == 0 then return                 -- skip an empty dir (no files)
   elseif (countFI  > lnkMax) and (lnkMax > 0) then -- avoid mass link creation
-    viewP:showNotification(tostring(countFI) .. " items selected, more than 'maxLinkNo' of '" ..lnkMax.."'",plugID,"short")
-  return end
-  if not parentFd then return end                        	-- skip root?
+    viewP:showNotification(tostring(countFI) .. " items selected, more than 'maxLinkNo' of '" ..lnkMax.."'",plugID,"short"); return; end
+  if not parentFd then return; end                       	-- skip root?
   if not parentFd.fileSystem:supports("writeAccess") then	-- skip paths w/o write access
-    viewP:showNotification("✗@link: Can't create a link here, file system is read only",plugID,"short")
-    return
+    viewP:showNotification("✗@link: Can't create a link here, file system is read only"                ,plugID,"short"); return; end
+  if target == "opp" then
+    if not parentFd_inA then	-- inactive pane is not a folder
+      viewP:showNotification("✗@link: Can't create a link @ the opposite tab, it's not a folder"       ,plugID,"short"); return; end
+    if not parentFd_inA.fileSystem:supports("writeAccess") then	-- skip paths w/o write access
+      viewP:showNotification("✗@link: Can't create a link @ the opposite tab, file system is read only",plugID,"short"); return; end
   end
 
   local symMode = martax.access("rwxr-xr-x") -- o755 or 493; though doesn't matter for symlinks
@@ -127,11 +147,11 @@ function symlink(arg)
       viewP:showNotification("✗@link: Item already a link: "..affixAlias,plugID,"short"); return; end
 
     local tgtPath,tgtName,tgtStem,tgtExt
-    local lnkPath,lnkName,lnkStem,lnkExt
-    tgtPath	= tgtFI.path
-    tgtName	= tgtFI.name
-    tgtStem	= parentFd:append(tgtName).nameWithoutExtension
-    tgtExt 	= tgtFI.pathExtension
+    local lnkPath,lnkName,lnkStem,lnkExt,lnkParentFd
+    tgtPath   	= tgtFI.path
+    tgtName   	= tgtFI.name
+    tgtStem   	= parentFd:append(tgtName).nameWithoutExtension
+    tgtExt    	= tgtFI.pathExtension
 
     local isFail	= nil
     local last  	= iterMax + 1                   -- add one more step to signal failure
@@ -140,11 +160,14 @@ function symlink(arg)
       local n = tostring((i>0 and i) or '')       -- index to add to affix on subsequent tries (1st try is '')
 
       -- construct the link file path by appending symbol target name
-      if     (spot == 'pre' ) then lnkF = parentFd:append(affix..n..tgtName)
-      elseif (spot == 'stem') then lnkF = parentFd:append(          tgtStem..affix..n..'.'.. tgtExt)
-      elseif (spot == 'post') then lnkF = parentFd:append(          tgtName..affix..n)
+      if target == "opp" then lnkParentFd	= parentFd_inA -- InActive pane tab
+      else                    lnkParentFd	= parentFd end -- Active   ...
+
+      if     (spot == 'pre' ) then lnkF = lnkParentFd:append(affix..n..tgtName)
+      elseif (spot == 'stem') then lnkF = lnkParentFd:append(          tgtStem..affix..n..'.'.. tgtExt)
+      elseif (spot == 'post') then lnkF = lnkParentFd:append(          tgtName..affix..n)
       else viewP:showNotification("✗@link: wrong 'spot' validation",plugID,"short"); return; end
-      lnkPath	= lnkF.path
+      lnkPath   	= lnkF.path
       if lnkF:exists() then goto continue; end -- try a new name skipping link creation
 
       if     linkT == "sym"   then
