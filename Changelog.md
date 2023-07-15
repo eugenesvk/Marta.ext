@@ -4,23 +4,23 @@ All notable changes to this project will be documented in this file
 [unreleased]: https://github.com/eugenesvk/Marta.ext/compare/0.1.0...HEAD
 ## [Unreleased]
   <!-- - __Added__ -->
-    <!-- + :sparkles:  -->
-    <!-- new features -->
+  <!--   + :sparkles:  -->
+  <!--   new features -->
   <!-- - __Changed__ -->
-    <!-- +   -->
-    <!-- changes in existing functionality -->
+  <!--   +   -->
+  <!--   changes in existing functionality -->
   <!-- - __Fixed__ -->
-    <!-- + :beetle:  -->
-    <!-- bug fixes -->
+  <!--   + :beetle:  -->
+  <!--   bug fixes -->
   <!-- - __Deprecated__ -->
-    <!-- + :poop:  -->
-    <!-- soon-to-be removed features -->
+  <!--   + :poop:  -->
+  <!--   soon-to-be removed features -->
   <!-- - __Removed__ -->
-    <!-- + :wastebasket:  -->
-    <!-- now removed features -->
+  <!--   + :wastebasket:  -->
+  <!--   now removed features -->
   <!-- - __Security__ -->
-    <!-- + :lock:  -->
-    <!-- vulnerabilities -->
+  <!--   + :lock:  -->
+  <!--   vulnerabilities -->
 
   - __Added__
     + :sparkles: Tab Deduplication plugin
