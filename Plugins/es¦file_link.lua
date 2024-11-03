@@ -8,10 +8,10 @@ marta.action({id="symlink",name="Symlink🔗 to the currently selected items in-
 marta.action({id="symlink_op",name="Symlink🔗 to the currently selected items @ the opposite tab"  ,
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
   apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="sym"  ,target="opp"})  ; end})
-marta.action({id="alias"  ,name="Alias⤻ to the currently selected items in-place"  ,
+marta.action({id="alias"  ,name="Alias⤻ link to the currently selected items in-place"  ,
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
   apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="alias",target="self"}); end})
-marta.action({id="alias_op",name="Alias⤻ to the currently selected items @ the opposite tab"  ,
+marta.action({id="alias_op",name="Alias⤻ link to the currently selected items @ the opposite tab"  ,
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
   apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="alias",target="opp"}); end})
 marta.action({id="hardlink",name="Hardlink⤑ to the currently selected items in-place"  ,
