@@ -13,7 +13,7 @@ marta.action({id="alias"  ,name="Alias⤻ link to the currently selected items i
   apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="alias",target="self"}); end})
 -- marta.action({id="alias_op",name="Alias⤻ link to the currently selected items @ the opposite tab"  ,
 -- crashes ↑ on "reopen", ↓ shorter name seems fine
-marta.action({id="alias_op",name="Alias⤻ link to the opposite tab"  ,
+marta.action({id="alias_op",name="Alias ⤻ link to the currently selected items @ the opposite tab"  ,
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
   apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="alias",target="opp"}); end})
 marta.action({id="hardlink",name="Hardlink⤑ to the currently selected items in-place"  ,
