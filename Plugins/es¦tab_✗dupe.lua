@@ -5,8 +5,13 @@ marta.action({id="✗tab_n_dupe"	, name="Tab: ✗Close Current & Duplicates"
   ,apply                      	= function(ctxA) tabCloseNLeft(ctxA); tabCloseDupe({ctxA=ctxA,saveCur=true}); end})
 marta.action({id="✗dupe"      	, name="Tab: ✗Close Duplicates"
   ,apply                      	= function(ctxA)                      tabCloseDupe({ctxA=ctxA,saveCur=true}); end})
--- marta.action({id="✗tab_cur←" , name="Tab: ✗Close Current and switch to the ←Left",
---   apply = function(ctxA) tabClose(ctxA); tabLeft(ctxA); end})
+--marta.action({id="✗tab_cur←"	, name="Tab: ✗Close Current and switch to the ←Left",
+--   apply                    	= function(ctxA) tabClose(ctxA); tabLeft(ctxA); end})
+--marta.action({id="✗tab_cur" 	,name="Tab: ✗Close Current"
+  -- ,apply                   	= function(ctxA) tabClose    (ctxA); end})
+--marta.action({id="tab←"     	,name="Tab: Switch to the ←Left"
+  -- ,apply                   	= function(ctxA) tabLeft     (ctxA); end})
+local _d = 0
 
 function tabCloseNLeft(ctxA) -- move selection ← after tab close (by default it shifts →) unless ours is the right-most
   local ctxW    	= ctxA.window
@@ -70,14 +75,17 @@ function tabCloseDupe(arg)
   local t        	= {}
   local i        	= 0
   if saveCur then t[tabA_path.rawValue]={true,tabA.id} end -- save current tab's path/ID to not close it later
+  if _d >= 3 then martax.alert("Active tab's ID=\n" .. tabA.id .. "\nwith path@=" .. tabA_path) end
 
   while (i < tabCount) do
     local tab    	 = tabMan:getTab(tabSide, i)
     local path_s 	 = tab.model.folder.path.rawValue
     if (t[path_s]	~= nil) then
       if saveCur and (tab.id == tabA.id) then -- don't close if current tab is our original active tab
+        if _d >= 3 then martax.alert("Saving active tab ID=\n" .. tabA.id .. "\npath=" .. tabA_path) end
         i	= i + 1
       else
+        if _d >= 3 then martax.alert("Closing tab with ID=\n" .. tab.id) end
         tabMan:close(tab)
         tabCount	 = tabCount - 1 -- reuse index (it can be a ←moved tab), decrease the # of iters from the top
       end
