@@ -4,24 +4,24 @@ marta.plugin({id=plugID, name="File actions", apiVersion="2.2"})
 
 marta.action({id="symlink",name="Symlink🔗 to the currently selected items in-place"  ,
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
-  apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="sym"  ,target="self"})  ; end})
+  apply        = function(ctxA) symlink({ctxA=ctxA,linkT="sym"  ,target="self"})  ; end})
 marta.action({id="symlink_op",name="Symlink🔗 to the currently selected items @ the opposite tab"  ,
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
-  apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="sym"  ,target="opp"})  ; end})
+  apply        = function(ctxA) symlink({ctxA=ctxA,linkT="sym"  ,target="opp"})  ; end})
 marta.action({id="alias"  ,name="Alias⤻ link to the currently selected items in-place"  ,
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
-  apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="alias",target="self"}); end})
+  apply        = function(ctxA) symlink({ctxA=ctxA,linkT="alias",target="self"}); end})
 -- marta.action({id="alias_op",name="Alias⤻ link to the currently selected items @ the opposite tab"  ,
 -- crashes ↑ on "reopen", ↓ shorter name seems fine
 marta.action({id="alias_op",name="Alias ⤻ link to the currently selected items @ the opposite tab"  ,
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
-  apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="alias",target="opp"}); end})
+  apply        = function(ctxA) symlink({ctxA=ctxA,linkT="alias",target="opp"}); end})
 marta.action({id="hardlink",name="Hardlink⤑ to the currently selected items in-place"  ,
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
-  apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="hard" ,target="self"}) ; end})
+  apply        = function(ctxA) symlink({ctxA=ctxA,linkT="hard" ,target="self"}) ; end})
 marta.action({id="hardlink_op",name="Hardlink⤑ to the currently selected items @ the opposite tab"  ,
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
-  apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="hard" ,target="opp"}) ; end})
+  apply        = function(ctxA) symlink({ctxA=ctxA,linkT="hard" ,target="opp"}) ; end})
 
 local cfgID    	= "link"
 local cfgKeyPre	 = plugID ..'.'.. cfgID
