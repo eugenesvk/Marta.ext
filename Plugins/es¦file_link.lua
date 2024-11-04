@@ -186,7 +186,7 @@ function symlink(arg)
       ::continue::
     end
     if lnkF:exists() and isFail then -- looped thru the end and didn't find any empty paths
-      viewP:showNotification("✗@link: paths taken up to: " .. lnkPath,plugID,"short"); return; end
+      viewP:showNotification("✗@link: "..last.." paths taken up to: " .. lnkPath,plugID,"short"); return; end
   end
 end
 
