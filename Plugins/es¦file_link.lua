@@ -50,6 +50,7 @@ marta.configurationKey("behavior","actions",cfgKeyPre .. ".binHard", {
   description	= "Full path to the 'ln' binary for creating hardlinks",
   examples   	= {"/bin/ln"}          , typeConstraints={"string"} })
 
+local _d = 0
 local illegalFS = "[*:\"\\|<>/?^]" -- Win+Mac, remove these from user string input for compatibility
 function symlink(arg)
   local ctxA    	= arg.ctxA             	-- holds refs to PaneContext instances for active+inactive panes
@@ -131,6 +132,8 @@ function symlink(arg)
     then   binHard    	 = cfgDef['binHard'   	]; pss("❗link: wrong '"..cfgKeyPre..".binHard'"   	.._sa..cfgDef['binHard'].."'") end
   r_affix = {["sym"]=affixSym,["alias"]=affixAlias,["hard"]=affixHard} -- all possible affix values
   affix   = r_affix[linkT] -- set affix to the matching link type
+  if _d	>= 3 then martax.alert("Config vs Validated",(cfgSym or '✗') ..'|'.. (cfgAls or '✗') ..'|'.. (cfgSpot or '✗') ..'|'.. (cfgLnkMax or '✗')
+    .."\n".. (affixSym or 'a') ..'|'.. (affixAlias or 'l') ..'|'.. (spot or 's') ..'|'.. (tostring(lnkMax) or 'l')) end
 
   local countFI = #filesInf
   if      countFI == 0 then return                 -- skip an empty dir (no files)
@@ -154,12 +157,14 @@ function symlink(arg)
       pss("❗link: Item already a link: "..affixSym); return
     elseif tgtFI.isAlias           then      -- ...       and aliases
       pss("❗link: Item already a link: "..affixAlias); return; end
+    -- elseif tgtFI.hardLinkCount > 1 then      -- ...       and hardlinks
+      -- viewP:showNotification("❗link: Item already a link: "..affixHard,plugID,"short"); return; end
 
     local tgtPath,tgtName,tgtStem,tgtExt
     local lnkPath,lnkName,lnkStem,lnkExt,lnkParentFd
     tgtPath	= tgtFI.path.rawValue
     tgtName	= tgtFI.name
-    tgtStem	= parentFd:append(tgtName).nameWithoutExtension
+    tgtStem	= parentFd:append(tgtName).nameWithoutExtension -- tgtFI.nameWithoutExtension
     tgtExt 	= tgtFI.extension
 
     local isFail	= nil
@@ -176,7 +181,14 @@ function symlink(arg)
       elseif (spot == 'stem') then lnkF = lnkParentFd:append(          tgtStem..affix..n..'.'.. tgtExt)
       elseif (spot == 'post') then lnkF = lnkParentFd:append(          tgtName..affix..n)
       else pss("❗link: wrong 'spot' validation"); return; end
-      lnkPath	= lnkF.path.rawValue
+      lnkPath  	= lnkF.path.rawValue
+      if _d    	>= 3 then
+        lnkName	= lnkF.name
+        lnkStem	= lnkF.nameWithoutExtension
+        lnkExt 	= lnkF.extension
+        martax.alert("Target vs Link", '\ntgtPath='..tgtPath .. '\ntgtName='..tgtName .. '\ntgtStem='..tgtStem .. '\ntgtExt='..tgtExt
+          ..'\n'.. '\nlnkPath='..lnkPath .. '\nlnkName='..lnkName .. '\nlnkStem='..lnkStem .. '\nlnkExt='..lnkExt)
+      end
       if lnkF:exists() then goto continue; end -- try a new name skipping link creation
 
       if     linkT == "sym"   then
