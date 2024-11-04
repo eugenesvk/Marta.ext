@@ -39,25 +39,24 @@ function tabCloseDupe(arg)
   local tabA     	= paneMan.activePane
   local tabPos   	= tabMan:getPosition(tabA)     -- Get the tab position          	--(tab:PaneContext):Option<TabPosition>
   local tabCount 	= tabMan:getCount   (tabPos  ) -- tab count for a given position	--(pos:             Option<TabPosition>):Int
-  local tabA_path	= tabA.model.folder.path       -- tab unique id
+  local tabA_path	= tabA.model.folder.path       -- tab unique Path (≠String, use rawValue for that)
   local t        	= {}
   local i        	= 0
-  if saveCur then t[tabA_path]={true,tabA.id} end -- save current tab's path/ID to not close it later
+  if saveCur then t[tabA_path.rawValue]={true,tabA.id} end -- save current tab's path/ID to not close it later
 
   while (i < tabCount) do
-    local tab   	 = tabMan:getTab(tabPos, i)
-    local tab_id	 = tab.id
-    local path  	 = tab.model.folder.path
-    if (t[path] 	~= nil) then
-      if saveCur and ( tab_id == tabA.id) then -- don't close if current tab is our original active tab
+    local tab    	 = tabMan:getTab(tabPos, i)
+    local path_s 	 = tab.model.folder.path.rawValue
+    if (t[path_s]	~= nil) then
+      if saveCur and (tab.id == tabA.id) then -- don't close if current tab is our original active tab
         i	= i + 1
       else
         tabMan:close(tab)
-        tabCount	 = tabCount - 1
+        tabCount	 = tabCount - 1 -- reuse index (it can be a ←moved tab), decrease the # of iters from the top
       end
     else
-      t[path]	= {true,tab_id} -- path has been seen @ ID (use it later to close i instead of my active tab)
-      i      	= i + 1
+      t[path_s]	= {true,tab.id} -- path has been seen @ ID (use it later to close i instead of my active tab)
+      i        	= i + 1
     end
   end
   if saveCur then -- activate our original active tab as focus shifts on tab close (bug)
