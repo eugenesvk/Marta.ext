@@ -75,7 +75,7 @@ function symlink(arg)
   local cfgDef,cfgPath,cfgBeh,cfgAct,cfgSym,cfgAls,cfgSpot,cfgMaxLnk,cfgIterMax,cfgAlsP,cfgHrdP,linkT,target,affix
   local affixSym,affixAlias,maxLnk,binAlias,binHard,spot_ref                           ,linkT_ref,affix_ref
 
-  cfgDef      	 = {["affixSym"]='🔗',["affixAlias"]='⤻',["spot"]='stem',["lnkMax"]=3,["iterMax"]=5
+  cfgDef      	 = {["affixSym"]='🔗',["affixAlias"]='⤻',["affixHard"]='⤑',["spot"]='stem',["lnkMax"]=1,["iterMax"]=5
    ,          	   ["linkT"]="sym",["target"]="self",["binAlias"]='/usr/local/bin/alisma',["binHard"]='/bin/ln',}
   spot_ref    	 = {["pre"]=true,["stem"] =true,["post"]=true} -- all possible spot values
   linkT_ref   	 = {["sym"]=true,["alias"]=true,["hard"]=true} -- all possible link values
