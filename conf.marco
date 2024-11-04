@@ -241,6 +241,8 @@ keyBindings {
   "m"               	"core.move.half.page.down"       	","                 	"core.move.half.page.up"
   "Home"            	"core.move.home"                 	"End"               	"core.move.end"
   "Cmd+Left"        	"core.move.home"                 	"Cmd+Right"         	"core.move.end"
+  "Shift+Home"      	"core.select.move.home"          	"Shift+End"         	"core.select.move.end"
+  "Shift+Cmd+Left"  	"core.select.move.home"          	"Shift+Cmd+Right"   	"core.select.move.end"
   "Shift+k"         	"core.select.move.up"            	"Shift+j"           	"core.select.move.down"
   "Shift+l"         	"core.select.move.left"          	"Shift+;"           	"core.select.move.right"
   "Shift+Up"        	"core.select.move.up"            	"Shift+Down"        	"core.select.move.down"
@@ -248,7 +250,6 @@ keyBindings {
   "Shift+PageUp"    	"core.select.move.page.up"       	"Shift+PageDown"    	"core.select.move.page.down"
   "Alt+Shift+PageUp"	"core.select.move.half.page.up"  	"Alt+Shift+PageDown"	"core.select.move.half.page.down"
   "Shift+m"         	"core.select.move.half.page.down"	"Shift+,"           	"core.select.move.half.page.up"
-  "Shift+Home"      	"core.select.move.home"          	"Shift+End"         	"core.select.move.end"
   "Shift+Alt+Up"    	"core.select.all.before"         	"Shift+Alt+Down"    	"core.select.all.after"
   "Cmd+A"           	"core.select.all"                	"Escape"            	"core.select.none"
 
@@ -264,17 +265,19 @@ keyBindings {
   "Ctrl+Tab"   	null	"Ctrl+Shift+Tab"	null
   "Cmd+6" null "Cmd+7" null "Cmd+8" null "Cmd+9" null
 
-  "Alt+Cmd+Left"  	"core.clone.left"       	"Alt+Cmd+Right"  	"core.clone.right"
-  "Shift+Cmd+Left"	"core.clone.left.folder"	"Shift+Cmd+Right"	"core.clone.right.folder"
+  "Alt+l"             	"core.clone.left.folder"	"Alt+;"          	"core.clone.right.folder"
+  "Alt+."             	"core.clone.left"       	"Alt+/"          	"core.clone.right"
+  "Alt+Cmd+Left"      	"core.clone.left"       	"Alt+Cmd+Right"  	"core.clone.right"
 
-  "o"             "core.open"   "i" "core.open"     "Return"    "core.open" "Cmd+Return"  "core.open.with"
-  "h"             "core.go.up"                      "Backspace" "core.go.up"
-  "u"             "core.back"   "y" "core.forward"  "Cmd+["     "core.back" "Cmd+]" "core.forward"
-  "Cmd+G"         "core.go"     "G" "core.go"
+  "o"           	"core.open" 	"i" "core.open"   	"Return"    "core.open" 	"Cmd+Return"  "core.open.with"
+  "h"           	"core.go.up"	                  	"Backspace" "core.go.up"
+  "u"           	"core.back" 	"y" "core.forward"	"Cmd+["     "core.back" 	"Cmd+]" "core.forward"	"z"     "core.back"	"x" "core.forward"
+  "Cmd+G"       	"core.go"   	"G" "core.go"
   "Shift+o"     	{id "core.open.folder" mode "newTab"}
   "Shift+Return"	{id "core.open.folder" mode "newTab"}
   "Alt+o"       	{id "core.open.folder" mode "newTabBackground"}
   "Alt+Return"  	{id "core.open.folder" mode "newTabBackground"}
+  "Ctrl+Return" 	"core.edit"
 
   "Cmd+I"	"core.finder.showInfo"
   "Cmd+Y"	"core.preview"
@@ -282,7 +285,7 @@ keyBindings {
 
   "Cmd+N"      	"core.new.file"	"Shift+Cmd+N"	"core.new.folder"
   "Shift+Cmd+D"	"core.duplicate"
-  "Shift+x"    	"core.trash"	"Cmd+Backspace"	"core.trash"	"Delete"	"core.trash"	"Alt+Cmd+Backspace"	"core.delete"
+  "Shift+x"    	"core.trash"	"Cmd+Backspace"	"core.trash"	"Opt+Backspace"	"core.trash" "Delete"	"core.trash"	"Alt+Cmd+Backspace"	"core.delete"
   "Cmd+l" "core.navigate.original.tab"
 
         "Ctrl+Cmd+l"	"es¦file.symlink"	      "Alt+Cmd+l"	"es¦file.alias"	      "Ctrl+Alt+l"	"es¦file.hardlink"
@@ -306,8 +309,8 @@ keyBindings {
   "Alt+4"	{id "core.display.mode"	mode "table"}
 
   "F1" 	null
-  "F2" 	"core.rename"
-  "F3" 	"core.refresh"	"Cmd+R"   	"core.refresh"
+  "F2" 	"core.rename" 	"Cmd+R"   	"core.rename"
+  "F3" 	"core.refresh"	"Shift+R" 	"core.refresh"
   "F4" 	"core.edit"   	"Shift+F4"	"core.edit.folder"
   "F5" 	"core.copy"
   "F6" 	"core.move" 	"Shift+F6"	"core.rename"
