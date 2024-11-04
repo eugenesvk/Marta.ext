@@ -5,8 +5,6 @@ environment {
 behavior {
   theme "esWhite"
   style {
-    forceOverlayScrollBars	true
-    density               	"normal"
   }
   layout {
     alwaysShowTabBar	true
@@ -32,9 +30,14 @@ behavior {
   sizeFormat "adaptive"
   dateFormat  {normal "‘%y %b %e"}
   timeFormat  {normal "%k:%M"   separator " "}
-  volumeSpace {format "${availableSpace}🆓${availablePercent}"  show "always"}
+  volumeSpace {format "${availableSpace}🆓${availablePercent} use ${usedPercent} ${usedSpace}" show "always"}
+
+  groupingSeparator	null
+  decimalSeparator 	null
 
   table {
+    hideExtensions 	true
+
     showIcons      	true
     iconSize       	18
     verticalPadding	0
@@ -61,10 +64,11 @@ behavior {
     }
   }
   quickSelect {
-    activateOnAnyCharacter false
-    defaultMode       	"substring"
-    filterMatchedItems	false
-    matchOnlyPrefix   	false
+    activateOnAnyCharacter 	false
+    deactivateWhenUnfocused	false
+    defaultMode            	"substring"
+    filterMatchedItems     	false
+    matchOnlyPrefix        	false
   }
 }
 
