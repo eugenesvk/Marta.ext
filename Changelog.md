@@ -22,6 +22,8 @@ All notable changes to this project will be documented in this file
   <!--   + :lock:  -->
   <!--   vulnerabilities -->
 
+[0.1.0]: https://github.com/eugenesvk/Marta.ext/releases/tag/0.1.0
+## [0.1.0]
   - __Added__
     + :sparkles: Tab Deduplication plugin
     + :sparkles: Link plugin
@@ -31,6 +33,3 @@ All notable changes to this project will be documented in this file
   - __Fixed__
     + 🐞 wrong tab shifts when closing left/right-most sides
     + missing/wrong defaults in the Link plugin
-
-[0.1.0]: https://github.com/eugenesvk/Marta.ext/releases/tag/0.1.0
-## [0.1.0]
