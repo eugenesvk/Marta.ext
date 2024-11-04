@@ -1,4 +1,6 @@
 # templates github.com/github/gitignore
+# user-specific files
+favorites.marco
 # test folder
 \[test\]
 # project's built/temp docs
