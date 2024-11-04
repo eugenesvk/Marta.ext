@@ -23,29 +23,30 @@ marta.action({id="hardlink_op",name="Hardlink⤑ to the currently selected items
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
   apply        = function(ctxA) symlink ({ctxA=ctxA,linkT="hard" ,target="opp"}) ; end})
 
-local cfgID	= "link"
-marta.configurationKey("behavior","actions",plugID ..'.'.. cfgID .. ".affixSym", {
+local cfgID    	= "link"
+local cfgKeyPre	 = plugID ..'.'.. cfgID
+marta.configurationKey("behavior","actions",cfgKeyPre .. ".affixSym", {
   description	= "Icon for a symbolic link affix (d̳e̳f̳)",
   examples   	= {"🔗̳","🖇"}         , typeConstraints={"string"}})
-marta.configurationKey("behavior","actions",plugID ..'.'.. cfgID .. ".affixAlias", {
+marta.configurationKey("behavior","actions",cfgKeyPre .. ".affixAlias", {
   description	= "Icon for an alias affix (d̳e̳f̳)",
   examples   	= {"⤻̳","⤺","⤴"}      , typeConstraints={"string"}})
-marta.configurationKey("behavior","actions",plugID ..'.'.. cfgID .. ".affixHard", {
+marta.configurationKey("behavior","actions",cfgKeyPre .. ".affixHard", {
   description	= "Icon for an alias affix (d̳e̳f̳)",
   examples   	= {"⤑̳","→","⇢"}      , typeConstraints={"string"}})
-marta.configurationKey("behavior","actions",plugID ..'.'.. cfgID .. ".spot", {
+marta.configurationKey("behavior","actions",cfgKeyPre .. ".spot", {
   description	= "Affix location: ⎀pre.ext, stem⎀.ext,  post.ext⎀ (d̳e̳f̳)",
   examples   	= {"pre","s̳t̳e̳m̳","post"}, typeConstraints={"string"} })
-marta.configurationKey("behavior","actions",plugID ..'.'.. cfgID .. ".maxLinkNo", {
+marta.configurationKey("behavior","actions",cfgKeyPre .. ".maxLinkNo", {
   description	= "Create links unless selected more than this # of items (0=∞)",
   examples   	= {"1̳","5","0"}        , typeConstraints={"int"} })
-marta.configurationKey("behavior","actions",plugID ..'.'.. cfgID .. ".maxIterNo", {
+marta.configurationKey("behavior","actions",cfgKeyPre .. ".maxIterNo", {
   description	= "When link path exists, try this # of times to change the name by adding 1,2,3,... (d̳e̳f̳)",
   examples   	= {"5̳","0"}            , typeConstraints={"int"} })
-marta.configurationKey("behavior","actions",plugID ..'.'.. cfgID .. ".binAlias", {
+marta.configurationKey("behavior","actions",cfgKeyPre .. ".binAlias", {
   description	= "Full path to the 'alisma' binary for creating aliases",
   examples   	= {"/usr/local/bin/alisma"}, typeConstraints={"string"} })
-marta.configurationKey("behavior","actions",plugID ..'.'.. cfgID .. ".binHard", {
+marta.configurationKey("behavior","actions",cfgKeyPre .. ".binHard", {
   description	= "Full path to the 'ln' binary for creating hardlinks",
   examples   	= {"/bin/ln"}          , typeConstraints={"string"} })
 
@@ -78,7 +79,6 @@ function symlink(arg)
    ,          	   ["linkT"]="sym",["target"]="self",["binAlias"]='/usr/local/bin/alisma',["binHard"]='/bin/ln',}
   spot_ref    	 = {["pre"]=true,["stem"] =true,["post"]=true} -- all possible spot values
   linkT_ref   	 = {["sym"]=true,["alias"]=true,["hard"]=true} -- all possible link values
-  cfgKeyPre   	 = plugID ..'.'.. cfgID
   cfgBeh      	 = ctxG.get("behavior","actions") -- crashes without the extra path element
   if cfgBeh   	~= nil then
      cfgAct   	 = cfgBeh["actions"] end
@@ -151,9 +151,9 @@ function symlink(arg)
     local tgtPath,tgtName,tgtStem,tgtExt
     local lnkPath,lnkName,lnkStem,lnkExt,lnkParentFd
     tgtPath   	= tgtFI.path
-    tgtName   	= tgtFI.name
-    tgtStem   	= parentFd:append(tgtName).nameWithoutExtension
     tgtExt    	= tgtFI.pathExtension
+    tgtName	= tgtFI.name
+    tgtStem	= parentFd:append(tgtName).nameWithoutExtension
 
     local isFail	= nil
     local last  	= iterMax + 1                   -- add one more step to signal failure
