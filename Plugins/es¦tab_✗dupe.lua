@@ -1,5 +1,5 @@
 marta.expose()
-marta.plugin({id="es¦tab", name="Close Duplicated Tabs", apiVersion="2.1"})
+marta.plugin({id="es¦tab", name="Close Duplicated Tabs", apiVersion="2.2"})
 
 marta.action({id="✗tab_n_dupe", name="Tab: ✗Close Current & Duplicates",
   apply = function(ctxA) tabClose(ctxA); tabLeft(ctxA); tabCloseDupe({ctxA=ctxA,saveCur=true}); end})
