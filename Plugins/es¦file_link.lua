@@ -1,6 +1,6 @@
 marta.expose()
 local plugID = "es¦file"
-marta.plugin({id=plugID, name="File actions", apiVersion="2.1"})
+marta.plugin({id=plugID, name="File actions", apiVersion="2.2"})
 
 marta.action({id="symlink",name="Symlink🔗 to the currently selected items in-place"  ,
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
@@ -79,9 +79,7 @@ function symlink(arg)
    ,          	   ["linkT"]="sym",["target"]="self",["binAlias"]='/usr/local/bin/alisma',["binHard"]='/bin/ln',}
   spot_ref    	 = {["pre"]=true,["stem"] =true,["post"]=true} -- all possible spot values
   linkT_ref   	 = {["sym"]=true,["alias"]=true,["hard"]=true} -- all possible link values
-  cfgBeh      	 = ctxG.get("behavior","actions") -- crashes without the extra path element
-  if cfgBeh   	~= nil then
-     cfgAct   	 = cfgBeh["actions"] end
+  cfgAct      	 = ctxG:get("behavior","actions") -- crashes without the extra path element
   if cfgAct   	~= nil then
     cfgSym    	 = cfgAct[cfgKeyPre .. ".affixSym"  ]
     cfgAls    	 = cfgAct[cfgKeyPre .. ".affixAlias"]
@@ -150,10 +148,10 @@ function symlink(arg)
 
     local tgtPath,tgtName,tgtStem,tgtExt
     local lnkPath,lnkName,lnkStem,lnkExt,lnkParentFd
-    tgtPath   	= tgtFI.path
-    tgtExt    	= tgtFI.pathExtension
+    tgtPath	= tgtFI.path.rawValue
     tgtName	= tgtFI.name
     tgtStem	= parentFd:append(tgtName).nameWithoutExtension
+    tgtExt 	= tgtFI.extension
 
     local isFail	= nil
     local last  	= iterMax + 1                   -- add one more step to signal failure
@@ -169,7 +167,7 @@ function symlink(arg)
       elseif (spot == 'stem') then lnkF = lnkParentFd:append(          tgtStem..affix..n..'.'.. tgtExt)
       elseif (spot == 'post') then lnkF = lnkParentFd:append(          tgtName..affix..n)
       else viewP:showNotification("✗@link: wrong 'spot' validation",plugID,"short"); return; end
-      lnkPath   	= lnkF.path
+      lnkPath   	= lnkF.path.rawValue
       if lnkF:exists() then goto continue; end -- try a new name skipping link creation
 
       if     linkT == "sym"   then
