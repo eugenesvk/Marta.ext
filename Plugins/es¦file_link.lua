@@ -62,6 +62,9 @@ function symlink(arg)
   local filesInf	= model.activeFileInfos	-- array of FileInfo with all the attributes, gathered on folder load (so cached) (ZIP fs doesn't store macOS extended attributes)
   local parentFd	= model.folder         	--
 
+  function pss(msg) viewP:showNotification(msg,plugID,"short") end -- short-term "print" to the statusbar
+  function psl(msg) viewP:showNotification(msg,plugID,"long" ) end -- long-term  "print" to the statusbar
+
   -- Get info about InActive pane
   local model_inA,parentFd_inA
   if ctxP_inA   	~= nil then
@@ -100,41 +103,41 @@ function symlink(arg)
   linkT       	 = arg.linkT  or cfgDef['linkT'     ]
   target      	 = arg.target or cfgDef['target'    ]
   if (type(affixSym)   ~= "string")                              then
-    affixSym = cfgDef['affixSym']; viewP:showNotification("✗@link: wrong '".. cfgKeyPre..".affixSym' argument, using the default '"  ..cfgDef['affixSym'].."'",plugID,"short")
+    affixSym = cfgDef['affixSym'    ]; pss("❗link: wrong '"..cfgKeyPre..".affixSym' argument, using the default '"  ..cfgDef['affixSym'].."'")
   else affixSym = affixSym:gsub(illegalFS,"")     end
   if (type(affixAlias) ~= "string")                              then
-    affixAlias = cfgDef['affixAlias']; viewP:showNotification("✗@link: wrong '".. cfgKeyPre..".affixAlias' argument, using the default '"  ..cfgDef['affixAlias'].."'",plugID,"short")
+    affixAlias = cfgDef['affixAlias']; pss("❗link: wrong '"..cfgKeyPre..".affixAlias' argument, using the default '"  ..cfgDef['affixAlias'].."'")
   else affixAlias = affixAlias:gsub(illegalFS,"") end
   if (type(affixHard)  ~= "string")                              then
-    affixHard = cfgDef['affixHard']; viewP:showNotification("✗@link: wrong '".. cfgKeyPre..".affixHard' argument, using the default '"  ..cfgDef['affixHard'].."'",plugID,"short")
+    affixHard = cfgDef['affixHard'  ]; pss("❗link: wrong '"..cfgKeyPre..".affixHard' argument, using the default '"  ..cfgDef['affixHard'].."'")
   else affixHard = affixHard:gsub(illegalFS,"")   end
   if (type(spot)       ~= "string") or (spot_ref[spot] == nil)   then
-    spot = cfgDef['spot']        ; viewP:showNotification("✗@link: wrong '".. cfgKeyPre..".spot' argument, using the default '"      ..cfgDef['spot'].."'"    ,plugID,"short") end
+    spot = cfgDef['spot']        ; pss("❗link: wrong '"..cfgKeyPre..".spot' argument, using the default '"      ..cfgDef['spot'].."'"    ) end
   if (type(lnkMax)     ~= "number") or (not isint(lnkMax))       then
-    lnkMax = cfgDef['lnkMax']    ; viewP:showNotification("✗@link: wrong '".. cfgKeyPre..".maxLinkNo' argument, using the default '" ..cfgDef['lnkMax'].."'"  ,plugID,"short") end
+    lnkMax = cfgDef['lnkMax']    ; pss("❗link: wrong '"..cfgKeyPre..".maxLinkNo' argument, using the default '" ..cfgDef['lnkMax'].."'"  ) end
   if (type(iterMax)    ~= "number") or (not isint(iterMax) or (iterMax < 0)) then
-    iterMax = cfgDef['iterMax']  ; viewP:showNotification("✗@link: wrong '".. cfgKeyPre..".maxIterNo' argument, using the default '" ..cfgDef['iterMax'].."'" ,plugID,"short") end
+    iterMax = cfgDef['iterMax']  ; pss("❗link: wrong '"..cfgKeyPre..".maxIterNo' argument, using the default '" ..cfgDef['iterMax'].."'" ) end
   if (type(linkT)      ~= "string") or (linkT_ref[linkT] == nil) then
-    linkT = cfgDef['linkT']      ; viewP:showNotification("✗@link: wrong 'linkT' action argument, using the default '"      ..cfgDef['linkT'].."'"    ,plugID,"short") end
+    linkT = cfgDef['linkT']      ; pss("❗link: wrong 'linkT' action argument, using the default '"      ..cfgDef['linkT'].."'"    ) end
   if (type(binAlias)   ~= "string")                              then
-    binAlias = cfgDef['binAlias']; viewP:showNotification("✗@link: wrong '".. cfgKeyPre..".binAlias' argument, using the default '"  ..cfgDef['binAlias'].."'",plugID,"short") end
+    binAlias = cfgDef['binAlias']; pss("❗link: wrong '"..cfgKeyPre..".binAlias' argument, using the default '"  ..cfgDef['binAlias'].."'") end
   if (type(binHard)    ~= "string")                              then
-    binHard = cfgDef['binHard']  ; viewP:showNotification("✗@link: wrong '".. cfgKeyPre..".binHard' argument, using the default '"  ..cfgDef['binHard'].."'",plugID,"short") end
+    binHard = cfgDef['binHard']  ; pss("❗link: wrong '"..cfgKeyPre..".binHard' argument, using the default '"  ..cfgDef['binHard'].."'") end
   affix_ref	= {["sym"]=affixSym,["alias"]=affixAlias,["hard"]=affixHard} -- all possible affix values
   affix    	= affix_ref[linkT] -- set affix to the matching link type
 
   local countFI = #filesInf
   if      countFI == 0 then return                 -- skip an empty dir (no files)
   elseif (countFI  > lnkMax) and (lnkMax > 0) then -- avoid mass link creation
-    viewP:showNotification(tostring(countFI) .. " items selected, more than 'maxLinkNo' of '" ..lnkMax.."'",plugID,"short"); return; end
+    pss(tostring(countFI) .. " items selected, more than 'maxLinkNo' of '" ..lnkMax.."'"); return; end
   if not parentFd then return; end                       	-- skip root?
   if not parentFd.fileSystem:supports("writeAccess") then	-- skip paths w/o write access
-    viewP:showNotification("✗@link: Can't create a link here, file system is read only"                ,plugID,"short"); return; end
+    pss("❗link: Can't create a link here, file system is read only"                ); return; end
   if target == "opp" then
     if not parentFd_inA then	-- inactive pane is not a folder
-      viewP:showNotification("✗@link: Can't create a link @ the opposite tab, it's not a folder"       ,plugID,"short"); return; end
+      pss("❗link: Can't create a link @ the opposite tab, it's not a folder"       ); return; end
     if not parentFd_inA.fileSystem:supports("writeAccess") then	-- skip paths w/o write access
-      viewP:showNotification("✗@link: Can't create a link @ the opposite tab, file system is read only",plugID,"short"); return; end
+      pss("❗link: Can't create a link @ the opposite tab, file system is read only"); return; end
   end
 
   local symMode = martax.access("rwxr-xr-x") -- o755 or 493; though doesn't matter for symlinks
@@ -142,9 +145,9 @@ function symlink(arg)
 
   for _, tgtFI in ipairs(filesInf) do        -- Iterate thru active=(selected¦cursor) files
     if     tgtFI.isSymbolicLink    then      -- skip existing symlinks
-      viewP:showNotification("✗@link: Item already a link: "..affixSym,plugID,"short"); return
+      pss("❗link: Item already a link: "..affixSym); return
     elseif tgtFI.isAlias           then      -- ...       and aliases
-      viewP:showNotification("✗@link: Item already a link: "..affixAlias,plugID,"short"); return; end
+      pss("❗link: Item already a link: "..affixAlias); return; end
 
     local tgtPath,tgtName,tgtStem,tgtExt
     local lnkPath,lnkName,lnkStem,lnkExt,lnkParentFd
@@ -166,27 +169,27 @@ function symlink(arg)
       if     (spot == 'pre' ) then lnkF = lnkParentFd:append(affix..n..tgtName)
       elseif (spot == 'stem') then lnkF = lnkParentFd:append(          tgtStem..affix..n..'.'.. tgtExt)
       elseif (spot == 'post') then lnkF = lnkParentFd:append(          tgtName..affix..n)
-      else viewP:showNotification("✗@link: wrong 'spot' validation",plugID,"short"); return; end
-      lnkPath   	= lnkF.path.rawValue
+      else pss("❗link: wrong 'spot' validation"); return; end
+      lnkPath	= lnkF.path.rawValue
       if lnkF:exists() then goto continue; end -- try a new name skipping link creation
 
       if     linkT == "sym"   then
         local err = lnkF:makeSymbolicLink(tgtPath, symMode)
-        if err then viewP:showNotification("✗@link: " .. err.description,plugID,"long")
+        if err then psl("❗link: " .. err.description)
         else        break; end
       elseif linkT == "alias" then
         if fsL:get(binAlias):exists() then
           martax.execute(binAlias,{"-a",tgtPath,lnkPath}); break
-        else viewP:showNotification("✗@link: missing binary @ " .. binAlias,plugID,"long"); return; end
+        else psl("❗link: missing binary @ " .. binAlias); return; end
       elseif linkT == "hard"  then
         if fsL:get(binHard):exists() then
           martax.execute(binHard,{     tgtPath,lnkPath}); break
-        else viewP:showNotification("✗@link: missing binary @ " .. binHard,plugID,"long"); return; end
+        else psl("❗link: missing binary @ " .. binHard); return; end
       end
       ::continue::
     end
     if lnkF:exists() and isFail then -- looped thru the end and didn't find any empty paths
-      viewP:showNotification("✗@link: "..last.." paths taken up to: " .. lnkPath,plugID,"short"); return; end
+      pss("❗link: "..last.." paths taken up to: " .. lnkPath); return; end
   end
 end
 
