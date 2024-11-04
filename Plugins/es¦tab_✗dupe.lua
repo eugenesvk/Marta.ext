@@ -12,9 +12,9 @@ function tabLeft(ctxA)
   local tabMan 	= ctxW.tabs
   local paneMan	= ctxW.panes
   local tabA   	= paneMan.activePane -- get uptodate active tab
-  local tabPos 	= tabMan:getPosition      (tabA)  --(tab: PaneContext): Option<TabPosition> -- Get the tab position
-  local tabActI	= tabMan:getActiveTabIndex(tabPos) -- 0-based active tab index
-  local tabLeft	= tabMan:getTab           (tabPos, tabActI-1)
+  local tabSide	= tabMan:getPosition      (tabA)  --(tab: PaneContext): Option<TabPosition> -- Get the tab ←position→
+  local tabActI	= tabMan:getActiveTabIndex(tabSide) -- 0-based active tab index
+  local tabLeft	= tabMan:getTab           (tabSide, tabActI-1)
   if (tabActI > 0) then -- this might not be needed since left-most tab receiving -1 command doesn't error
     tabMan:activate(tabLeft)
   end
@@ -37,15 +37,15 @@ function tabCloseDupe(arg)
   local paneMan	= ctxW.panes
 
   local tabA     	= paneMan.activePane
-  local tabPos   	= tabMan:getPosition(tabA)     -- Get the tab position          	--(tab:PaneContext):Option<TabPosition>
-  local tabCount 	= tabMan:getCount   (tabPos  ) -- tab count for a given position	--(pos:             Option<TabPosition>):Int
-  local tabA_path	= tabA.model.folder.path       -- tab unique Path (≠String, use rawValue for that)
+  local tabSide  	= tabMan:getPosition(tabA)    -- the tab ←position→            	--(tab:PaneContext):Option<TabPosition>
+  local tabCount 	= tabMan:getCount   (tabSide) -- tab count for a given position	--(pos:             Option<TabPosition>):Int
+  local tabA_path	= tabA.model.folder.path      -- tab unique Path (≠String, use rawValue for that)
   local t        	= {}
   local i        	= 0
   if saveCur then t[tabA_path.rawValue]={true,tabA.id} end -- save current tab's path/ID to not close it later
 
   while (i < tabCount) do
-    local tab    	 = tabMan:getTab(tabPos, i)
+    local tab    	 = tabMan:getTab(tabSide, i)
     local path_s 	 = tab.model.folder.path.rawValue
     if (t[path_s]	~= nil) then
       if saveCur and (tab.id == tabA.id) then -- don't close if current tab is our original active tab
