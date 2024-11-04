@@ -76,12 +76,12 @@ function symlink(arg)
 
   -- Get and validate user configuration values
   local cfgDef,cfgPath,cfgBeh,cfgAct,cfgSym,cfgAls,cfgSpot,cfgMaxLnk,cfgIterMax,cfgAlsP,cfgHrdP,linkT,target,affix
-  local affixSym,affixAlias,maxLnk,binAlias,binHard,spot_ref                           ,linkT_ref,affix_ref
+  local affixSym,affixAlias,maxLnk,binAlias,binHard,r_spot                           ,r_linkT,r_affix
 
   cfgDef      	 = {["affixSym"]='🔗',["affixAlias"]='⤻',["affixHard"]='⤑',["spot"]='stem',["lnkMax"]=1,["iterMax"]=5
    ,          	   ["linkT"]="sym",["target"]="self",["binAlias"]='/usr/local/bin/alisma',["binHard"]='/bin/ln',}
-  spot_ref    	 = {["pre"]=true,["stem"] =true,["post"]=true} -- all possible spot values
-  linkT_ref   	 = {["sym"]=true,["alias"]=true,["hard"]=true} -- all possible link values
+  r_spot      	 = {["pre"]=true,["stem"] =true,["post"]=true} -- all possible spot values
+  r_linkT     	 = {["sym"]=true,["alias"]=true,["hard"]=true} -- all possible link values
   cfgAct      	 = ctxG:get("behavior","actions") -- crashes without the extra path element
   if cfgAct   	~= nil then
     cfgSym    	 = cfgAct[cfgKeyPre .. ".affixSym"  ]
@@ -102,29 +102,35 @@ function symlink(arg)
   binHard     	 = cfgHrdP    or cfgDef['binHard'   ]
   linkT       	 = arg.linkT  or cfgDef['linkT'     ]
   target      	 = arg.target or cfgDef['target'    ]
-  if (type(affixSym)   ~= "string")                              then
-    affixSym = cfgDef['affixSym'    ]; pss("❗link: wrong '"..cfgKeyPre..".affixSym' argument, using the default '"  ..cfgDef['affixSym'].."'")
-  else affixSym = affixSym:gsub(illegalFS,"")     end
-  if (type(affixAlias) ~= "string")                              then
-    affixAlias = cfgDef['affixAlias']; pss("❗link: wrong '"..cfgKeyPre..".affixAlias' argument, using the default '"  ..cfgDef['affixAlias'].."'")
-  else affixAlias = affixAlias:gsub(illegalFS,"") end
-  if (type(affixHard)  ~= "string")                              then
-    affixHard = cfgDef['affixHard'  ]; pss("❗link: wrong '"..cfgKeyPre..".affixHard' argument, using the default '"  ..cfgDef['affixHard'].."'")
-  else affixHard = affixHard:gsub(illegalFS,"")   end
-  if (type(spot)       ~= "string") or (spot_ref[spot] == nil)   then
-    spot = cfgDef['spot']        ; pss("❗link: wrong '"..cfgKeyPre..".spot' argument, using the default '"      ..cfgDef['spot'].."'"    ) end
-  if (type(lnkMax)     ~= "number") or (not isint(lnkMax))       then
-    lnkMax = cfgDef['lnkMax']    ; pss("❗link: wrong '"..cfgKeyPre..".maxLinkNo' argument, using the default '" ..cfgDef['lnkMax'].."'"  ) end
-  if (type(iterMax)    ~= "number") or (not isint(iterMax) or (iterMax < 0)) then
-    iterMax = cfgDef['iterMax']  ; pss("❗link: wrong '"..cfgKeyPre..".maxIterNo' argument, using the default '" ..cfgDef['iterMax'].."'" ) end
-  if (type(linkT)      ~= "string") or (linkT_ref[linkT] == nil) then
-    linkT = cfgDef['linkT']      ; pss("❗link: wrong 'linkT' action argument, using the default '"      ..cfgDef['linkT'].."'"    ) end
-  if (type(binAlias)   ~= "string")                              then
-    binAlias = cfgDef['binAlias']; pss("❗link: wrong '"..cfgKeyPre..".binAlias' argument, using the default '"  ..cfgDef['binAlias'].."'") end
-  if (type(binHard)    ~= "string")                              then
-    binHard = cfgDef['binHard']  ; pss("❗link: wrong '"..cfgKeyPre..".binHard' argument, using the default '"  ..cfgDef['binHard'].."'") end
-  affix_ref	= {["sym"]=affixSym,["alias"]=affixAlias,["hard"]=affixHard} -- all possible affix values
-  affix    	= affix_ref[linkT] -- set affix to the matching link type
+  local _sa = " argument, using ≝'"
+  if (type(affixSym)  	~= "string"           	)                                                 	--
+    then   affixSym   	 = cfgDef['affixSym'  	]; pss("❗link: wrong '"..cfgKeyPre..".affixSym'"  	.._sa..cfgDef['affixSym'].."'")
+  else     affixSym   	 = affixSym:gsub      	(illegalFS,"")                                    	end
+  if (type(affixAlias)	~= "string"           	)                                                 	--
+    then   affixAlias 	 = cfgDef['affixAlias'	]; pss("❗link: wrong '"..cfgKeyPre..".affixAlias'"	.._sa..cfgDef['affixAlias'].."'")
+  else affixAlias     	 = affixAlias:gsub    	(illegalFS,"")                                    	end
+  if (type(affixHard) 	~= "string"           	)                                                 	--
+    then   affixHard  	 = cfgDef['affixHard' 	]; pss("❗link: wrong '"..cfgKeyPre..".affixHard'" 	.._sa..cfgDef['affixHard'].."'")
+  else     affixHard  	= affixHard:gsub      	(illegalFS,"")                                    	end
+  if (type(spot)      	~= "string"           	)                                                 	--
+    or (r_spot[spot]  	== nil                	)                                                 	--
+    then   spot       	 = cfgDef['spot'      	]; pss("❗link: wrong '"..cfgKeyPre..".spot'"      	.._sa..cfgDef['spot'].."'"    ) end
+  if (type(lnkMax)    	~= "number"           	)                                                 	--
+    or (not           	isint(lnkMax)         	)                                                 	--
+    then   lnkMax     	 = cfgDef['lnkMax'    	]; pss("❗link: wrong '"..cfgKeyPre..".maxLinkNo'" 	.._sa..cfgDef['lnkMax'].."'"  ) end
+  if (type(iterMax)   	~= "number"           	)                                                 	--
+    or (not           	isint(iterMax         	)                                                 	--
+    or (   iterMax    	< 0)                  	)                                                 	--
+    then   iterMax    	 = cfgDef['iterMax'   	]; pss("❗link: wrong '"..cfgKeyPre..".maxIterNo'" 	.._sa..cfgDef['iterMax'].."'" ) end
+  if (type(linkT)     	~= "string"           	)                                                 	--
+    or (r_linkT[linkT]	== nil                	)                                                 	--
+    then   linkT      	 = cfgDef['linkT'     	]; pss("❗link: wrong 'linkT' action"              	.._sa..cfgDef['linkT'].."'"    ) end
+  if (type(binAlias)  	~= "string"           	)                                                 	--
+    then   binAlias   	 = cfgDef['binAlias'  	]; pss("❗link: wrong '"..cfgKeyPre..".binAlias'"  	.._sa..cfgDef['binAlias'].."'") end
+  if (type(binHard)   	~= "string"           	)                                                 	--
+    then   binHard    	 = cfgDef['binHard'   	]; pss("❗link: wrong '"..cfgKeyPre..".binHard'"   	.._sa..cfgDef['binHard'].."'") end
+  r_affix = {["sym"]=affixSym,["alias"]=affixAlias,["hard"]=affixHard} -- all possible affix values
+  affix   = r_affix[linkT] -- set affix to the matching link type
 
   local countFI = #filesInf
   if      countFI == 0 then return                 -- skip an empty dir (no files)
