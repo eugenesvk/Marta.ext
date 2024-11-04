@@ -1,11 +1,38 @@
 marta.expose()
 marta.plugin({id="es¦tab", name="Close Duplicated Tabs", apiVersion="2.2"})
 
-marta.action({id="✗tab_n_dupe", name="Tab: ✗Close Current & Duplicates",
-  apply = function(ctxA) tabClose(ctxA); tabLeft(ctxA); tabCloseDupe({ctxA=ctxA,saveCur=true}); end})
-marta.action({id="✗dupe" , name="Tab: ✗Close Duplicates"  , apply = function(ctxA) tabCloseDupe({ctxA=ctxA,saveCur=true}); end})
+marta.action({id="✗tab_n_dupe"	, name="Tab: ✗Close Current & Duplicates"
+  ,apply                      	= function(ctxA) tabCloseNLeft(ctxA); tabCloseDupe({ctxA=ctxA,saveCur=true}); end})
+marta.action({id="✗dupe"      	, name="Tab: ✗Close Duplicates"
+  ,apply                      	= function(ctxA)                      tabCloseDupe({ctxA=ctxA,saveCur=true}); end})
 -- marta.action({id="✗tab_cur←" , name="Tab: ✗Close Current and switch to the ←Left",
 --   apply = function(ctxA) tabClose(ctxA); tabLeft(ctxA); end})
+
+function tabCloseNLeft(ctxA) -- move selection ← after tab close (by default it shifts →) unless ours is the right-most
+  local ctxW    	= ctxA.window
+  local tabMan  	= ctxW.tabs
+  local paneMan 	= ctxW.panes
+  local tabA    	= paneMan.activePane -- get uptodate active tab
+  local tabSide 	= tabMan:getPosition      (tabA)    -- tab ←position→      (tab:PaneContext):Option<TabPosition>
+  local tabCount	= tabMan:getCount         (tabSide) -- tab count for a given position	--(pos:Option<TabPosition>):Int
+  local tabActI 	= tabMan:getActiveTabIndex(tabSide) -- 0-based active tab index
+  local tabL0I  	= tabMan:getTab(tabSide,0         ).tabIndex -- ‹most  tab index
+  local tabR0I  	= tabMan:getTab(tabSide,tabCount-1).tabIndex --  most› tab index
+
+  if (tabCount == 1) then tabMan:close(tabA); return end -- no adjustment needed for just a single tab
+
+  if     (tabActI == tabL0I) then -- no left-adjustment needed since post-close there will be no ‹tab
+    tabMan:close(tabA)
+  elseif (tabActI == tabR0I) then -- no left-adjustment needed since post-close the tab selection will move left
+    tabMan:close(tabA)
+  else -- close active tab then move selection left
+    tabMan:close(tabA)
+    if (tabActI > 0) then -- this might not be needed since left-most tab receiving -1 command doesn't error
+      local tabLeft	= tabMan:getTab         (tabSide, tabActI-1)
+      tabMan:activate(tabLeft)
+    end
+  end
+end
 
 function tabLeft(ctxA)
   local ctxW   	= ctxA.window
