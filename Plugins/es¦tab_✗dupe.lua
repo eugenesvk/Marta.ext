@@ -39,18 +39,17 @@ function tabCloseDupe(arg)
   local tabA     	= paneMan.activePane
   local tabPos   	= tabMan:getPosition(tabA)     -- Get the tab position          	--(tab:PaneContext):Option<TabPosition>
   local tabCount 	= tabMan:getCount   (tabPos  ) -- tab count for a given position	--(pos:             Option<TabPosition>):Int
-  local tabA_id  	= tabA.id -- tab unique id
   local tabA_path	= tabA.model.folder.path       -- tab unique id
   local t        	= {}
   local i        	= 0
-  if saveCur then t[tabA_path]={true,tabA_id} end -- save current tab's path/ID to not close it later
+  if saveCur then t[tabA_path]={true,tabA.id} end -- save current tab's path/ID to not close it later
 
   while (i < tabCount) do
     local tab   	 = tabMan:getTab(tabPos, i)
     local tab_id	 = tab.id
     local path  	 = tab.model.folder.path
     if (t[path] 	~= nil) then
-      if saveCur and ( tab_id == tabA_id) then -- don't close if current tab is our original active tab
+      if saveCur and ( tab_id == tabA.id) then -- don't close if current tab is our original active tab
         i	= i + 1
       else
         tabMan:close(tab)
