@@ -71,6 +71,11 @@ luac.out
 *.zip
 *.tar.gz
 
+# Rust
+callgrind.out.justfile
+lib-rs/dist
+lib-rs/target
+
 # Object files
 *.o
 *.os
