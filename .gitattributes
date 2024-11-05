@@ -1,0 +1,32 @@
+# ≝ behavior when no core.autocrlf set. 1st since a later line overrides an earlier line
+* text=lf
+# Text files
+*.bat       	text
+*.css_t     	text
+*.in        	text
+*.json      	text
+*.py        	text
+*.rst       	text
+*.sh        	text
+*.txt       	text
+*.xsh       	text
+*.yaml      	text
+*.yml       	text
+*.ini       	text
+Contributing	text
+license     	text
+License     	text
+Makefile    	text
+ReadMe      	text
+
+# Files in the lazyjson format require LF line endings
+tests/histories/*.json text eol=lf
+
+# Binary files
+*.ico 	binary
+*.gif 	binary
+*.gz  	binary
+*.png 	binary
+*.webm	binary
+*.jpeg	binary
+*.jpg 	binary
