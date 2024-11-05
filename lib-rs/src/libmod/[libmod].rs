@@ -20,7 +20,11 @@ pub fn console(lua:&Lua,in_str:String) -> LuaResult<i8> {
 
 pub fn ret_s(lua:&Lua, _:()) -> LuaResult<LuaString> { // example of a String being returned back to lua
   let s_rs:String="fn ret_Str()@Marta's Rust lua module".to_string();
-  // let s:LuaString = lua.create_string("core.sile").unwrap();
+  // let s_rs:String=type_of(&lua).to_string();
+  // let s:LuaString = lua.create_string("libmod.rs").unwrap();
+  let s_lua:LuaString = lua.create_string(s_rs)?;
+  Ok(s_lua)
+}
 
 use mlua::Function;
 pub fn call_lua_fn(lua:&Lua, _:()) -> LuaResult<LuaString> { // example of using `mytostring = tostring`
