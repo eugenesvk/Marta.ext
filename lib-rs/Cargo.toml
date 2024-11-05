@@ -15,7 +15,7 @@ path	= "src/dummy.bin.rs"
 [lib]
 name      	= "es_rs"
 path      	= "src/es_rs.lib.rs"
-crate-type	= ['lib','cdylib']
+crate-type	= ['cdylib']
 
 [dependencies]
 helperes     	= {git="https://github.com/eugenesvk/helperes.git"     , tag="0.1.0"}
