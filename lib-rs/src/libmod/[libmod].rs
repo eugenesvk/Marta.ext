@@ -17,3 +17,10 @@ pub fn console(lua:&Lua,in_str:String) -> LuaResult<i8> {
   warn!(myvar="⚠️","fn console(in_str)@Marta's Rust lua module es_rs.rs, in_str=‘{:?}’", in_str); // this creates a new event, outside of any spans.
   Ok(0)
 }
+
+pub fn ret_s(lua:&Lua, _:()) -> LuaResult<LuaString> { // example of a String being returned back to lua
+  let s_rs:String="fn ret_Str()@Marta's Rust lua module".to_string();
+  // let s:LuaString = lua.create_string("core.sile").unwrap();
+  let s_lua:LuaString = lua.create_string(s_rs)?;
+  Ok(s_lua)
+}

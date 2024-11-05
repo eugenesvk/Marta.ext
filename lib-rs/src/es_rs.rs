@@ -7,7 +7,7 @@ pub use ::h::alias 	::*;
 pub use ::h::helper	::*;
 
 #[path="libmod/[libmod].rs"] pub mod libmod;
-use crate::libmod::{sum,used_memory,hello,console,setup_logging};
+use crate::libmod::{sum,used_memory,ret_s,console,setup_logging};
 
 use mlua::prelude::*;
 
@@ -19,5 +19,6 @@ fn my_lua_lib(lua:&Lua) -> LuaResult<LuaTable> { // exported as _luaopen_libes_r
   exports.set("sum"        , lua.create_function(sum        )?)?;
   exports.set("used_memory", lua.create_function(used_memory)?)?;
   exports.set("console"    , lua.create_function(console    )?)?;
+  exports.set("ret_s"      , lua.create_function(ret_s      )?)?;
   Ok(exports)
 }
