@@ -1,5 +1,5 @@
 [package]  # help on keys doc.rust-lang.org/cargo/reference/manifest.html
-name   	= "dummy"
+name   	= "es_rs"
 version	= "0.1.0"
 authors	= ["{{authors}}"]
 edition	= "2021"
@@ -13,8 +13,8 @@ name	= "dummy_bin"
 path	= "src/dummy.bin.rs"
 
 [lib]
-name      	= "dummy_lib"
-path      	= "src/dummy.lib.rs"
+name      	= "es_rs"
+path      	= "src/es_rs.lib.rs"
 crate-type	= ['lib','cdylib']
 
 [dependencies]

@@ -4,7 +4,7 @@ version	= "0.1.0"
 edition	= "2021"
 
 [dependencies]
-dummy        	= {path= "..", default-features=false}
+es_rs        	= {path= "..", default-features=false}
 helperes     	= {git="https://github.com/eugenesvk/helperes.git"     , tag="0.1.0"}
 helperes_proc	= {git="https://github.com/eugenesvk/helperes-proc.git", tag="0.1.0"}
 log          	= "0.4"
