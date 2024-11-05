@@ -1,0 +1,141 @@
+#✗=unstable
+version                        	= "Two" 	# |One| backwards-compatible with 1.0, others backwards compatible within a major version number |One|Two¦ rust-lang.github.io/rustfmt/?version=v2.0.0-rc.2
+unstable_features              	= false 	#|false| Enable unstable features on the unstable channel
+# Width                        	        	#individual widths ≤max_width, if scaled=% of max_width
+max_width                      	= 100   	#|100| max width of each line before falling to vertical formatting
+# width_heuristics             	= "Max" 	#✗2|Scaled¦Off¦Max¦
+ #fn_call_width                	= 100   	#|70%| args of a function call
+ #attr_fn_like_width           	= 110   	#|70%| args of a function-like attributes
+ #struct_lit_width             	= 100   	#|18%| body of a struct literal
+ #struct_variant_width         	= 100   	#|35%| body of a struct variant
+ #array_width                  	= 100   	#|60%| array literal
+ #chain_width                  	= 100   	#|60%| chain to fit on one line
+ #single_line_if_else_max_width	= 100   	#|50%| length for single line if-else expressions
+error_on_line_overflow         	= false 	#|false|✗ Error if Rustfmt is unable to get all lines within max_width, except for comments and string literals. If this happens, then it is a bug in Rustfmt. You might be able to work around the bug by refactoring your code to avoid long/complex expressions, usually by extracting a local variable or using a shorter name {false, true}
+#write_mode                    	= "Diff"	# Used for debugging rustfmt configurations
+
+
+use_small_heuristics	= "Max" 	# ?use different formatting for items and expressions if they satisfy a heuristic notion of 'small' |Default|Off¦Max¦
+indent_style        	= "Block" #✗Indent on expressions or items |Block|Visual¦
+
+# Comments
+wrap_comments              	= false	#✗|false| Break comments to fit on the line
+comment_width              	= 100  	#✗|80| max comment length of comments, requires wrap_comments=true; 0=use wrap_comments regardles sof line width
+format_code_in_doc_comments	= true 	#✗|false| Format code snippet included in doc comments
+normalize_comments         	= false	#✗|false| Convert /* */ comments to // comments where possible
+normalize_doc_attributes   	= true 	#✗|false| Convert #![doc] and #[doc] attributes to //! and /// doc comments
+
+# Format scope
+format_strings       	= false	#✗|false| string literals where necessary (insert \ in long ones)
+format_macro_matchers	= false	#✗|false| metavariable matching patterns in macros
+  #                  	       		($a: ident : $b: ty) => {
+  #                  	       		($a:ident : $b:ty) => {
+format_macro_bodies  	= false	#✗|true| bodies of macros
+  #                  	       	($a: ident $b: ident $c: ident) => { $a=$b+$c; };  false
+  #                  	       	($a: ident $b: ident $c: ident) => {               true
+  #                  	       	     $a = $b + $c;
+
+# One-liners
+empty_item_single_line	= true	#|true| Put empty-body functions and impls     	on a single line
+struct_lit_single_line	= true	#|true| Put small struct literals              	on a single line
+fn_single_line        	= true	#|true| Put single-expression functions        	on a single line
+where_single_line     	= true	#✗|true| Forces the where clause to be laid out	on a single line
+
+# Imports
+imports_indent	= "Visual"	#✗Indent style of imports |Block|Visual¦
+  #           	          	use foo::{
+  #           	          	    block1,
+  #           	          	    block2,
+  #           	          	use foo::{visual1,
+  #           	          	          visual2};
+imports_layout 	= "Mixed"   	# Item layout inside a imports block "Mixed", "Horizontal", "HorizontalVertical", "Vertical"
+# group_imports	= "Preserve"	# Preserve, StdExternalCrate
+
+# Order
+reorder_imports   	= true	#|true| import/extern crate statements: alphabetically in groups (a group is separated by a newline)
+reorder_modules   	= true	#|true| alphabetically in group
+reorder_impl_items	= true	#|false| Type, const are 1st, then macros and methods
+
+# Punctuation & Spacing
+tab_spaces                  	= 2           	#|4| Number of spaces per tab
+hard_tabs                   	= false       	#|false| Use tab characters for indentation, spaces for alignment. todo: Change to true when flexible tastops can differentiate between indent and alignment
+type_punctuation_density    	= "Compressed"	# wrap + = in ␠ in the punctuation of types |Wide|Compressed¦
+remove_nested_parens        	= true        	#|true| Remove nested parens
+trailing_semicolon          	= false       	#|true| Add trailing semicolon after break, continue and return
+trailing_comma              	= "Vertical"  	# How to handle trailing commas for lists |Vertical|Always¦Never¦
+match_block_trailing_comma  	= true        	#|false| Put a trailing comma after a block based match arm (non-block arms are not affected)
+space_before_colon          	= false       	#✗|false| Leave a space before the colon
+space_after_colon           	= false       	#✗|true| Leave a space after the colon
+spaces_around_ranges        	= false       	#|false| Put spaces around the .., ..=, and ... range operators
+# space_around_attr_eq      	= false       	#✗|true| wrap '=' in spaces in attributes
+  #                         	              	#[cfg(not(target_os = "false"))]
+  #                         	              	#[cfg(not(target_os="true"))]
+struct_field_align_threshold	= 20          	#✗|0| max diff of width between struct fields to be aligned with each other
+  #                         	              	struct Foo { // 0
+  #                         	              	    x: u32,
+  #                         	              	    yy: u32,
+  #                         	              	struct Foo { //20:
+  #                         	              	    x:   u32,
+  #                         	              	    yy:  u32,
+newline_style               	= "Unix"      	# |Auto|Unix¦Windows¦ ␤␍
+# Separator                 	              	#
+blank_lines_lower_bound     	= 0           	#✗|0| min# of blank lines which must be put between items, insert extra
+blank_lines_upper_bound     	= 1           	#✗|1| max# of blank lines which must be put between items, trim extra
+binop_separator             	= "Front"     	#|Front|Back¦ binary operator location when a binary expression goes multiline
+  #                 let _  = arg1  arg1 ||
+  #                       || arg2  arg2
+
+
+# Misc
+combine_control_expr        	= true            	#✗|true| Combine control expressions with function calls
+  #                         	                  	 fn example() {
+  #                         	                  	   foo!(if x {  vs foo!(
+  #                         	                  	                     if x {
+overflow_delimited_expr     	= true            	#✗|false| When structs, slices, arrays, and block/array-like macros are used as the last argument in an expression list, allow them to overflow (like blocks/closures) instead of being indented on a new line
+  #                         	                  	foo(ctx, True {
+  #                         	                  	foo(
+  #                         	                  	    ctx,
+  #                         	                  	    False {
+enum_discrim_align_threshold	= 20              	#✗|0| max length of enum variant having discriminant, that gets vertically aligned with others. Variants without discriminants would be ignored for the purpose of alignment {0}
+  #                         	                  	enum Bar { // 20
+  #                         	                  	    A = 0,
+  #                         	                  	    Bb = 1,
+  #                         	                  	    RandomLongVariantGoesHere = 10,
+  #                         	                  	enum Foo { // 20
+  #                         	                  	    A   = 0,
+  #                         	                  	    Bb  = 1,
+  #                         	                  	    RandomLongVariantGoesHere = 10,
+match_arm_blocks            	= false           	#✗|true| Wrap the body of arms in blocks when it does not fit on the same line with the pattern of arms
+# match_arm_leading_pipes   	= "KeepExisting"  	#✗ include a leading pipe on match arms |Never|Always¦KeepExisting
+force_multiline_blocks      	= false           	#✗|false| Force multiline closure and match arm bodies to be wrapped in a block
+fn_args_layout              	= "Compressed"    	# layout of args in a function |Tall|Compressed¦Vertical¦
+fn_params_layout            	= "Compressed"    	# layout of pars in a function |Tall|Compressed¦Vertical¦
+brace_style                 	= "PreferSameLine"	#✗Brace style for items                  	|SameLineWhere|AlwaysNextLine¦PreferSameLine¦
+control_brace_style         	= "AlwaysSameLine"	# Brace style for control flow constructs	|AlwaysSameLine|AlwaysNextLine¦ClosingNextLine¦
+# edition                   	= "2024"          	# picked up from Cargo.toml
+# license_template_path     	= ""              	#✗Check whether beginnings of files match a license template ""
+
+
+inline_attribute_width    	= 20     	# Write an item and its attribute on the same line if their combined width is below a threshold {0}
+  #                       	         	[cfg(feature = "alloc")]                    // 0
+  #                       	         	use core::slice;
+  #                       	         	#[cfg(feature = "alloc")] use core::slice;  //50
+merge_derives             	= true   	#|true| Merge multiple derives into a single one
+merge_imports             	= true   	#✗|false| Merge multiple imports into a single nested one
+use_try_shorthand         	= true   	#✗|false| Replace uses of the try! macro by the ? shorthand {false, true}
+use_field_init_shorthand  	= true   	#|false| Use field initialize shorthand if possible
+  #                       	         	let false = Foo { x: x, y: y, z: z };
+  #                       	         	let true  = Foo { x, y, z };
+# force_explicit_abi      	= true   	#|true| Always print the abi for extern items
+condense_wildcard_suffixes	= true   	#✗|false| Replace strings of _ wildcards by a single .. in tuple patterns
+# required_version        	= "2.0.0"	#✗|CARGO_PKG_VERSION| Require a specific version of rustfmt. If you want to make sure that the specific version of rustfmt is used in your CI, use this option. {CARGO_PKG_VERSION}
+# disable_all_formatting  	= false  	#|false| Don't reformat anything
+# skip_children           	= false  	#|false| Don't reformat out of line modules
+hide_parse_errors         	= false  	#✗|false| ... if the parser failed to parse files
+error_on_unformatted      	= false  	#✗|false| Error if unable to get comments or string literals within max_width, or they are left with trailing whitespaces {false, true}
+# ignore                  	= []     	# Skip formatting files/dirs matching this pattern (=.gitignore, use / in paths, \ not supported)
+# emit_mode               	= "Files"	#
+# make_backup             	= false  	# {false, true}
+
+
+# color	= "Auto"	# removed in 2.0 Whether to use colored output or not. {"Auto", "Always", "Never"}

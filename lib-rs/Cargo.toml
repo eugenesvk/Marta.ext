@@ -1,0 +1,48 @@
+[package]  # help on keys doc.rust-lang.org/cargo/reference/manifest.html
+name   	= "dummy"
+version	= "0.1.0"
+authors	= ["{{authors}}"]
+edition	= "2021"
+build  	= "build.rs"
+
+[workspace]
+members = ["./","xtask"]	# relative to the workspace root
+
+[[bin]]
+name	= "dummy_bin"
+path	= "src/dummy.bin.rs"
+
+[lib]
+name      	= "dummy_lib"
+path      	= "src/dummy.lib.rs"
+crate-type	= ['lib','cdylib']
+
+[dependencies]
+helperes     	= {git="https://github.com/eugenesvk/helperes.git"     , tag="0.1.0"}
+helperes_proc	= {git="https://github.com/eugenesvk/helperes-proc.git", tag="0.1.0"}
+log          	= "0.4"
+stderrlog    	= "0.5"
+anyhow       	= "1.0"
+faccess      	= "0.2"
+
+[build-dependencies]
+log	= "0.4"
+
+[profile.release]
+# opt        	for      	size
+strip        	= true   	# Auto strip symbols from the binary (included by default on Linux/macOS)
+opt-level    	= 3      	# |3|     s=size, z=size+
+lto          	= true   	# |false| Sets link-time optimization.
+codegen-units	= 1      	# |16|    reduce parallel code generation
+panic        	= "abort"	# |unwind| save ~20k w/o drop-on-panic cleanup and std::panic::catch_unwind
+
+# Overrides doc.rust-lang.org/nightly/cargo/reference/profiles.html#overrides
+[profile.dev.package."*"] # panic/lto/rpath can't be overridden
+opt-level	= 3 	# build dependencies in release mode to make the main app faster
+[profile.dev.build-override]
+opt-level	= 3	# build scripts and proc-macros in release mode to make them faster
+
+[lint.rust]
+non_snake_case        	= "allow"
+non_upper_case_globals	= "allow"
+non_camel_case_types  	= "allow"
