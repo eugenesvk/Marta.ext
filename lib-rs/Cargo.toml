@@ -14,7 +14,7 @@ path	= "src/dummy.bin.rs"
 
 [lib]
 name      	= "es_rs"
-path      	= "src/es_rs.lib.rs"
+path      	= "src/es_rs.rs"
 crate-type	= ['cdylib']
 
 [features]
