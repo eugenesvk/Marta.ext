@@ -21,6 +21,40 @@ pub fn console(lua:&Lua,in_str:String) -> LuaResult<i8> {
 pub fn ret_s(lua:&Lua, _:()) -> LuaResult<LuaString> { // example of a String being returned back to lua
   let s_rs:String="fn ret_Str()@Marta's Rust lua module".to_string();
   // let s:LuaString = lua.create_string("core.sile").unwrap();
+
+use mlua::Function;
+pub fn call_lua_fn(lua:&Lua, _:()) -> LuaResult<LuaString> { // example of using `mytostring = tostring`
+  let g = lua.globals();
+  let mytostring:Function = g.get("mytostring")?;
+  let s_rs:String = mytostring.call::<String>(123)?;
   let s_lua:LuaString = lua.create_string(s_rs)?;
+
+  let s_lua1:LuaString = lua.create_string("glue.get(myalert).call::<()>(s_lua1)")?;
+  //1ok
+  // let myalert:Function = g.get("myalert")?;
+  // let _ = myalert.call::<()>(s_lua1)?;
+  //2
+  // let got:LuaString = match g.get::<LuaValue>("myalert")? {
+  //   LuaValue::Function(myalert)	=> myalert.call((s_lua1,)),
+  //   _                          	=> Err(LuaError::RuntimeError("❗ globals.myalert wrong type ≠ 𝑓𝑛".into())),
+  //   }?;
+  //missing myalert1 shows no context in Console from Marta -- 'apply()' failed:LuaUserData(ptr:Optional(0x0000600001071cb8))
+  //3 custom console error message works, but how to make LuaError show up? Is it blocked by Marta???
+  let got = match g.get::<LuaValue>("myalert1") {
+    Ok(val)                      	=> match val {
+      LuaValue::Function(myalert)	=> myalert.call::<()>(s_lua1),
+      _                          	=> {warn!("❗ globals.myalert1 not found"); Err(LuaError::RuntimeError("❗".into()))},
+      }                          	,
+    _                            	=> {warn!("❗ globals.myalert1 wrong type ≠ 𝑓𝑛"); Err(LuaError::RuntimeError("❗".into()))},
+    }?;
+
+  let s_lua2:LuaString = lua.create_string("g.get(martax).get(alert).call::<()>(s_lua2)")?;
+  let martax:LuaTable = g.get("martax")?;
+  let alert:Function = martax.get("alert")?;
+  let _ = alert.call::<()>(s_lua2)?;
+
+  let get_application_url:Function = martax.get("getApplicationUrl")?;
+  let s_app:LuaString = get_application_url.call::<LuaString>("com.apple.calculator")?;
+  let _ = alert.call::<()>(s_app)?;
   Ok(s_lua)
 }
