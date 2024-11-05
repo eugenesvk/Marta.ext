@@ -1,3 +1,5 @@
+use crate::*;
+
 use mlua::prelude::*;
 pub fn sum        (_  :&Lua, (a,b):(i64,i64)) -> LuaResult<i64  > {Ok(a + b)            }
 pub fn used_memory(lua:&Lua, _    :(       )) -> LuaResult<usize> {Ok(lua.used_memory())}
