@@ -49,7 +49,8 @@ pub fn call_lua_fn(lua:&Lua, _:()) -> LuaResult<LuaString> { // example of using
   let got = match g.get::<LuaValue>("myalert1") {
     Ok(val)                      	=> match val {
       LuaValue::Function(myalert)	=> myalert.call::<()>(s_lua1),
-      _                          	=> {warn!("❗ globals.myalert1 not found"); Err(LuaError::RuntimeError("❗".into()))},
+      _                          	=> {warn!("❗ globals.myalert1 not found"); Err(anyhow!("❗"))},
+      // _                       	=> {warn!("❗ globals.myalert1 not found"); Err(LuaError::RuntimeError("❗".into()))},
       }                          	,
     _                            	=> {warn!("❗ globals.myalert1 wrong type ≠ 𝑓𝑛"); Err(LuaError::RuntimeError("❗".into()))},
     }?;
