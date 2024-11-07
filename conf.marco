@@ -211,7 +211,7 @@ fonts {
   virtualTabs	[ "Garamond Premier Pro Bold"   	16 ]
   breadcrumbs	[ "Garamond Premier Pro"        	16 ]
   tableHeader	[ "Garamond Premier Pro Caption"	14 ]
-  files      	[ "Garamond Premier Pro"        	16 ]
+  files      	[ "Garamond Premier Pro Caption"	16 ]
   statusBar  	[ "Garamond Premier Pro"        	14 ]
   actionBar  	[ "Default"                     	12 ]
   preferences	[ "Monaco"                      	12 ]
