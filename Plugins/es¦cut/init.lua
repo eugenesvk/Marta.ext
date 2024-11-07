@@ -11,7 +11,7 @@ local libes_rs	= require "libes_rs" -- name = `#[mlua::lua_module(name="es_rs")]
 marta.action({id="📋cut",name="Cut the currently selected items to the 📋clipboard ()"  ,
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
   apply        = function(ctxA) clipboard_cut_paste({ctxA=ctxA,op="cut"})  ; end})
-marta.action({id="📋paste.move.cut",name="Paste&move the previously ‘📋cut’ items to the currently active tab (ignore items added directly via ‘core.clipboard.copy’)"  ,
+marta.action({id="📋paste.move.cut",name="Move the previously ‘📋cut’ items to the currently active tab or paste copied items"  ,
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
   apply        = function(ctxA) clipboard_cut_paste({ctxA=ctxA,op="move"})  ; end})
 marta.action({id="📋paste.move.any",name="Paste&move any items from the 📋clipboard to the currently active tab (even if not added via ‘📋cut’, but ‘core.clipboard.copy’)"  ,
@@ -43,11 +43,10 @@ function clipboard_cut_paste(arg)
   if     (arg.op == "cut"     ) then is_cut = true ; run_action("core.clipboard.copy"); pss('📋cut')
   elseif (arg.op == "move"    ) then
     if   (is_cut == true      ) then is_cut = false; libes_rs.move()                  ; dbg(1,'‘📋paste.move.cut’')
-    else pss("No items were ‘📋cut’, so nothing to ‘📋paste.move.cut’")
+    else run_action("core.clipboard.paste");             dbg(1,"No items were ‘📋cut’, pasting copied…")
     end
   elseif (arg.op == "move.any") then
-    if   (is_cut == true      ) then is_cut = false; --libes_rs.move_any()
-    else run_action("core.clipboard.paste"); pss("No items were ‘📋cut’, pasting copied…")
-    end
+    if   (is_cut == true      ) then is_cut = false else dbg(1,"No items were ‘📋cut’, moving copied…") end
+    libes_rs.move()
   end
 end
