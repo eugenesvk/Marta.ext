@@ -1,5 +1,7 @@
 local std = {} -- stdlib
 
+require("function_bind")
+
 -- escape magic chars ^$()%.[]*+-? https://www.lua.org/manual/5.1/manual.html#5.4.1
 string.escmagic  	= function(self, str)	return self:gsub("([^%w])", "%%%1")                  	end
 string.startswith	= function(self, str)	return self:find('^' .. str:escmagic()       ) ~= nil	end
