@@ -224,6 +224,8 @@ fonts {
 }
 
 keyBindings {
+  "Cmd+X" "es¦cut.📋cut"
+  "Cmd+=" "es¦cut.📋paste.move.cut"
   "Alt+Cmd+q" {id "core.run.actions" actions ["core.tab.new" "core.tab.new"]}
 
   "e"	"core.actions"	"a"	"core.actions"	"Cmd+E"	"core.actions"	"Shift+Cmd+P"	null
