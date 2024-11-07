@@ -73,6 +73,12 @@ behavior {
 }
 
 gadgets [
+  {id          	"gadget.sublime.text"
+    name       	"Open in Sublime Text Editor"
+    type       	"application"
+    application	"/Applications/2 Play/1 Text/Sublime Text.app"
+    "files"    	["${active.selection.paths}"]
+  }
   {id "gadget.action.my.application.runner"
     name       	"My Application Runner"
     type       	"application"
@@ -278,6 +284,7 @@ keyBindings {
   "Alt+o"       	{id "core.open.folder" mode "newTabBackground"}
   "Alt+Return"  	{id "core.open.folder" mode "newTabBackground"}
   "Ctrl+Return" 	"core.edit"
+  "Alt+p"       	"gadget.sublime.text"
 
   "Cmd+I"	"core.finder.showInfo"
   "Cmd+Y"	"core.preview"
