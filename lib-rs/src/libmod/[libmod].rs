@@ -28,6 +28,7 @@ pub fn ret_s(lua:&Lua, _:()) -> LuaResult<LuaString> { // example of a String be
   Ok(s_lua)
 }
 
+use anyhow::{anyhow, Result};
 use mlua::Function;
 pub fn call_lua_fn(lua:&Lua, _:()) -> LuaResult<LuaString> { // example of using `mytostring = tostring`
   let g = lua.globals();
