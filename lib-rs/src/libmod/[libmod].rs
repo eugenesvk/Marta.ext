@@ -74,7 +74,7 @@ pub fn cut     (lua:&Lua, _:()) -> LuaResult<LuaString> {
   let s_lua:LuaString = lua.create_string("stub for a cut")?;
   Ok(s_lua)
 }
-pub fn move    (lua:&Lua, _:()) -> LuaResult<LuaString> {
+pub fn cmove   (lua:&Lua, _:()) -> LuaResult<LuaString> {
   let s_lua:LuaString = lua.create_string("stub for a move")?;
   Ok(s_lua)
 }
