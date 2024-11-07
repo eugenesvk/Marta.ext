@@ -62,5 +62,32 @@ pub fn call_lua_fn(lua:&Lua, _:()) -> LuaResult<LuaString> { // example of using
   let get_application_url:Function = martax.get("getApplicationUrl")?;
   let s_app:LuaString = get_application_url.call::<LuaString>("com.apple.calculator")?;
   let _ = alert.call::<()>(s_app)?;
+
+use std     	::{//env,fs,
+  path      	::{Path,PathBuf},
+  // process	::{Command,Stdio},
+};
+use clipboard_files;
+pub fn cut     (lua:&Lua, _:()) -> LuaResult<LuaString> {
+  let s_lua:LuaString = lua.create_string("stub for a cut")?;
+  Ok(s_lua)
+}
+pub fn move    (lua:&Lua, _:()) -> LuaResult<LuaString> {
+  let s_lua:LuaString = lua.create_string("stub for a move")?;
+  Ok(s_lua)
+}
+pub fn move_any(lua:&Lua, _:()) -> LuaResult<LuaString> {
+  let g = lua.globals();
+
+  let mut out_s:String = "".to_string();
+  match clipboard_files::read() { //:Vec<std::path::PathBuf>
+    Ok (paths)	=> {out_s.push_str(format!("got №{}",paths.len()).as_ref());},
+    Err(e)    	=> {out_s.push_str("clipboard has no files");},
+  }
+  let martax:LuaTable = g.get("martax")?;
+  let alert:Function = martax.get("alert")?;
+  let s_lua:LuaString = lua.create_string(out_s)?;
+  // let _ = alert.call::<()>(s_lua)?;
+
   Ok(s_lua)
 }
