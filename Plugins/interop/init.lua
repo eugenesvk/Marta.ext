@@ -7,7 +7,8 @@ local cfgP 	= ctxG.application.configurationFolder.rawValue
 local plugP	= ctxG.application.pluginFolder -- .rawValue BUG github.com/marta-file-manager/marta-issues/issues/1089
 
 package.cpath = package.cpath ..';'.. plugP..'/lib/?.dylib'
-local librustinterop	= require "libes_rs" -- name = `#[mlua::lua_module(name="es_rs")]` annotated fn at es_rs.lib.rs
+--- ERRRORs if loaded in two modules
+-- local librustinterop	= require "libes_rs" -- name = `#[mlua::lua_module(name="es_rs")]` annotated fn at es_rs.lib.rs
 
 -- librustinterop.lua_plugin_within_rust()
 marta.action({id="rust",name="test librustinterop",
@@ -21,7 +22,7 @@ function luarustinterop(ctxA)
   -- martax.alert('libcinterop.used_memory()',tostring(librustinterop.used_memory()))
   -- librustinterop.console("my_console")
   -- martax.alert('libcinterop.ret_s()',tostring(librustinterop.ret_s()))
-  librustinterop.call_lua_fn() --= myalert(tostring(123))
+  -- librustinterop.call_lua_fn() --= myalert(tostring(123))
 
   -- a= librustinterop.hello("my_name")
   -- martax.alert('libcinterop.hello(myname)',tostring(a.name))
