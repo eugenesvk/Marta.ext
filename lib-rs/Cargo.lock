@@ -339,6 +339,7 @@ dependencies = [
  "anyhow",
  "cacao",
  "clipboard-files",
+ "core-graphics",
  "faccess",
  "helperes",
  "helperes_proc",
