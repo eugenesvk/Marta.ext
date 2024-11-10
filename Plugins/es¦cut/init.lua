@@ -1,4 +1,4 @@
-local plugID = "es¦cut"
+plugID = "es¦cut"
 marta.plugin({id=plugID,name="Cut command via a Rust plugin",apiVersion="2.2"})
 
 local ctxG 	= marta.globalContext	--
@@ -29,24 +29,49 @@ function clipboard_cut_paste(arg)
   local fsL     	= marta.localFileSystem	--
   local ctxPA   	= ctxA.activePane      	--
   local ctxP_inA	= ctxA.inactivePane    	--
-  local model   	= ctxPA.model          	-- Active pane list model
+  local modelA  	= ctxPA.model          	-- Active pane list model
   local viewP   	= ctxPA.view           	--
 
   function pss(msg) viewP:showNotification(msg,plugID,"short") end -- short-term "print" to the statusbar
   function psl(msg) viewP:showNotification(msg,plugID,"long" ) end -- long-term  "print" to the statusbar
   function dbg(l,msg) if (_d>=l) then pss(msg) end end -- short-term "print" to the statusbar
-
   function run_action(action) ctxW:runAction(actG:getById(action),ctxPA) end -- short-term "print" to the statusbar
 
-  function pss(msg) viewP:showNotification(msg,plugID,"short") end -- short-term "print" to the statusbar
-  -- set our global flag to true to track our cut ↓, but otherwise ↓ use native copy libes_rs.cut()
-  if     (arg.op == "cut"     ) then is_cut = true ; run_action("core.clipboard.copy"); pss('📋cut')
-  elseif (arg.op == "move"    ) then
-    if   (is_cut == true      ) then is_cut = false; libes_rs.move()                  ; dbg(1,'‘📋paste.move.cut’')
-    else run_action("core.clipboard.paste");             dbg(1,"No items were ‘📋cut’, pasting copied…")
-    end
-  elseif (arg.op == "move.any") then
-    if   (is_cut == true      ) then is_cut = false else dbg(1,"No items were ‘📋cut’, moving copied…") end
-    libes_rs.move()
-  end
+  -- local cb_alert = function(name) if name then martax.alert("Hello, " .. name .. "!") end end
+  cb_alert = function(name) martax.alert(name) end
+  local cb_res = libes_rs.ask_name(ctxA, cb_alert)
+  -- psl("cb_res = "..cb_res)
+  -- psl(type(ctxW.nsWindow)) -- userdata
+  -- psl(type(cb_alert))
+
+
+  -- local is_fs = modelA.isLocalFileSystem -- ignore non-folders, e.g., zip files
+  -- if not is_fs then dbg(1,plugID.."📋 can't run in a non-local filesystem"); return; end
+  -- local is_dir = false
+  -- local parentFdInf = modelA.folderInfo
+  -- local path_to
+  -- if   parentFdInf then
+  --   path_to = parentFdInf.path.rawValue
+  --   if parentFdInf.isFolder then is_dir = true end
+  -- end
+  -- local can_paste = is_fs and is_dir
+  -- if _d>=4 then pss("can_paste="..tostring(can_paste).." local_fs="..tostring(is_fs).." dir="..tostring(is_dir)) end
+  -- local cb_res = libes_rs.move_to(ctxA, path_to)
+  -- psl("cb_res = "..cb_res)
+
+  -- psl(type(ctxA.args))
+
+  -- local errt = libes_rs.errort()
+  -- psl("errt = "..errt)
+
+  -- set our global flag to true to track ↓ our cut, but otherwise ↓ use native copy
+  -- if     (arg.op == "cut"     ) then is_cut = true ; run_action("core.clipboard.copy"); pss('📋cut')
+  -- elseif (arg.op == "move"    ) then if not can_paste then pss("❗not a 📁, can't paste here"); return end
+  --   if   (is_cut == true      ) then is_cut = false; libes_rs.move_to(path_to)        ; dbg(2,'‘📋paste.move.cut’')
+  --   else run_action("core.clipboard.paste");             dbg(2,"No items were ‘📋cut’, pasting copied…")
+  --   end
+  -- elseif (arg.op == "move.any") then if not can_paste then pss("❗not a 📁, can't paste here"); return end
+  --   if   (is_cut == true      ) then is_cut = false else dbg(2,"No items were ‘📋cut’, moving copied…") end
+  --   libes_rs.move_to(path_to)
+  -- end
 end
