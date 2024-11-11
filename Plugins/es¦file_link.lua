@@ -166,6 +166,7 @@ function symlink(arg)
     tgtName	= tgtFI.name
     tgtStem	= parentFd:append(tgtName).nameWithoutExtension -- tgtFI.nameWithoutExtension
     tgtExt 	= tgtFI.extension
+    dtgtExt	= tgtExt~='' and ('.'..tgtExt) or tgtExt
 
     local isFail	= nil
     local last  	= iterMax + 1                   -- add one more step to signal failure
@@ -178,7 +179,7 @@ function symlink(arg)
       else                    lnkParentFd	= parentFd end -- Active   ...
 
       if     (spot == 'pre' ) then lnkF = lnkParentFd:append(affix..n..tgtName)
-      elseif (spot == 'stem') then lnkF = lnkParentFd:append(          tgtStem..affix..n..'.'.. tgtExt)
+      elseif (spot == 'stem') then lnkF = lnkParentFd:append(          tgtStem..affix..n..dtgtExt)
       elseif (spot == 'post') then lnkF = lnkParentFd:append(          tgtName..affix..n)
       else pss("❗link: wrong 'spot' validation"); return; end
       lnkPath  	= lnkF.path.rawValue
@@ -186,7 +187,7 @@ function symlink(arg)
         lnkName	= lnkF.name
         lnkStem	= lnkF.nameWithoutExtension
         lnkExt 	= lnkF.extension
-        martax.alert("Target vs Link", '\ntgtPath='..tgtPath .. '\ntgtName='..tgtName .. '\ntgtStem='..tgtStem .. '\ntgtExt='..tgtExt
+        martax.alert("Target vs Link", '\ntgtPath='..tgtPath .. '\ntgtName='..tgtName .. '\ntgtStem='..tgtStem .. '\ndtgtExt='..dtgtExt
           ..'\n'.. '\nlnkPath='..lnkPath .. '\nlnkName='..lnkName .. '\nlnkStem='..lnkStem .. '\nlnkExt='..lnkExt)
       end
       if lnkF:exists() then goto continue; end -- try a new name skipping link creation
