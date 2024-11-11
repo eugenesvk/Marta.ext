@@ -1,0 +1,65 @@
+[package]  # help on keys doc.rust-lang.org/cargo/reference/manifest.html
+name   	= "es_rs"
+version	= "0.1.0"
+authors	= ["{{authors}}"]
+edition	= "2021"
+build  	= "build.rs"
+
+[workspace]
+members = ["./","xtask"]	# relative to the workspace root
+
+[[bin]]
+name	= "dummy_bin"
+path	= "src/dummy.bin.rs"
+
+[lib]
+name      	= "es_rs"
+path      	= "src/es_rs.rs"
+crate-type	= ['cdylib']
+
+[features]
+default	= ["lua54"]
+lua54  	= ["mlua/lua54","mlua/module",]
+
+[dependencies]
+helperes     	= {git="https://github.com/eugenesvk/helperes.git"     , tag="0.1.0"}
+helperes_proc	= {git="https://github.com/eugenesvk/helperes-proc.git", tag="0.1.0"}
+log          	= "0.4"
+stderrlog    	= "0.5"
+anyhow       	= "1.0"
+faccess      	= "0.2"
+mlua         	= {version="0.10.0", features=["anyhow"]}
+# log to macOS, view in Console
+tracing-oslog     	= "0.2.0"
+tracing           	= "0.1.40"
+tracing-subscriber	= "0.3.18"
+# OS integration
+clipboard-files	= "0.1.1"
+# cacao        	= "0.3.2" # native GUI
+objc_id        	= "0.1.1"
+objc           	= "0.2.7"
+core-graphics  	= "0.22.0" # should version in cacao
+cacao          	= {path="/Volumes/SDXCUHSI256/Dev/Repo/_dep/cacao-0.3.2"}
+dispatch = "0.2.0"
+
+[build-dependencies]
+log	= "0.4"
+
+[profile.release]
+# opt        	for      	size
+strip        	= true   	# Auto strip symbols from the binary (included by default on Linux/macOS)
+opt-level    	= 3      	# |3|     s=size, z=size+
+lto          	= true   	# |false| Sets link-time optimization.
+codegen-units	= 1      	# |16|    reduce parallel code generation
+panic        	= "abort"	# |unwind| save ~20k w/o drop-on-panic cleanup and std::panic::catch_unwind
+
+# Overrides doc.rust-lang.org/nightly/cargo/reference/profiles.html#overrides
+[profile.dev.package."*"] # panic/lto/rpath can't be overridden
+opt-level	= 3 	# build dependencies in release mode to make the main app faster
+[profile.dev.build-override]
+opt-level	= 3	# build scripts and proc-macros in release mode to make them faster
+
+[lints.rust]
+non_snake_case        	= "allow"
+non_upper_case_globals	= "allow"
+non_camel_case_types  	= "allow"
