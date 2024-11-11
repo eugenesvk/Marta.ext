@@ -33,14 +33,6 @@ mlua         	= {version="0.10.0", features=["anyhow"]}
 tracing-oslog     	= "0.2.0"
 tracing           	= "0.1.40"
 tracing-subscriber	= "0.3.18"
-# OS integration
-clipboard-files	= "0.1.1"
-# cacao        	= "0.3.2" # native GUI
-objc_id        	= "0.1.1"
-objc           	= "0.2.7"
-core-graphics  	= "0.22.0" # should version in cacao
-cacao          	= {path="/Volumes/SDXCUHSI256/Dev/Repo/_dep/cacao-0.3.2"}
-dispatch = "0.2.0"
 
 [build-dependencies]
 log	= "0.4"
