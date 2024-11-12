@@ -1,3 +1,13 @@
+use crate::*;
+use crate::libmod::*;
+
+use objc::{class, msg_send, sel, sel_impl,
+  runtime	::Object,
+};
+use objc_id::{ShareId,Id,Shared};
+
+use cacao::foundation::id;
+
 pub fn get_win_id_objc(nswin_lua:&LuaLightUserData) -> Result<ShareId<Object>> {
   // nswin = Unmanaged<NSWindow>.fromOpaque(nsWindowPtr).takeUnretainedValue(); //Swift example
   let ptr_r:*mut c_void	= nswin_lua.0;
