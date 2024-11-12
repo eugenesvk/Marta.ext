@@ -72,8 +72,8 @@ impl       WinMgr {
     match msg {
       Message::OpenOverwriteSheet	=> {warn!("M:OpenOverwriteSheet"	); /*self.open_sheet() 	;*/},
       Message::CloseSheet        	=> {warn!("M:CloseSheet"        	); /*self.close_sheet()	;*/},
-      _ => {warn!("got other UI msg @ WinMgr Dispatcher");}
+      _ => {warn!("got other UI msg @ implg WinMgr");}
     }
-    if let Some(w) = &*(self.modal.read().unwrap())	{if let Some(delegate) = &w.delegate {warn!("M:modal");delegate.on_message(msg.clone());}}
+    if let Some(w) = &*(self.modal.read().unwrap())	{if let Some(delegate) = &w.delegate {warn!("on_msg modal");delegate.on_message(msg.clone());}}
   }
 }
