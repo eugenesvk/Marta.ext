@@ -15,10 +15,10 @@ use cacao::appkit::App;
   CloseSheet,
   /// Test
   TestChangeTitle,
-  /// Button Yes
-  ActOnBtnYes,
-  /// Button No
-  ActOnBtnNo,
+  /// Confirm move, overwriting the target
+  MoveOverwrite,
+  /// Cancel the move operation, overwriting prompt was rejected
+  MoveCancel,
 }
 
 /// Dispatch a message to the window manager (can't do regular app background thread dispatch since we don't control the app)
