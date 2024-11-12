@@ -10,4 +10,6 @@ use cacao::appkit::App;
   OpenOverwriteSheet,
   /// Close the current active sheet
   CloseSheet,
+  /// Test
+  TestChangeTitle,
 }
