@@ -18,8 +18,8 @@ impl       wOverwrite {pub fn new() -> Self {wOverwrite {content:ViewController:
   pub fn on_message(&self, msg:Message) {
     let win = self.win.as_ref().unwrap();
     match msg { //TODO: test storing window as is
-      Message::TestTitleOverwriteWin1	=> {win.set_title("TestTitleOverwriteWin1"	);/*win.set_content_view_controller(&self.win1);*/},
-      _                              	=> {}
+      Message::TestChangeTitle	=> {win.set_title("TestChangeTitle"	);/*win.set_content_view_controller(&self.win1);*/},
+      _                       	=> {}
     }
   }
 
