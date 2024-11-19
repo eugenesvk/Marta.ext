@@ -13,7 +13,7 @@ use cacao::appkit::window::{Window,WindowConfig,WindowDelegate, Window as Win, W
 
 use cacao::foundation::{id, nil, to_bool, NSInteger, NSString, NSUInteger, NO, YES, AutoReleasePool};
 use objc::runtime::Object;
-use objc::{class, msg_send, sel, sel_impl};
+use objc::{class, msg_send, sel};
 use objc_id::{ShareId,Id,Shared};
 
 thread_local! {pub static WM:LazyCell<WinMgr> = LazyCell::new(|| {WinMgr::default()});}

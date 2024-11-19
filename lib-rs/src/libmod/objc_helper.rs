@@ -1,7 +1,7 @@
 use crate::*;
 use crate::libmod::*;
 
-use objc::{class, msg_send, sel, sel_impl,
+use objc::{class, msg_send, sel,
   runtime	::Object,
 };
 use objc_id::{ShareId,Id,Shared};
