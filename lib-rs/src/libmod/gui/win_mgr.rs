@@ -8,7 +8,7 @@ use std::cell::Cell;
 use tracing::{info,warn,Level};
 
 use cacao::appkit::window::{Window,WindowConfig,WindowDelegate, Window as Win, WindowConfig as WinCfg, WindowDelegate as WinDelegate};
-use objc::runtime::Object;
+use cacao::objc::runtime::Object;
 use objc_id::{ShareId,Id,Shared};
 
 /// A helper method: check for our modal window existence, and create it if not, then show it

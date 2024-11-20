@@ -13,7 +13,8 @@ use cacao::appkit::window::{Window,WindowConfig,WindowDelegate, Window as Win, W
 
 use cacao::foundation::{id, nil, to_bool, NSInteger, NSString, NSUInteger, AutoReleasePool};
 use objc::ffi::{NO,YES};
-use objc::runtime::Object;
+use cacao::objc::runtime::Object;
+// use objc::runtime::Object;
 use objc::{class, msg_send, sel};
 use objc_id::{ShareId,Id,Shared};
 

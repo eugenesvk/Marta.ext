@@ -9,7 +9,8 @@ use crate::libmod::*;
 
 use cacao::appkit::window::{Window       , WindowConfig          , WindowDelegate
   ,                         Window as Win, WindowConfig as WinCfg, WindowDelegate as WinDelegate};
-use objc::runtime::Object;
+use cacao::objc::runtime::Object;
+// use objc::runtime::Object;
 use objc_id::{ShareId,Id,Shared};
 
 // 1 Window
