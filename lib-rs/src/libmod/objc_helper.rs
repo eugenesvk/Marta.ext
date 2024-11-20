@@ -2,8 +2,9 @@ use crate::*;
 use crate::libmod::*;
 
 use objc::{class, msg_send, sel,
-  runtime	::Object,
+  // runtime	::Object,
 };
+use cacao::objc::runtime::Object;
 use objc_id::{ShareId,Id,Shared};
 
 use cacao::foundation::id;
