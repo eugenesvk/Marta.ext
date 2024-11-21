@@ -8,9 +8,12 @@
 - add a way to cancel long operation (a button? in a progress bar)
 - TODO: verify that did_load doesn't recreate all the views on every single invocation of the dialog
 - allow quitting the app even when modal sheet is opened [src](https://forums.macrumors.com/threads/terminate-while-nssheet-isvisible-solved.522228/)
+- UI window
+  - split 3 red/yellow/green buttons, make the colors much more muted and move close to the right corner as it's a categorically different button from min/max
 - UI button
   - can't highlight on mouseover? [fr](https://github.com/ryanmcgrath/cacao/issues/140), add mouseover with help and e.g. shortcut on a button should show a different style
   - can't highlight to simulate a button press manually when manual accelerators are used?
+  - make default width higher than normal, but not constrained
   - ? disable beeps on key presses that aren't bound as keybinds (need to subclass something)?
   - ? check how to make very constrained view still visible: buttons should shrink to a single icon with 0 padding
   + (use unicode underscore + AttributedString) button highlight acelerator key in a different user-customizable color (no mnemonics, deprecated)
