@@ -110,16 +110,13 @@ impl ViewDelegate for       vOverwrite {const NAME: &'static str = "vOverwrite d
       (Theme::Dark, _)	=> Color::SystemGreen,
       _               	=> Color::SystemRed});
 
-
-    self.title      	.set_text          	("title_Label_vOver_write"   	);
-    self.subtitle   	.set_text          	("subtitle_Label_vOver_write"	);
-    // self.subtitle	.set_text_alignment	(TextAlign::Center           	);
-    // v.add_subview(&self.v);
-
-    let title   	= Label::new()	;v.add_subview(&self.title   	);
-    let subtitle	= Label::new()	;v.add_subview(&self.subtitle	);
-
-
+    let title   	= Label::new();
+    let subtitle	= Label::new();
+    title       	.set_text          	("title_Label_vOver_write"   	);
+    title       	.set_text_alignment	(TextAlign::Center           	);
+    subtitle    	.set_text          	("subtitle_Label_vOver_write"	);
+    v           	.add_subview       	(&title                      	);
+    v           	.add_subview       	(&subtitle                   	);
 
     // let mut y=Button::new("O̲verwrite"	);y.set_action(|_| {press_y("UI button")});y.set_key_equivalent("o"); //❗
     // let mut n=Button::new("S̲kip"     	);n.set_action(|_| {press_n("UI button")});n.set_key_equivalent("\r");
@@ -225,9 +222,11 @@ impl ViewDelegate for       vOverwrite {const NAME: &'static str = "vOverwrite d
       n  	.width   	.constraint_equal_to_constant(200.	)             ,//n	.height	.constraint_equal_to_constant(hn	),
       y  	.width   	.constraint_equal_to(&n.width     	)             ,//y	.height	.constraint_equal_to_constant(hy	),
     ]);
-    self.bYes = Some(y);
-    self.bNo  = Some(n);
-    self.v  = v;
+    self.v       	= v;
+    self.title   	= title;
+    self.subtitle	= subtitle;
+    self.bYes    	= Some(y);
+    self.bNo     	= Some(n);
   }
 }
 
