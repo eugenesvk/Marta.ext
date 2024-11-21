@@ -34,25 +34,92 @@ impl       wOverwrite {pub fn new() -> Self {wOverwrite {content:ViewController:
 
 // 2 Root view controller
 use cacao::{
-  layout 	::{Layout,LayoutConstraint},
-  text   	::{Label,TextAlign},
-  view   	::{View,ViewDelegate,ViewController},
+  layout 	::{Layout,LayoutConstraint,},
+  text   	::{Label,TextAlign,Font,AttributedString, AttributedString as RichStr },
+  view   	::{View,ViewDelegate,ViewController,},
   switch 	::Switch,
-  button 	::{Button,BezelStyle, BezelStyle as Border},
+  button 	::{Button,BezelStyle, BezelStyle as Border,ImagePosition,},
   control	::{Control,ControlSize,},
-  color  	::Color,
+  color  	::{Color, Theme,},
+  image  	::{Image,MacSystemIcon,SFSymbol},
+  utils  	::os::OS_VERSION,
 };
+use cacao::appkit::FocusRingType;
+use cacao::objc::{class, msg_send, sel, sel_impl};
+use core_graphics::base::CGFloat;
 
-#[derive(Debug)] pub struct vOverwrite {
+#[derive(Debug,Default)] pub struct vOverwrite {
   pub v       	: View  	,//
   pub title   	: Label 	,//
   pub subtitle	: Label 	,//
-  pub bYes    	: Button	,//
-  pub bNo     	: Button	,//
+  pub bYes    	: Option<Button>	,//
+  pub bNo     	: Option<Button>	,//
 }
-impl Default      for       vOverwrite { /// Creates and returns a stock Overwrite view
-  fn default() -> Self {
-    let v       	= View::new();
+// impl Default      for       vOverwrite { /// Creates and returns a stock Overwrite view
+//   fn default() -> Self {
+//     let v       	= View::new();
+//     let title   	= Label::new()	;//v.add_subview(&title   	);
+//     let subtitle	= Label::new()	;//v.add_subview(&subtitle	);
+
+//     let mut y=Button::new("❗Overwrite"	);y.set_action(|_| dispatch_ui(Message::MoveOverwrite	));y.set_key_equivalent("\r");//🖍
+//     let mut n=Button::new("Cancel"    	);n.set_action(|_| dispatch_ui(Message::MoveCancel   	));n.set_key_equivalent("a");
+//     y.set_highlighted(false);y.set_bezel_style(BezelStyle::RegularSquare);y.set_control_size(ControlSize::Large);y.set_text_color(Color::SystemRed  );
+//     n.set_highlighted(true );n.set_bezel_style(BezelStyle::RegularSquare);n.set_control_size(ControlSize::Large);n.set_text_color(Color::SystemBlack);
+//     v.add_subview(&y);let bYes = y;
+//     v.add_subview(&n);let bNo  = n;
+
+//     LayoutConstraint::activate(&[
+//       // title   	.top     	.constraint_equal_to(&v.top          	).offset(  2.),
+//       // subtitle	.top     	.constraint_equal_to(&title.bottom   	),
+//       // // bYes 	.top     	.constraint_equal_to(&subtitle.bottom	).offset(-20.),
+//       // // bNo  	.top     	.constraint_equal_to(&subtitle.bottom	).offset(-20.),
+//       // title   	.leading 	.constraint_equal_to(&v.leading      	),
+//       // subtitle	.leading 	.constraint_equal_to(&v.leading      	),
+//       // // bYes 	.leading 	.constraint_equal_to(&v.leading      	).offset( -4.),
+//       // // bNo  	.leading 	.constraint_equal_to(&v.leading      	).offset( -4.),
+//       // title   	.trailing	.constraint_equal_to(&v.trailing     	),
+//       // subtitle	.trailing	.constraint_equal_to(&v.trailing     	),
+//       // title   	.width   	.constraint_equal_to_constant(248.   	),
+//       // subtitle	.width   	.constraint_equal_to_constant(248.   	),
+//       // // bYes 	.width   	.constraint_equal_to_constant(248.   	),bYes	.height	.constraint_equal_to_constant(148.	),
+//       // // bNo  	.width   	.constraint_equal_to_constant(248.   	),
+//       // subtitle	.bottom  	.constraint_equal_to(&v.bottom       	),
+//       // // bYes 	.bottom  	.constraint_equal_to(&v.bottom       	),
+//       // bNo     	.bottom  	.constraint_equal_to(&v.bottom       	),
+
+//       v.width.constraint_equal_to_constant(600.0),
+//       v.height.constraint_equal_to_constant(500.0),
+//       bYes	.width   	.constraint_equal_to_constant(28.	),
+//       bYes	.height  	.constraint_equal_to_constant(28.	),
+//       bYes	.top     	.constraint_equal_to(&v.top).offset(-1.),
+//       bYes	.leading 	.constraint_equal_to(&v.leading).offset(40.),
+//       bYes	.trailing	.constraint_equal_to(&v.trailing).offset(-2.),
+//       bYes	.bottom  	.constraint_equal_to(&v.bottom).offset(-1.),
+//     ]);
+//     vOverwrite {v,title,subtitle,bYes,bNo}
+//   }
+// }
+// impl                        vOverwrite {
+//   /// Configures vOverwrite, handler is fired on each state change of the checkbox
+//   pub fn configure<F>(&mut self, text:&str, subtitle:&str, state:bool, handler:F) where F:Fn()+Send+Sync+'static {
+//     self.title   	.set_text(text);
+//     self.subtitle	.set_text(subtitle);
+//     self.switch  	.set_action(handler);
+//     self.switch  	.set_checked(state);
+//   }
+// }
+
+pub fn toggle_do_nothing() {}
+impl ViewDelegate for       vOverwrite {const NAME: &'static str = "vOverwrite";
+  fn did_load(&mut self, v:View) { //View is ready to work with, arg View is safe to store and use repeatedly, but it's not thread safe - any UI calls must be made from the main thread!
+    warn!("ViewDelegate for vOverwrite did_load function");
+    self.title      	.set_text          	("title_Label_vOverwrite"   	);
+    self.subtitle   	.set_text          	("subtitle_Label_vOverwrite"	);
+    // self.subtitle	.set_text_alignment	(TextAlign::Center          	);
+    v.add_subview(&self.v);
+
+
+
     let title   	= Label::new()	;//v.add_subview(&title   	);
     let subtitle	= Label::new()	;//v.add_subview(&subtitle	);
 
@@ -80,7 +147,7 @@ impl Default      for       vOverwrite { /// Creates and returns a stock Overwri
       // // bNo  	.width   	.constraint_equal_to_constant(248.   	),
       // subtitle	.bottom  	.constraint_equal_to(&v.bottom       	),
       // // bYes 	.bottom  	.constraint_equal_to(&v.bottom       	),
-      // bNo  	.bottom  	.constraint_equal_to(&v.bottom       	),
+      // bNo     	.bottom  	.constraint_equal_to(&v.bottom       	),
 
       v.width.constraint_equal_to_constant(600.0),
       v.height.constraint_equal_to_constant(500.0),
@@ -91,28 +158,17 @@ impl Default      for       vOverwrite { /// Creates and returns a stock Overwri
       bYes	.trailing	.constraint_equal_to(&v.trailing).offset(-2.),
       bYes	.bottom  	.constraint_equal_to(&v.bottom).offset(-1.),
     ]);
-    vOverwrite {v,title,subtitle,bYes,bNo}
-  }
-}
-// impl                        vOverwrite {
-//   /// Configures vOverwrite, handler is fired on each state change of the checkbox
-//   pub fn configure<F>(&mut self, text:&str, subtitle:&str, state:bool, handler:F) where F:Fn()+Send+Sync+'static {
-//     self.title   	.set_text(text);
-//     self.subtitle	.set_text(subtitle);
-//     self.switch  	.set_action(handler);
-//     self.switch  	.set_checked(state);
-//   }
-// }
+    self.bYes = Some(bYes);
+    self.bNo  = Some(bNo);
+    // vOverwrite {v,title,subtitle,bYes,bNo}
 
-pub fn toggle_do_nothing() {}
-impl ViewDelegate for       vOverwrite {const NAME: &'static str = "vOverwrite";
-  fn did_load(&mut self, v:View) { //View is ready to work with, arg View is safe to store and use repeatedly, but it's not thread safe - any UI calls must be made from the main thread!
-    warn!("ViewDelegate for vOverwrite did_load function");
-    self.title      	.set_text          	("title_Label_vOverwrite"   	);
-    self.subtitle   	.set_text          	("subtitle_Label_vOverwrite"	);
-    // self.subtitle	.set_text_alignment	(TextAlign::Center          	);
-    v.add_subview(&self.v);
 
+
+
+
+
+
+    /*
     // LayoutConstraint::activate(&[
       // v.width.constraint_equal_to_constant(1000.0),
 
@@ -134,6 +190,7 @@ impl ViewDelegate for       vOverwrite {const NAME: &'static str = "vOverwrite";
     //   self.label.trailing	.constraint_equal_to(&v.trailing	).offset( -16.),
     //   self.label.bottom  	.constraint_equal_to(&v.bottom  	).offset(-100.),
     // ]);
+    */
   }
 }
 
