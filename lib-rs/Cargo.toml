@@ -43,6 +43,8 @@ objc           	= { version = "=0.3.0-beta.2", package = "objc2" }
 core-foundation	= { git = "https://github.com/madsmtm/core-foundation-rs.git", rev = "7d593d016175755e492a92ef89edca68ac3bd5cd" }
 core-graphics  	= { git = "https://github.com/madsmtm/core-foundation-rs.git", rev = "7d593d016175755e492a92ef89edca68ac3bd5cd" } # should version in cacao
 #              	.
+# OS integration
+os_info	= "3.0.1"
 
 [build-dependencies]
 log	= "0.4"
