@@ -17,20 +17,20 @@ pub struct wOverwrite {pub                               content:ViewController 
 impl       wOverwrite {pub fn new() -> Self {wOverwrite {content:ViewController::new(vOverwrite::default()),win:None          , win_id_objc:None                   ,key_monitor:RwLock::new(None)}}
   pub fn on_message(&self, msg:Message) {
     match msg { //TODO: test storing window as is
-      Message::TestChangeTitle	=> {warn!("M@wOver_write:TestChangeTitle");let win = self.win.as_ref().unwrap();win.set_title("TestChangeTitle"	);/*win.set_content_view_controller(&self.win1);*/},
-      Message::MoveOverwrite  	=> {warn!("M@wOver_write:MoveOverwrite");},
+      Message::TestChangeTitle	=> {/*warn!("M@wOver_write:TestChangeTitle");*/let win = self.win.as_ref().unwrap();win.set_title("TestChangeTitle"	);/*win.set_content_view_controller(&self.win1);*/},
+      Message::MoveOverwrite  	=> {/*warn!("M@wOver_write:MoveOverwrite");*/},
       // Message::MoveCancel  	=> {warn!("M@wOver_write:MoveCancel");/*do something move-specific before closing the modal;*/ dispatch_ui(Message::CloseSheet)},
       // Message::MoveCancel  	=> {warn!("M@wOver_write:MoveCancel");      WM.with(|wm| {wm.close_sheet();});}, //←↑ hangs Marta
       // Message::MoveCancel  	=> {warn!("M@wOver_write:MoveCancel");self.cancel();}, //← hangs Marta
-      _                       	=> {warn!("M@wOver_write: other = {:#?}",msg);}
+      _                       	=> {/*debug!("M@wOver_write: other = {:#?}",msg);*/}
     }
   }
 
-  pub fn save_marta_ptr(&mut self, win_id_objc:ShareId<Object>) {warn!{"impl wOver_write save_marta_ptr, store a ref to our main windows's pointer for future use"};
+  pub fn save_marta_ptr(&mut self, win_id_objc:ShareId<Object>) {//warn!{"save_marta_ptr@wOver_write: store a ref to our main windows's pointer for future use"};
     if self.win_id_objc.is_none() {
        self.win_id_objc =
       Some( win_id_objc);
-      warn!("SAVED self.win_id_objc {:?}",self.win_id_objc); //Some(
+      //warn!("SAVED self.win_id_objc {:?}",self.win_id_objc); //Some(
     }
   }
 
@@ -53,7 +53,7 @@ impl       wOverwrite {pub fn new() -> Self {wOverwrite {content:ViewController:
           let key_code = evt.key_code(); //virtual code for the key associated with the event.
           let mod_flag = evt.modifier_flags(); //modifier flags for the key associated with the event.
           let bits = str::replace(&format!("{: >24b}",mod_flag.bits()),"0"," ");
-          warn!("{} {}𝚻{:?} vk={} mod_flag={}\tbits=0b{}", chars, ev_t,kind, key_code, mod_flag,bits);
+          // trace!("{} {}𝚻{:?} vk={} mod_flag={}\tbits=0b{}", chars, ev_t,kind, key_code, mod_flag,bits);
           match chars.as_ref() {
             "y" => {press_y("letter y")},
             "c" => {press_n("letter c")},
@@ -66,7 +66,7 @@ impl       wOverwrite {pub fn new() -> Self {wOverwrite {content:ViewController:
           let key_code = evt.key_code(); //virtual code for the key associated with the event.
           let mod_flag = evt.modifier_flags(); //modifier flags for the key associated with the event.
           let bits = str::replace(&format!("{: >24b}",mod_flag.bits()),"0"," ");
-          warn!("   {}𝚻{:?} vk={} mod_flag={:#}\tbits=0b{}", ev_t,kind, key_code, mod_flag,bits);
+          // trace!("   {}𝚻{:?} vk={} mod_flag={:#}\tbits=0b{}", ev_t,kind, key_code, mod_flag,bits);
         }
         _	=> {//dbg!("  𝚻{:?} ev_t={} ev={:?}", kind, ev_t, evt);
           return None},
@@ -95,7 +95,7 @@ use core::ops::Range;
 
 pub fn toggle_do_nothing() {}
 fn press_y(s:&str) {warn!("Y action from: {}",s)}
-fn press_n(s:&str) {warn!("N action from: {}",s);dispatch_ui(Message::CloseSheet);}
+fn press_n(s:&str) {/*trace!("N action from: {}",s);*/dispatch_ui(Message::CloseSheet);}
 
 #[derive(Debug,Default)] pub struct vOverwrite {
   pub v       	: View          	,//
@@ -108,7 +108,7 @@ fn press_n(s:&str) {warn!("N action from: {}",s);dispatch_ui(Message::CloseSheet
 use cacao::events::EventType;
 impl ViewDelegate for       vOverwrite {const NAME: &'static str = "vOver_write delegate";
   fn did_load(&mut self, v:View) { //View is ready to work with, arg View is safe to store and use repeatedly, but it's not thread safe - any UI calls must be made from the main thread!
-    warn!("did_load@ViewDelegate for vOver_write");
+    // warn!("did_load@ViewDelegate for vOver_write");
     let dynamic = Color::dynamic(|style| match (style.theme, style.contrast) {
       (Theme::Dark, _)	=> Color::SystemGreen,
       _               	=> Color::SystemRed});
@@ -249,12 +249,11 @@ impl WinDelegate for wOverwrite {const NAME: &'static str = "wOver_write";
   }
 
   fn should_close(&self) -> bool { // when the user has attempted to close the window (not quit the app). Return false here if you need to handle the edge case.
-    warn!("WinDelegate for wOver_write should_close function");
-    // self.close_sheet();
+    //warn!("WinDelegate for wOver_write should_close function");// self.close_sheet();
     true
   }
   fn cancel(&self) { // close when the ESC key is hit (for modals)
-    if let Some(win_id_objc) = &self.win_id_objc {warn!("✓ WinDelegate for wOver_write cancel function win_id_objc pointer exists {:?} {:?}", self.win_id_objc, win_id_objc);
+    if let Some(win_id_objc) = &self.win_id_objc {//warn!("✓ WinDelegate for wOver_write cancel function win_id_objc pointer exists {:?} {:?}", self.win_id_objc, win_id_objc);
       WM.with(|wm| {wm.close_sheet();}); //TODO replace with messages?
     } else {warn!("✗ WinDelegate for wOver_write cancel function win_id_objc pointer does NOT exists {:?}", self.win_id_objc);}
   }
