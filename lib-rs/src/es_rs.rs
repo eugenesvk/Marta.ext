@@ -7,7 +7,7 @@ pub use ::h::alias 	::*;
 pub use ::h::helper	::*;
 
 #[path="libmod/[libmod].rs"] pub mod libmod;
-use crate::libmod::{used_memory,setup_logging,cut,move_cb_to,ask_name};
+use crate::libmod::{used_memory,setup_logging,cut,move_cb_to,ask_overwrite};
 
 use mlua::prelude::*;
 
@@ -16,9 +16,9 @@ use mlua::prelude::*;
 fn my_lua_lib(lua:&Lua) -> LuaResult<LuaTable> { // exported as _luaopen_libes_rs, see `nm -gU libes_rs.dylib`
   setup_logging()?;
   let exports = lua.create_table()?;
-  exports.set("used_memory"	, lua.create_function(used_memory	)?)?;
-  exports.set("cut"        	, lua.create_function(cut        	)?)?;
-  exports.set("move_to"    	, lua.create_function(move_cb_to 	)?)?;
-  exports.set("ask_name"   	, lua.create_function(ask_name   	)?)?;
+  exports.set("used_memory"  	, lua.create_function(used_memory  	)?)?;
+  exports.set("cut"          	, lua.create_function(cut          	)?)?;
+  exports.set("move_to"      	, lua.create_function(move_cb_to   	)?)?;
+  exports.set("ask_overwrite"	, lua.create_function(ask_overwrite	)?)?;
   Ok(exports)
 }
