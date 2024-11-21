@@ -205,6 +205,11 @@ impl ViewDelegate for       vOverwrite {const NAME: &'static str = "vOverwrite d
 
     let hn:f64 = 20.0; let hy:f64 = hn; //20 seems to be the default large, but manually setting.height makes the buttons bug and have diff H
     LayoutConstraint::activate(&[
+      // (sub)title
+      title   	.top     	.constraint_equal_to(&v.top       	).offset(  2.),
+      title   	.center_x	.constraint_equal_to(&v.center_x  	),
+      subtitle	.top     	.constraint_equal_to(&title.bottom	),
+      // buttons and button shortcut accelerator labels
       n  	.top     	.constraint_equal_to(&v.top       	).offset( 46.),
       nl1	.top     	.constraint_equal_to(&n.top       	),
       nl2	.bottom  	.constraint_equal_to(&n.bottom    	),
