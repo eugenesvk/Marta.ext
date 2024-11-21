@@ -106,7 +106,7 @@ fn press_n(s:&str) {warn!("N action from: {}",s);dispatch_ui(Message::CloseSheet
 }
 
 use cacao::events::EventType;
-impl ViewDelegate for       vOverwrite {const NAME: &'static str = "vOverwrite delegate";
+impl ViewDelegate for       vOverwrite {const NAME: &'static str = "vOver_write delegate";
   fn did_load(&mut self, v:View) { //View is ready to work with, arg View is safe to store and use repeatedly, but it's not thread safe - any UI calls must be made from the main thread!
     warn!("did_load@ViewDelegate for vOver_write");
     let dynamic = Color::dynamic(|style| match (style.theme, style.contrast) {
