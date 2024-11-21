@@ -417,6 +417,7 @@ dependencies = [
  "mlua",
  "objc2",
  "objc_id",
+ "os_info",
  "stderrlog",
  "tracing",
  "tracing-oslog",
