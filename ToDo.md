@@ -7,6 +7,7 @@
 # es¦cut
 - add a way to cancel long operation (a button? in a progress bar)
 - TODO: verify that did_load doesn't recreate all the views on every single invocation of the dialog
+- allow quitting the app even when modal sheet is opened [src](https://forums.macrumors.com/threads/terminate-while-nssheet-isvisible-solved.522228/)
 - UI button
   - can't highlight on mouseover? [fr](https://github.com/ryanmcgrath/cacao/issues/140), add mouseover with help and e.g. shortcut on a button should show a different style
   - can't highlight to simulate a button press manually when manual accelerators are used?
