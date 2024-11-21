@@ -94,8 +94,8 @@ use core_graphics::base::CGFloat;
 use core::ops::Range;
 
 pub fn toggle_do_nothing() {}
-fn press_y(s:&str) {println!("Y action from: {}",s)}
-fn press_n(s:&str) {println!("N action from: {}",s)}
+fn press_y(s:&str) {warn!("Y action from: {}",s)}
+fn press_n(s:&str) {warn!("N action from: {}",s);dispatch_ui(Message::CloseSheet);}
 
 #[derive(Debug,Default)] pub struct vOverwrite {
   pub v       	: View          	,//
