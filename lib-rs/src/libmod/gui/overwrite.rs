@@ -13,8 +13,8 @@ use cacao::objc::runtime::Object;
 use objc_id::{ShareId,Id,Shared};
 
 // 1 Window
-pub struct wOverwrite {pub                               content:ViewController     <vOverwrite>           ,win:Option<Window>, win_id_objc:Option<ShareId<Object>>,}
-impl       wOverwrite {pub fn new() -> Self {wOverwrite {content:ViewController::new(vOverwrite::default()),win:None          , win_id_objc:None}}
+pub struct wOverwrite {pub                               content:ViewController     <vOverwrite>           ,win:Option<Window>, win_id_objc:Option<ShareId<Object>>,key_monitor:RwLock<Option<EventMonitor>>,}
+impl       wOverwrite {pub fn new() -> Self {wOverwrite {content:ViewController::new(vOverwrite::default()),win:None          , win_id_objc:None                   ,key_monitor:RwLock::new(None)}}
   pub fn on_message(&self, msg:Message) {
     let win = self.win.as_ref().unwrap();
     match msg { //TODO: test storing window as is
@@ -30,6 +30,47 @@ impl       wOverwrite {pub fn new() -> Self {wOverwrite {content:ViewController:
       warn!("SAVED self.win_id_objc {:?}",self.win_id_objc); //Some(
     }
   }
+
+  pub fn start_monitoring(&self) {
+    let mut lock = self.key_monitor.write().unwrap();
+    *lock = Some(Event::local_monitor(EventMask::KeyDown | EventMask::KeyUp | EventMask::FlagsChanged, |evt| {
+      //use calculator::{dispatch, Msg};
+      let kind = evt.kind();
+      let ev_t:&str = match kind {
+        EventType::FlagsChanged	=> &format!("Δ in {}{}{}{}{}{:#}",&Mod::CapsLock,&Mod::Shift,&Mod::Control,&Mod::Option,&Mod::Command,&Mod::Function),
+        EventType::KeyDown     	=> "↓",
+        EventType::KeyUp       	=> "↑",
+        _                      	=> "?",
+      };
+      match evt.kind() {
+         EventType::KeyDown
+        |EventType::KeyUp	=> {
+          let chars = evt.characters(); //characters associated with a key-up or key-down event
+          let chars = evt.characters_ignoring_modifiers(); //characters associated with a key-up or key-down event w/o mods (except ⇧)
+          let key_code = evt.key_code(); //virtual code for the key associated with the event.
+          let mod_flag = evt.modifier_flags(); //modifier flags for the key associated with the event.
+          let bits = str::replace(&format!("{: >24b}",mod_flag.bits()),"0"," ");
+          warn!("{} {}𝚻{:?} vk={} mod_flag={}\tbits=0b{}", chars, ev_t,kind, key_code, mod_flag,bits);
+          match chars.as_ref() {
+            "y" => {press_y("letter y")},
+            "c" => {press_n("letter c")},
+            "s" => {press_n("letter s")},
+            _ => return Some(evt),
+          }
+        },
+        // use key code to diff ‹vs› in modifiers as key presses (not as part of modifier flags)
+        EventType::FlagsChanged	=> {
+          let key_code = evt.key_code(); //virtual code for the key associated with the event.
+          let mod_flag = evt.modifier_flags(); //modifier flags for the key associated with the event.
+          let bits = str::replace(&format!("{: >24b}",mod_flag.bits()),"0"," ");
+          warn!("   {}𝚻{:?} vk={} mod_flag={:#}\tbits=0b{}", ev_t,kind, key_code, mod_flag,bits);
+        }
+        _	=> {//dbg!("  𝚻{:?} ev_t={} ev={:?}", kind, ev_t, evt);
+          return None},
+      }
+      None
+    }));
+  }
 }
 
 // 2 Root view controller
@@ -44,7 +85,7 @@ use cacao::{
   image  	::{Image,MacSystemIcon,SFSymbol},
   utils  	::os::OS_VERSION,
   objc   	::{class, msg_send, sel, sel_impl},
-  appkit 	::{Event, EventMask, EventMonitor, FocusRingType},
+  appkit 	::{Event, EventMask, EventMonitor, FocusRingType, EventModifierBitFlag, EventModifierBitFlag as Mod},
 };
 use core_graphics::base::CGFloat;
 use core::ops::Range;
@@ -60,6 +101,8 @@ fn press_n(s:&str) {println!("N action from: {}",s)}
   pub bYes    	: Option<Button>	,//option to allow default derive
   pub bNo     	: Option<Button>	,//
 }
+
+use cacao::events::EventType;
 impl ViewDelegate for       vOverwrite {const NAME: &'static str = "vOverwrite delegate";
   fn did_load(&mut self, v:View) { //View is ready to work with, arg View is safe to store and use repeatedly, but it's not thread safe - any UI calls must be made from the main thread!
     warn!("did_load@ViewDelegate for vOver_write");
@@ -201,6 +244,7 @@ impl WinDelegate for wOverwrite {const NAME: &'static str = "wOver_write";
     win.set_content_view_controller(&self.content);
 
     self.win = Some(win);
+    self.start_monitoring(); // Event Monitors needs to be started after the Window is activated
   }
 
   fn should_close(&self) -> bool { // when the user has attempted to close the window (not quit the app). Return false here if you need to handle the edge case.
