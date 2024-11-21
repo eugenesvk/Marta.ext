@@ -115,11 +115,11 @@ impl ViewDelegate for       vOverwrite {const NAME: &'static str = "vOver_write 
 
     let title   	= Label::new();
     let subtitle	= Label::new();
-    title       	.set_text          	("title_Label_vOver_write"   	);
-    title       	.set_text_alignment	(TextAlign::Center           	);
-    subtitle    	.set_text          	("subtitle_Label_vOver_write"	);
-    v           	.add_subview       	(&title                      	);
-    v           	.add_subview       	(&subtitle                   	);
+    title       	.set_text          	("Item(s) already exist");
+    title       	.set_text_alignment	(TextAlign::Center	);
+    subtitle    	.set_text          	("Do you want to overwrite them?");
+    v           	.add_subview       	(&title   	);
+    v           	.add_subview       	(&subtitle	);
 
     // let mut y=Button::new("O̲verwrite"	);y.set_action(|_| {press_y("UI button")});y.set_key_equivalent("o"); //❗
     // let mut n=Button::new("S̲kip"     	);n.set_action(|_| {press_n("UI button")});n.set_key_equivalent("\r");
