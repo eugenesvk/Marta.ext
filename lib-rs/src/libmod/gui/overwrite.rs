@@ -23,7 +23,7 @@ impl       wOverwrite {pub fn new() -> Self {wOverwrite {content:ViewController:
     }
   }
 
-  pub fn save_marta_ptr(&mut self, win_id_objc:ShareId<Object>) {warn!{"impl wOverwrite save_marta_ptr, store a ref to our main windows's pointer for future use"};
+  pub fn save_marta_ptr(&mut self, win_id_objc:ShareId<Object>) {warn!{"impl wOver_write save_marta_ptr, store a ref to our main windows's pointer for future use"};
     if self.win_id_objc.is_none() {
        self.win_id_objc =
       Some( win_id_objc);
@@ -209,13 +209,13 @@ impl WinDelegate for wOverwrite {const NAME: &'static str = "wOverwrite";
   }
 
   fn should_close(&self) -> bool { // when the user has attempted to close the window (not quit the app). Return false here if you need to handle the edge case.
-    warn!("WinDelegate for wOverwrite should_close function");
+    warn!("WinDelegate for wOver_write should_close function");
     // self.close_sheet();
     true
   }
   fn cancel(&self) { // close when the ESC key is hit (for modals)
-    if let Some(win_id_objc) = &self.win_id_objc {warn!("✓ WinDelegate for wOverwrite cancel function win_id_objc pointer exists {:?} {:?}", self.win_id_objc, win_id_objc);
+    if let Some(win_id_objc) = &self.win_id_objc {warn!("✓ WinDelegate for wOver_write cancel function win_id_objc pointer exists {:?} {:?}", self.win_id_objc, win_id_objc);
       WM.with(|wm| {wm.close_sheet();}); //TODO replace with messages?
-    } else {warn!("✗ WinDelegate for wOverwrite cancel function win_id_objc pointer does NOT exists {:?}", self.win_id_objc);}
+    } else {warn!("✗ WinDelegate for wOver_write cancel function win_id_objc pointer does NOT exists {:?}", self.win_id_objc);}
   }
 }
