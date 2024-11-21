@@ -39,7 +39,7 @@ function clipboard_cut_paste(arg)
 
   -- local cb_alert = function(name) if name then martax.alert("Hello, " .. name .. "!") end end
   cb_alert = function(name) martax.alert(name) end
-  local cb_res = libes_rs.ask_name(ctxA, cb_alert)
+  local cb_res = libes_rs.ask_overwrite(ctxA, cb_alert)
   -- psl("cb_res = "..cb_res)
   -- psl(type(ctxW.nsWindow)) -- userdata
   -- psl(type(cb_alert))
