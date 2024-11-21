@@ -11,6 +11,7 @@
 - dynamic: change modal color scheme to read from Marta's theme file or have a separate file that does the same and read its name from marta's config, pass the value to the function and cache the values in a global oncecell config var
 - UI window
   - split 3 red/yellow/green buttons, make the colors much more muted and move close to the right corner as it's a categorically different button from min/max
+  - ? add a help button with a tooltip? or at least on-press tooltip since mouseover doesn't work over buttons
 - UI button
   - can't highlight on mouseover? [fr](https://github.com/ryanmcgrath/cacao/issues/140), add mouseover with help and e.g. shortcut on a button should show a different style
   - can't highlight to simulate a button press manually when manual accelerators are used?
