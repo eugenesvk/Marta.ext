@@ -8,6 +8,7 @@
 - add a way to cancel long operation (a button? in a progress bar)
 - TODO: verify that did_load doesn't recreate all the views on every single invocation of the dialog
 - allow quitting the app even when modal sheet is opened [src](https://forums.macrumors.com/threads/terminate-while-nssheet-isvisible-solved.522228/)
+- dynamic: change modal color scheme to read from Marta's theme file or have a separate file that does the same and read its name from marta's config, pass the value to the function and cache the values in a global oncecell config var
 - UI window
   - split 3 red/yellow/green buttons, make the colors much more muted and move close to the right corner as it's a categorically different button from min/max
 - UI button
