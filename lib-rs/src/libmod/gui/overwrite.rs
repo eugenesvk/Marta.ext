@@ -125,35 +125,29 @@ impl ViewDelegate for       vOverwrite {const NAME: &'static str = "vOverwrite d
     // let mut n=Button::new("S̲kip"     	);n.set_action(|_| {press_n("UI button")});n.set_key_equivalent("\r");
 
     // Add colored button labels, highlighting the first accelerator underlined letter via rich string formatting
-    let lbl = "S̲kip"; let lbl_u16 = lbl.encode_utf16(); let len = lbl_u16.count() as isize;
-    let acc = "S̲"; let acc_len = acc.encode_utf16().count() as isize;
+    let lbl = "S̲kip"; let lbl_u16 = lbl.encode_utf16(); let lbl_len = lbl_u16.count() as isize;
+    let acc = "S̲"   ; let acc_u16 = acc.encode_utf16(); let acc_len = acc_u16.count() as isize;
     let mut n=Button::new(lbl	);n.set_action(|_| {press_n("UI button")});n.set_key_equivalent("\r");
     let mut attr_str = RichStr::new(lbl);
-    let font = Font::system(16.); attr_str.set_font(font, Range{start:0,end:len}); // make label bigger
-
+    let font = Font::system(16.); attr_str.set_font(font, Range{start:0,end:lbl_len}); // make label bigger
     let accelerator = Range{start:0,end:acc_len}; //[start,end)
     attr_str.set_text_color(cacao::color::Color::rgb(150,255,150), accelerator.clone());
-    let font = Font::bold_system(16.);
-    attr_str.set_font(font, accelerator);
+    let font = Font::bold_system(16.);attr_str.set_font(font, accelerator);
     n.set_attributed_text(attr_str);
 
-    let lbl = "O̲verwrite"; let lbl_u16 = lbl.encode_utf16(); let len = lbl_u16.count() as isize;
-    let acc = "O̲"; let acc_len = acc.encode_utf16().count() as isize;
+    let lbl = "O̲verwrite"; let lbl_u16 = lbl.encode_utf16(); let lbl_len = lbl_u16.count() as isize;
+    let acc = "O̲"        ; let acc_u16 = acc.encode_utf16(); let acc_len = acc_u16.count() as isize;
     let mut y=Button::new(lbl	);y.set_action(|_| {press_y("UI button")});y.set_key_equivalent("o");
     let mut attr_str = RichStr::new(lbl);
-    let font = Font::system(16.); attr_str.set_font(font, Range{start:0,end:len}); // make label bigger
+    let font = Font::system(16.); attr_str.set_font(font, Range{start:0,end:lbl_len}); // make label bigger
 
     let accelerator = Range{start:0,end:acc_len}; //[start,end)
     attr_str.set_text_color(cacao::color::Color::rgb(200,0,0), accelerator.clone());
-    let font = Font::bold_system(16.);
-    attr_str.set_font(font, accelerator);
+    let font = Font::bold_system(16.);attr_str.set_font(font, accelerator);
     y.set_attributed_text(attr_str);
 
-    // experimental button design
     y.set_control_size(ControlSize::Large);
     n.set_control_size(ControlSize::Large);
-    // y.set_alpha(0.1);
-    // n.set_alpha(0.9);
     y.set_bezel_style(BezelStyle::Rounded);
     n.set_bezel_style(BezelStyle::Rounded); // RegularSquare, ShadowlessSquare,SmallSquare,TexturedSquare break become vertical 100% of the height
     y.set_focus_ring_type(FocusRingType::Exterior); // seems to have no effect
