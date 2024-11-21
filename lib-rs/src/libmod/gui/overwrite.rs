@@ -43,155 +43,149 @@ use cacao::{
   color  	::{Color, Theme,},
   image  	::{Image,MacSystemIcon,SFSymbol},
   utils  	::os::OS_VERSION,
+  objc   	::{class, msg_send, sel, sel_impl},
+  appkit 	::{Event, EventMask, EventMonitor, FocusRingType},
 };
-use cacao::appkit::FocusRingType;
-use cacao::objc::{class, msg_send, sel, sel_impl};
 use core_graphics::base::CGFloat;
+use core::ops::Range;
+
+pub fn toggle_do_nothing() {}
+fn press_y(s:&str) {println!("Y action from: {}",s)}
+fn press_n(s:&str) {println!("N action from: {}",s)}
 
 #[derive(Debug,Default)] pub struct vOverwrite {
   pub v       	: View          	,//
   pub title   	: Label         	,//
   pub subtitle	: Label         	,//
-  pub subtitle	: Label         	,//
   pub bYes    	: Option<Button>	,//option to allow default derive
   pub bNo     	: Option<Button>	,//
 }
-// impl Default      for       vOverwrite { /// Creates and returns a stock Overwrite view
-//   fn default() -> Self {
-//     let v       	= View::new();
-//     let title   	= Label::new()	;//v.add_subview(&title   	);
-//     let subtitle	= Label::new()	;//v.add_subview(&subtitle	);
-
-//     let mut y=Button::new("❗Overwrite"	);y.set_action(|_| dispatch_ui(Message::MoveOverwrite	));y.set_key_equivalent("\r");//🖍
-//     let mut n=Button::new("Cancel"    	);n.set_action(|_| dispatch_ui(Message::MoveCancel   	));n.set_key_equivalent("a");
-//     y.set_highlighted(false);y.set_bezel_style(BezelStyle::RegularSquare);y.set_control_size(ControlSize::Large);y.set_text_color(Color::SystemRed  );
-//     n.set_highlighted(true );n.set_bezel_style(BezelStyle::RegularSquare);n.set_control_size(ControlSize::Large);n.set_text_color(Color::SystemBlack);
-//     v.add_subview(&y);let bYes = y;
-//     v.add_subview(&n);let bNo  = n;
-
-//     LayoutConstraint::activate(&[
-//       // title   	.top     	.constraint_equal_to(&v.top          	).offset(  2.),
-//       // subtitle	.top     	.constraint_equal_to(&title.bottom   	),
-//       // // bYes 	.top     	.constraint_equal_to(&subtitle.bottom	).offset(-20.),
-//       // // bNo  	.top     	.constraint_equal_to(&subtitle.bottom	).offset(-20.),
-//       // title   	.leading 	.constraint_equal_to(&v.leading      	),
-//       // subtitle	.leading 	.constraint_equal_to(&v.leading      	),
-//       // // bYes 	.leading 	.constraint_equal_to(&v.leading      	).offset( -4.),
-//       // // bNo  	.leading 	.constraint_equal_to(&v.leading      	).offset( -4.),
-//       // title   	.trailing	.constraint_equal_to(&v.trailing     	),
-//       // subtitle	.trailing	.constraint_equal_to(&v.trailing     	),
-//       // title   	.width   	.constraint_equal_to_constant(248.   	),
-//       // subtitle	.width   	.constraint_equal_to_constant(248.   	),
-//       // // bYes 	.width   	.constraint_equal_to_constant(248.   	),bYes	.height	.constraint_equal_to_constant(148.	),
-//       // // bNo  	.width   	.constraint_equal_to_constant(248.   	),
-//       // subtitle	.bottom  	.constraint_equal_to(&v.bottom       	),
-//       // // bYes 	.bottom  	.constraint_equal_to(&v.bottom       	),
-//       // bNo     	.bottom  	.constraint_equal_to(&v.bottom       	),
-
-//       v.width.constraint_equal_to_constant(600.0),
-//       v.height.constraint_equal_to_constant(500.0),
-//       bYes	.width   	.constraint_equal_to_constant(28.	),
-//       bYes	.height  	.constraint_equal_to_constant(28.	),
-//       bYes	.top     	.constraint_equal_to(&v.top).offset(-1.),
-//       bYes	.leading 	.constraint_equal_to(&v.leading).offset(40.),
-//       bYes	.trailing	.constraint_equal_to(&v.trailing).offset(-2.),
-//       bYes	.bottom  	.constraint_equal_to(&v.bottom).offset(-1.),
-//     ]);
-//     vOverwrite {v,title,subtitle,bYes,bNo}
-//   }
-// }
-// impl                        vOverwrite {
-//   /// Configures vOverwrite, handler is fired on each state change of the checkbox
-//   pub fn configure<F>(&mut self, text:&str, subtitle:&str, state:bool, handler:F) where F:Fn()+Send+Sync+'static {
-//     self.title   	.set_text(text);
-//     self.subtitle	.set_text(subtitle);
-//     self.switch  	.set_action(handler);
-//     self.switch  	.set_checked(state);
-//   }
-// }
-
-pub fn toggle_do_nothing() {}
-impl ViewDelegate for       vOverwrite {const NAME: &'static str = "vOverwrite";
+impl ViewDelegate for       vOverwrite {const NAME: &'static str = "vOverwrite delegate";
   fn did_load(&mut self, v:View) { //View is ready to work with, arg View is safe to store and use repeatedly, but it's not thread safe - any UI calls must be made from the main thread!
-    warn!("ViewDelegate for vOverwrite did_load function");
-    self.title      	.set_text          	("title_Label_vOverwrite"   	);
-    self.subtitle   	.set_text          	("subtitle_Label_vOverwrite"	);
-    // self.subtitle	.set_text_alignment	(TextAlign::Center          	);
-    v.add_subview(&self.v);
+    warn!("did_load@ViewDelegate for vOver_write");
+    let dynamic = Color::dynamic(|style| match (style.theme, style.contrast) {
+      (Theme::Dark, _)	=> Color::SystemGreen,
+      _               	=> Color::SystemRed});
+
+
+    self.title      	.set_text          	("title_Label_vOver_write"   	);
+    self.subtitle   	.set_text          	("subtitle_Label_vOver_write"	);
+    // self.subtitle	.set_text_alignment	(TextAlign::Center           	);
+    // v.add_subview(&self.v);
+
+    let title   	= Label::new()	;v.add_subview(&self.title   	);
+    let subtitle	= Label::new()	;v.add_subview(&self.subtitle	);
 
 
 
-    let title   	= Label::new()	;//v.add_subview(&title   	);
-    let subtitle	= Label::new()	;//v.add_subview(&subtitle	);
+    // let mut y=Button::new("O̲verwrite"	);y.set_action(|_| {press_y("UI button")});y.set_key_equivalent("o"); //❗
+    // let mut n=Button::new("S̲kip"     	);n.set_action(|_| {press_n("UI button")});n.set_key_equivalent("\r");
 
-    let mut y=Button::new("❗Overwrite"	);y.set_action(|_| dispatch_ui(Message::MoveOverwrite	));y.set_key_equivalent("\r");//🖍
-    let mut n=Button::new("Cancel"    	);n.set_action(|_| dispatch_ui(Message::MoveCancel   	));n.set_key_equivalent("a");
-    y.set_highlighted(false);y.set_bezel_style(BezelStyle::RegularSquare);y.set_control_size(ControlSize::Large);y.set_text_color(Color::SystemRed  );
-    n.set_highlighted(true );n.set_bezel_style(BezelStyle::RegularSquare);n.set_control_size(ControlSize::Large);n.set_text_color(Color::SystemBlack);
-    v.add_subview(&y);let bYes = y;
-    v.add_subview(&n);let bNo  = n;
+    // Add colored button labels, highlighting the first accelerator underlined letter via rich string formatting
+    let lbl = "S̲kip"; let lbl_u16 = lbl.encode_utf16(); let len = lbl_u16.count() as isize;
+    let acc = "S̲"; let acc_len = acc.encode_utf16().count() as isize;
+    let mut n=Button::new(lbl	);n.set_action(|_| {press_n("UI button")});n.set_key_equivalent("\r");
+    let mut attr_str = RichStr::new(lbl);
+    let font = Font::system(16.); attr_str.set_font(font, Range{start:0,end:len}); // make label bigger
 
+    let accelerator = Range{start:0,end:acc_len}; //[start,end)
+    attr_str.set_text_color(cacao::color::Color::rgb(150,255,150), accelerator.clone());
+    let font = Font::bold_system(16.);
+    attr_str.set_font(font, accelerator);
+    n.set_attributed_text(attr_str);
+
+    let lbl = "O̲verwrite"; let lbl_u16 = lbl.encode_utf16(); let len = lbl_u16.count() as isize;
+    let acc = "O̲"; let acc_len = acc.encode_utf16().count() as isize;
+    let mut y=Button::new(lbl	);y.set_action(|_| {press_y("UI button")});y.set_key_equivalent("o");
+    let mut attr_str = RichStr::new(lbl);
+    let font = Font::system(16.); attr_str.set_font(font, Range{start:0,end:len}); // make label bigger
+
+    let accelerator = Range{start:0,end:acc_len}; //[start,end)
+    attr_str.set_text_color(cacao::color::Color::rgb(200,0,0), accelerator.clone());
+    let font = Font::bold_system(16.);
+    attr_str.set_font(font, accelerator);
+    y.set_attributed_text(attr_str);
+
+    // experimental button design
+    y.set_control_size(ControlSize::Large);
+    n.set_control_size(ControlSize::Large);
+    // y.set_alpha(0.1);
+    // n.set_alpha(0.9);
+    y.set_bezel_style(BezelStyle::Rounded);
+    n.set_bezel_style(BezelStyle::Rounded); // RegularSquare, ShadowlessSquare,SmallSquare,TexturedSquare break become vertical 100% of the height
+    y.set_focus_ring_type(FocusRingType::Exterior); // seems to have no effect
+    n.set_focus_ring_type(FocusRingType::None); // already an highlighted button, don't need another indicator
+    // y.set_text_color(Color::SystemRed  );
+    // n.set_text_color(Color::SystemBlack);
+
+    if let os_info::Version::Semantic(os_major,_,_) = OS_VERSION.version() {
+      if *os_major >= 11 {//debug!("info major version={:?}", os_major);
+        let icon = Image::symbol(SFSymbol::SquareAndArrowDownOnSquareFill, "Overwrite"); //SFSymbol min version 11, alt MacSystemIcon
+        y.set_image(icon);
+        y.set_image_position(ImagePosition::ImageLeft); // developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Button/Tasks/SettingButtonImage.html
+      }
+    }
+    v.add_subview(&y);
+    v.add_subview(&n);
+
+    ////win.set_content_view(&self.content);
+
+    // Add colored button shortcut reminder labels using rich text formatting
+    // let yl	= Label::new();yl.set_text("y")  	;v.add_subview(&yl	);
+    // let nl	= Label::new();nl.set_text("↩¦c")	;v.add_subview(&nl	);
+    let lbl = "y"; let lbl_u16 = lbl.encode_utf16(); let len = lbl_u16.count() as isize;
+    let acc = "y"; let acc_len = acc.encode_utf16().count() as isize;
+    let yl=Label::new();
+    let mut attr_str = RichStr::new(lbl);
+    // let font = Font::system(16.); attr_str.set_font(font, Range{start:0,end:len}); // make label bigger
+    let accelerator = Range{start:0,end:acc_len}; //[start,end)
+    attr_str.set_text_color(cacao::color::Color::rgb(240,140,40), accelerator.clone());
+    // let font = Font::bold_system(16.); attr_str.set_font(font, accelerator);
+    yl.set_attributed_text(attr_str);
+    v.add_subview(&yl	);
+
+    let lbl = "↩"; let lbl_u16 = lbl.encode_utf16(); let len = lbl_u16.count() as isize;
+    let acc = "↩"; let acc_len = acc.encode_utf16().count() as isize;
+    let nl1=Label::new();
+    let mut attr_str = RichStr::new(lbl);
+    // let font = Font::system(16.); attr_str.set_font(font, Range{start:0,end:len}); // make label bigger
+    let accelerator = Range{start:0,end:acc_len}; //[start,end)
+    attr_str.set_text_color(cacao::color::Color::rgb(240,140,40), accelerator.clone());
+    // let font = Font::bold_system(16.); attr_str.set_font(font, accelerator);
+    nl1.set_attributed_text(attr_str);
+    v.add_subview(&nl1	);
+
+    let lbl = "c"; let lbl_u16 = lbl.encode_utf16(); let len = lbl_u16.count() as isize;
+    let acc = "c"; let acc_len = acc.encode_utf16().count() as isize;
+    let nl2=Label::new();
+    let mut attr_str = RichStr::new(lbl);
+    // let font = Font::system(16.); attr_str.set_font(font, Range{start:0,end:len}); // make label bigger
+    let accelerator = Range{start:0,end:acc_len}; //[start,end)
+    attr_str.set_text_color(cacao::color::Color::rgb(240,140,40), accelerator.clone());
+    // let font = Font::bold_system(16.); attr_str.set_font(font, accelerator);
+    nl2.set_attributed_text(attr_str);
+    v.add_subview(&nl2	);
+
+    let hn:f64 = 20.0; let hy:f64 = hn; //20 seems to be the default large, but manually setting.height makes the buttons bug and have diff H
     LayoutConstraint::activate(&[
-      // title   	.top     	.constraint_equal_to(&v.top          	).offset(  2.),
-      // subtitle	.top     	.constraint_equal_to(&title.bottom   	),
-      // // bYes 	.top     	.constraint_equal_to(&subtitle.bottom	).offset(-20.),
-      // // bNo  	.top     	.constraint_equal_to(&subtitle.bottom	).offset(-20.),
-      // title   	.leading 	.constraint_equal_to(&v.leading      	),
-      // subtitle	.leading 	.constraint_equal_to(&v.leading      	),
-      // // bYes 	.leading 	.constraint_equal_to(&v.leading      	).offset( -4.),
-      // // bNo  	.leading 	.constraint_equal_to(&v.leading      	).offset( -4.),
-      // title   	.trailing	.constraint_equal_to(&v.trailing     	),
-      // subtitle	.trailing	.constraint_equal_to(&v.trailing     	),
-      // title   	.width   	.constraint_equal_to_constant(248.   	),
-      // subtitle	.width   	.constraint_equal_to_constant(248.   	),
-      // // bYes 	.width   	.constraint_equal_to_constant(248.   	),bYes	.height	.constraint_equal_to_constant(148.	),
-      // // bNo  	.width   	.constraint_equal_to_constant(248.   	),
-      // subtitle	.bottom  	.constraint_equal_to(&v.bottom       	),
-      // // bYes 	.bottom  	.constraint_equal_to(&v.bottom       	),
-      // bNo     	.bottom  	.constraint_equal_to(&v.bottom       	),
-
-      v.width.constraint_equal_to_constant(600.0),
-      v.height.constraint_equal_to_constant(500.0),
-      bYes	.width   	.constraint_equal_to_constant(28.	),
-      bYes	.height  	.constraint_equal_to_constant(28.	),
-      bYes	.top     	.constraint_equal_to(&v.top).offset(-1.),
-      bYes	.leading 	.constraint_equal_to(&v.leading).offset(40.),
-      bYes	.trailing	.constraint_equal_to(&v.trailing).offset(-2.),
-      bYes	.bottom  	.constraint_equal_to(&v.bottom).offset(-1.),
+      n  	.top     	.constraint_equal_to(&v.top       	).offset( 46.),
+      nl1	.top     	.constraint_equal_to(&n.top       	),
+      nl2	.bottom  	.constraint_equal_to(&n.bottom    	),
+      y  	.top     	.constraint_equal_to(&v.top       	).offset( 46.),
+      yl 	.top     	.constraint_equal_to(&y.top       	).offset(- 3.),
+      n  	.bottom  	.constraint_equal_to(&v.bottom    	).offset(-16.),
+      y  	.bottom  	.constraint_equal_to(&v.bottom    	).offset(-16.),
+      n  	.leading 	.constraint_equal_to(&v.leading   	).offset( 16.),y	.leading	.constraint_greater_than_or_equal_to(&n.trailing	).offset(5.),
+      nl1	.right   	.constraint_equal_to(&n.right     	).offset(- 2.),
+      nl2	.right   	.constraint_equal_to(&n.right     	).offset(- 2.),
+      y  	.trailing	.constraint_equal_to(&v.trailing  	).offset(-46.),
+      yl 	.right   	.constraint_equal_to(&y.right     	).offset(- 2.),
+      n  	.width   	.constraint_equal_to_constant(200.	)             ,//n	.height	.constraint_equal_to_constant(hn	),
+      y  	.width   	.constraint_equal_to(&n.width     	)             ,//y	.height	.constraint_equal_to_constant(hy	),
     ]);
-    self.bYes = Some(bYes);
-    self.bNo  = Some(bNo);
-    // vOverwrite {v,title,subtitle,bYes,bNo}
-
-
-
-
-
-
-
-    /*
-    // LayoutConstraint::activate(&[
-      // v.width.constraint_equal_to_constant(1000.0),
-
-      // self.bYes	.top     	.constraint_equal_to(&v.top).offset(-2.),
-      // self.bYes	.leading 	.constraint_equal_to(&v.leading).offset(-2.),
-      // self.bYes	.trailing	.constraint_equal_to(&v.trailing).offset(-2.),
-      // self.bYes	.width   	.constraint_equal_to_constant(28.	),
-      // self.bYes	.height  	.constraint_equal_to_constant(28.	),
-      // self.bYes	.bottom  	.constraint_equal_to(&v.bottom).offset(-1.)
-
-      // self.bYes	.top     	.constraint_equal_to(&self.subtitle.bottom).offset(1.),
-      // self.bYes	.trailing	.constraint_equal_to(&v.trailing).offset(-40.),
-      // self.bYes	.width   	.constraint_equal_to_constant(248.	),
-      // self.bYes	.bottom  	.constraint_equal_to(&v.bottom).offset(-10.)
-    // ]);
-    // LayoutConstraint::activate(&[
-    //   self.label.top     	.constraint_equal_to(&v.top     	).offset( 100.),
-    //   self.label.leading 	.constraint_equal_to(&v.leading 	).offset(  16.),
-    //   self.label.trailing	.constraint_equal_to(&v.trailing	).offset( -16.),
-    //   self.label.bottom  	.constraint_equal_to(&v.bottom  	).offset(-100.),
-    // ]);
-    */
+    self.bYes = Some(y);
+    self.bNo  = Some(n);
+    self.v  = v;
   }
 }
 
