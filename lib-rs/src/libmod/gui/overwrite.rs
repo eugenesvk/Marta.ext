@@ -49,10 +49,11 @@ use cacao::objc::{class, msg_send, sel, sel_impl};
 use core_graphics::base::CGFloat;
 
 #[derive(Debug,Default)] pub struct vOverwrite {
-  pub v       	: View  	,//
-  pub title   	: Label 	,//
-  pub subtitle	: Label 	,//
-  pub bYes    	: Option<Button>	,//
+  pub v       	: View          	,//
+  pub title   	: Label         	,//
+  pub subtitle	: Label         	,//
+  pub subtitle	: Label         	,//
+  pub bYes    	: Option<Button>	,//option to allow default derive
   pub bNo     	: Option<Button>	,//
 }
 // impl Default      for       vOverwrite { /// Creates and returns a stock Overwrite view
@@ -194,11 +195,11 @@ impl ViewDelegate for       vOverwrite {const NAME: &'static str = "vOverwrite";
   }
 }
 
-impl WinDelegate for wOverwrite {const NAME: &'static str = "wOverwrite";
+impl WinDelegate for wOverwrite {const NAME: &'static str = "wOver_write";
   fn did_load(&mut self, win:Win) { // when this window has loaded in memory, and is about to display (set up your views here)
     // warn!("WinDelegate for wOverwrite did_load function");
-    win.set_title                  	("wOverwriteTitle"	);
-    win.set_autosave_name          	("wOverwrite"     	);
+    win.set_title                  	("wOver_writeTitle"	);
+    win.set_autosave_name          	("wOver_write"     	);
     // win.set_minimum_content_size	(100, 100         	);//min size this window can shrink to, no max
     win.set_minimum_size           	(600, 500         	);//min/max match content
     win.set_movable_by_background  	(true             	);
