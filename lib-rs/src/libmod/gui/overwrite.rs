@@ -16,10 +16,13 @@ use objc_id::{ShareId,Id,Shared};
 pub struct wOverwrite {pub                               content:ViewController     <vOverwrite>           ,win:Option<Window>, win_id_objc:Option<ShareId<Object>>,key_monitor:RwLock<Option<EventMonitor>>,}
 impl       wOverwrite {pub fn new() -> Self {wOverwrite {content:ViewController::new(vOverwrite::default()),win:None          , win_id_objc:None                   ,key_monitor:RwLock::new(None)}}
   pub fn on_message(&self, msg:Message) {
-    let win = self.win.as_ref().unwrap();
     match msg { //TODO: test storing window as is
-      Message::TestChangeTitle	=> {win.set_title("TestChangeTitle"	);/*win.set_content_view_controller(&self.win1);*/},
-      _                       	=> {warn!{"M@wOverwrite:other"};}
+      Message::TestChangeTitle	=> {warn!("M@wOver_write:TestChangeTitle");let win = self.win.as_ref().unwrap();win.set_title("TestChangeTitle"	);/*win.set_content_view_controller(&self.win1);*/},
+      Message::MoveOverwrite  	=> {warn!("M@wOver_write:MoveOverwrite");},
+      // Message::MoveCancel  	=> {warn!("M@wOver_write:MoveCancel");/*do something move-specific before closing the modal;*/ dispatch_ui(Message::CloseSheet)},
+      // Message::MoveCancel  	=> {warn!("M@wOver_write:MoveCancel");      WM.with(|wm| {wm.close_sheet();});}, //←↑ hangs Marta
+      // Message::MoveCancel  	=> {warn!("M@wOver_write:MoveCancel");self.cancel();}, //← hangs Marta
+      _                       	=> {warn!("M@wOver_write: other = {:#?}",msg);}
     }
   }
 
