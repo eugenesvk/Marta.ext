@@ -55,8 +55,8 @@ impl       WinMgr {
       let   lock_marta = self.marta.write().unwrap();
       if let Some(win_marta) = &*lock_marta {warn!("close_sheet@Win_Mgr: ∃ marta❖");
         win_marta.end_sheet(&modal); //hide, not close to allow future reuse: modal.order_out();
-      }else{warn!("✗ close_sheet@Win_Mgr: win_marta ∄, doing nothing…");}
-    }  else{warn!("✗ close_sheet@Win_Mgr: modal ∄, doing nothing…");}
+      }else{warn!("✗ close_sheet@Win_Mgr: marta❖ ∄, doing nothing…");}
+    }  else{warn!("✗ close_sheet@Win_Mgr: modal❖ ∄, doing nothing…");}
     *       lock_modal = None;} // remove if using order_out
 
   pub fn toggle_full_screen(&self) { // TODO: delete
