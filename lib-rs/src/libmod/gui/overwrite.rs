@@ -20,7 +20,7 @@ impl       wOverwrite {pub fn new() -> Self {wOverwrite {content:ViewController:
     let win = self.win.as_ref().unwrap();
     match msg { //TODO: test storing window as is
       Message::TestChangeTitle	=> {win.set_title("TestChangeTitle"	);/*win.set_content_view_controller(&self.win1);*/},
-      _                       	=> {}
+      _                       	=> {warn!{"M@wOverwrite:other"};}
     }
   }
 
