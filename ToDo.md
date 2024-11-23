@@ -6,7 +6,20 @@
 
 # es¦cut
 - add a way to cancel long operation (a button? in a progress bar)
+- add an argument to force overwrite
 - TODO: verify that did_load doesn't recreate all the views on every single invocation of the dialog
+- add an option to rename on paste instead of overwriting: keep both/stop/replace
+- show status message at the end how many files/dirs were moved and Σfile/dir size
+- overwrite button icon disappears on white background, change its color to make it visible
+- make short/long duration of status bar messages configurable
+- ? store reference to lua in WMgr so that you could use statusbar message sends and show alerts from anywhere?
+- add command to append to clipboard instead of replacing to allow paste from multiple tabs, not just one
+- add a command to clean xattr from files with our key for debugging purposes in case our move command got aborted and not cleaned up xattrs?
+- add log command argument to the function to show results
+  - show log anyway if encounter access/other errors
+    - write log to file in this case
+- move:
+  - [fs_extra](https://github.com/webdesus/fs_extra) crate is buggy, [abandoned](https://github.com/webdesus/fs_extra/issues/80), data loss, toctou, concurrency bugs, unc windows handling bug
 - allow quitting the app even when modal sheet is opened [src](https://forums.macrumors.com/threads/terminate-while-nssheet-isvisible-solved.522228/)
 - add list of files to be overwritten in the modal
   - allow checking individual files and show which fields (size/mtime/permissions... are different)
