@@ -88,7 +88,11 @@ use cacao::objc::runtime::Object;
 use objc::{class, msg_send, sel};
 use objc_id::{ShareId,Id,Shared};
 
-pub fn ask_overwrite(lua:&Lua, (ctx_a, cb_alert_v):(LuaAnyUserData, LuaValue)) -> LuaResult<LuaString> { // move clipboard files to the destination
+pub fn ask_overwrite(lua:&Lua, (ctx_a, path_to, args_rest):(LuaAnyUserData, PathBuf, Option<LuaValue>)) -> LuaResult<LuaString> { // move clipboard files to the destination
+  // ctx_a = forwarded marta.ActionContext passed to action's apply function(), marta.sh/api/marta/actioncontext.type
+  // path_to = path string (marta.sh/api/marta/path.type/rawvalue) to move items to
+  // args_force = bool, whether to force overwrite without asking user's confirmation
+  // 0 Setup various helper constants
   let g      	:LuaTable 	= lua.globals();
   let marta  	:LuaTable 	= g.get("marta" 	)?;
   let martax 	:LuaTable 	= g.get("martax"	)?;
@@ -107,18 +111,54 @@ pub fn ask_overwrite(lua:&Lua, (ctx_a, cb_alert_v):(LuaAnyUserData, LuaValue)) -
   let model_a	:LuaAnyUserData	= ctx_pa.get(ctxP::model      	)?;// Active pane list model
   let view_p 	:LuaAnyUserData	= ctx_pa.get(ctxP::view       	)?;//
 
+  // 1 Parse arguments passed from lua
   let nswin_lua 	:LuaLightUserData	= ctx_w.get(ctxW::nsWindow	)?;//LightUserData<NSWindow>, equivalent to an unmanaged raw pointer
   let nswin_rptr	:*mut c_void     	= nswin_lua.0; // get the pointer
   if nswin_rptr.is_null() {let s_lua:LuaString = lua.create_string("✗ nswin_ptr.is_null")?;let _ = alert.call::<()>(s_lua.clone())?;
     return Ok(lua.create_string("📋 got no pointer to the main window, can't create any dialogs…")?)
   }
 
+  let mut force = false;
+  match args_force {
+    Some(LuaValue::Boolean(force_arg)) => {force = force_arg},
+    _ => {},
+  }
+  let s_rs:String = format!("got args3: {} and force={}",args_force.is_some(),force);
+  let s_lua:LuaString = lua.create_string(&s_rs)?;
+  let _ = alert.call::<()>(s_lua.clone())?;
+
+  // there is a check in lua, so this is just in case
+  let is_fs:bool = model_a.get::<LuaValue>("isLocalFileSystem")?.as_boolean().expect("isLocalFileSystem should be a bool");
+  if !is_fs {return Ok(lua.create_string("📋 can't run in a non-local filesystem")?)}
+  if !path_to.is_dir() {let s_lua:LuaString = lua.create_string(format!("❗not a 📁, can't paste here"))?; let _ = pss.call::<()>(s_lua.clone()); return Ok(s_lua)}  // zip-fs report path as / in Marta, so this doesn't help there
+
+  let mut cb_res = String::new();
+  let cb_paths:Vec<std::path::PathBuf> = match clipboard_files::read() {
+    Ok (paths)	=> paths,
+    Err(e)    	=> {let s_lua:LuaString = lua.create_string(format!("📋clipboard has no dir/file items"))?; let _ = pss.call::<()>(s_lua.clone()); return Ok(s_lua)},
+  };
+  cb_res.push_str(format!("📋clipboard has №{} dir/file items",cb_paths.len()).as_ref());
+
+  /*
+  warn!("move_cb_to"); // this creates a new event, outside of any spans.
+  // warn!("fn console(in_str)@Marta's Rust lua module es_rs.rs, in_str=‘{:?}’", path_to); // this creates a new event, outside of any spans.
+
+  // let sss:mlua::Value = path_to.into_os_string().into_lua(lua)?;
+  // let s_lua:LuaString = lua.create_string(sss)?;
+  // let s_lua:LuaString = lua.create_string(path_to.into_lua(lua)?)?;
+  // let s_lua:mlua::Value::String = path_to.into_lua(lua)?;
+  // let _ = alert.call::<()>(s_lua.clone())?;
+  */
+
+
+  // Ask user confirmation for overwriting
   let win_id_objc:ShareId<Object> = get_win_id_objc(&nswin_lua)?; // convert pointer to Objc type
   WM.with(|wm| {
     wm.save_marta(win_id_objc.clone()); //todo: move saving marta to open modal (check if saved)
     wm.open_sheet(win_id_objc);
     wm.on_message(Message::OpenOverwriteSheet); //todo: replace ↑
   });
+  //TODO ↑ this returns after showing, how to block?
 
   Ok(lua.create_string("Ok")?)
 }
