@@ -26,6 +26,9 @@ pub fn setup_logging() -> LuaResult<()> {
   tracing::subscriber::set_global_default(collector).expect("failed to set global subscriber"); //⚠️ libs should avoid this to not cause conflicts when executables that depend on the library try to set the default later
   Ok(())
 }
+static _dbg:i8 = 1;
+/// Quick and dirty way to disable blocks of debug-level code, use `if _d(1) {}` to do something only if global _dbg ≥ 1
+pub fn _d(lvl:i8) -> bool {if _dbg>=lvl{true}else{false}}
 
 use mlua::{Function,Variadic};
 use clipboard_files;
