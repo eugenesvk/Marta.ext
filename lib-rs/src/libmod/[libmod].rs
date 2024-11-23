@@ -62,14 +62,14 @@ pub fn move_cb_to(lua:&Lua, (ctx_a, path_to):(LuaAnyUserData, PathBuf)) -> LuaRe
   // there is a check in lua, so this is just in case
   let is_fs:bool = model_a.get::<LuaValue>("isLocalFileSystem")?.as_boolean().expect("isLocalFileSystem should be a bool");
   if !is_fs {return Ok(lua.create_string("📋 can't run in a non-local filesystem")?)}
-  if !path_to.is_dir() {let s_lua:LuaString = lua.create_string(format!("❗not a 📁, can't paste here"))?; let _ = pss.call::<()>(s_lua.clone()); return Ok(s_lua)}  // zip-fs report path as / in Marta, so this doesn't help there
+  if !path_to.is_dir() {let s_lua:LuaString = lua.create_string(format!("❗not a 📁, can't paste here"))?; let _ = psl.call::<()>(s_lua.clone()); return Ok(s_lua)}  // zip-fs report path as / in Marta, so this doesn't help there
 
-  let mut cb_res = String::new();
+  let mut cc_res = String::new();
   let cb_paths:Vec<std::path::PathBuf> = match clipboard_files::read() {
     Ok (paths)	=> paths,
-    Err(e)    	=> {let s_lua:LuaString = lua.create_string(format!("📋clipboard has no dir/file items"))?; let _ = pss.call::<()>(s_lua.clone()); return Ok(s_lua)},
+    Err(e)    	=> {let s_lua:LuaString = lua.create_string(format!("📋clipboard has no dir/file items"))?; let _ = psl.call::<()>(s_lua.clone()); return Ok(s_lua)},
   };
-  cb_res.push_str(format!("📋clipboard has №{} dir/file items",cb_paths.len()).as_ref());
+  cc_res.push_str(format!("📋clipboard has №{} dir/file items",cb_paths.len()).as_ref());
 
   warn!("move_cb_to"); // this creates a new event, outside of any spans.
   // warn!("fn console(in_str)@Marta's Rust lua module es_rs.rs, in_str=‘{:?}’", path_to); // this creates a new event, outside of any spans.
@@ -91,7 +91,7 @@ use cacao::objc::runtime::Object;
 use objc::{class, msg_send, sel};
 use objc_id::{ShareId,Id,Shared};
 
-pub fn ask_overwrite(lua:&Lua, (ctx_a, path_to, args_rest):(LuaAnyUserData, PathBuf, Option<LuaValue>)) -> LuaResult<LuaString> { // move clipboard files to the destination
+pub fn ask_overwrite(lua:&Lua, (ctx_a, path_to, args_force):(LuaAnyUserData, PathBuf, Option<LuaValue>)) -> LuaResult<LuaString> { // move clipboard files to the destination
   // ctx_a = forwarded marta.ActionContext passed to action's apply function(), marta.sh/api/marta/actioncontext.type
   // path_to = path string (marta.sh/api/marta/path.type/rawvalue) to move items to
   // args_force = bool, whether to force overwrite without asking user's confirmation
@@ -121,26 +121,21 @@ pub fn ask_overwrite(lua:&Lua, (ctx_a, path_to, args_rest):(LuaAnyUserData, Path
     return Ok(lua.create_string("📋 got no pointer to the main window, can't create any dialogs…")?)
   }
 
-  let mut force = false;
-  match args_force {
-    Some(LuaValue::Boolean(force_arg)) => {force = force_arg},
-    _ => {},
-  }
-  let s_rs:String = format!("got args3: {} and force={}",args_force.is_some(),force);
-  let s_lua:LuaString = lua.create_string(&s_rs)?;
-  let _ = alert.call::<()>(s_lua.clone())?;
+  let force = match args_force {Some(LuaValue::Boolean(force_arg)) => force_arg,  _=>false};
+  if _d(2) {let s_rs:String = format!("got args_force: {} and force={}",args_force.is_some(),force);
+  let s_lua:LuaString = lua.create_string(&s_rs)?;let _ = alert.call::<()>(s_lua.clone())?;}
 
   // there is a check in lua, so this is just in case
   let is_fs:bool = model_a.get::<LuaValue>("isLocalFileSystem")?.as_boolean().expect("isLocalFileSystem should be a bool");
   if !is_fs {return Ok(lua.create_string("📋 can't run in a non-local filesystem")?)}
-  if !path_to.is_dir() {let s_lua:LuaString = lua.create_string(format!("❗not a 📁, can't paste here"))?; let _ = pss.call::<()>(s_lua.clone()); return Ok(s_lua)}  // zip-fs report path as / in Marta, so this doesn't help there
+  if !path_to.is_dir() {let s_lua:LuaString = lua.create_string(format!("❗not a 📁, can't paste here"))?; let _ = psl.call::<()>(s_lua.clone()); return Ok(s_lua)}  // zip-fs report path as / in Marta, so this doesn't help there
 
-  let mut cb_res = String::new();
-  let cb_paths:Vec<std::path::PathBuf> = match clipboard_files::read() {
+  let mut cc_res = String::new();
+  let cc_paths:Vec<std::path::PathBuf> = match clipboard_files::read() {
     Ok (paths)	=> paths,
-    Err(e)    	=> {let s_lua:LuaString = lua.create_string(format!("📋clipboard has no dir/file items"))?; let _ = pss.call::<()>(s_lua.clone()); return Ok(s_lua)},
+    Err(e)    	=> {let s_lua:LuaString = lua.create_string(format!("📋clipboard has no dir/file items"))?; let _ = psl.call::<()>(s_lua.clone()); return Ok(s_lua)},
   };
-  cb_res.push_str(format!("📋clipboard has №{} dir/file items",cb_paths.len()).as_ref());
+  cc_res.push_str(format!("📋clipboard has №{} dir/file items",cc_paths.len()).as_ref());
 
   /*
   warn!("move_cb_to"); // this creates a new event, outside of any spans.
