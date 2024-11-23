@@ -19,6 +19,8 @@ use cacao::appkit::App;
   MoveOverwrite,
   /// Cancel the move operation, overwriting prompt was rejected
   MoveCancel,
+  /// Call the callback function (that deletes dir/file items)
+  UseCb,
 }
 
 /// Dispatch a message to the window manager (can't do regular app background thread dispatch since we don't control the app)
