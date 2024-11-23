@@ -32,10 +32,27 @@ fn save_win         (win_lock:&RwLock<Option<Win   >>, win_id_objc:ShareId<Objec
 
 #[derive(Default)]
 pub struct WinMgr {pub marta:RwLock<Option<Win            >>
-  ,                pub modal:RwLock<Option<Win<wOverwrite>>>,}
+  ,                pub modal:RwLock<Option<Win<wOverwrite>>>
+  ,                pub cb   :RwLock<Option<Box<dyn Fn() -> Result<()>>>>
+}
+
 impl       WinMgr {
   pub fn open_new       (&self                             ) {open_or_show(&self.modal, || (WinCfg::default(), wOverwrite::new()));}
   pub fn save_marta     (&self, win_id_objc:ShareId<Object>) {save_win    (&self.marta, win_id_objc);}
+  pub fn save_cb        (&self, cb:Box<dyn Fn() -> Result<()>>) {
+    let mut lock_cb = self.cb.write().unwrap();
+    *       lock_cb = Some(cb);
+    // if let Some(cb) = &*lock_cb	{*lock_cb = None; //warn!("save_cb@Win_Mg: RESET WM.cb");
+    // } else                     	{*lock_cb = Some(cb_clipboard_trash); //warn!("save_cb@Win_Mg: saved cb_clipboard_trash to WM.cb");
+    // }
+  }
+  pub fn use_cb         (&self) {
+    {let lock_cb = self.cb.write().unwrap();
+    if let Some(cb) = &*lock_cb {//warn!("use_cb@Win_Mgr: lock_cb");
+      let _ = cb();      } else {//warn!("use_cb@Win_Mgr: NO lock_cb");
+    }}
+  }
+
   pub fn open_sheet     (&self, win_id_objc:ShareId<Object>) {
     let on_modal_close = || {warn!("open_sheet@Win_Mgr: on_modal_close ");}; //run once the sheet is dismissed
     let mut lock_modal = self.modal.write().unwrap();
@@ -74,6 +91,7 @@ impl       WinMgr {
     match msg {
       Message::OpenOverwriteSheet	=> {/*warn!("M@Win_Mgr:OpenOverwriteSheet"	);*/ /*self.open_sheet()	;*/},
       Message::CloseSheet        	=> {/*warn!("M@Win_Mgr:CloseSheet"        	);*/ self.close_sheet();},
+      Message::UseCb             	=> {/*warn!("M@Win_Mgr:UseCb"             	);*/ self.use_cb();},
       Message::MoveCancel        	=> {/*warn!("M@Win_Mgr:MoveCancel"        	);*/ self.close_sheet();},
       _ => {/*warn!("M@Win_Mgr: unhandled UI msg = {:#?}",msg);*/}
     }
