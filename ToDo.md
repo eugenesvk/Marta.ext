@@ -7,12 +7,16 @@
 # es¦cut
 - add a way to cancel long operation (a button? in a progress bar)
 - add an argument to force overwrite
+- todo: test aliases, symlinks, hardlinks
+- add to gui info command: if xattr has delete tags,  show them and an "undo delete button"
 - TODO: verify that did_load doesn't recreate all the views on every single invocation of the dialog
 - add an option to rename on paste instead of overwriting: keep both/stop/replace
 - show status message at the end how many files/dirs were moved and Σfile/dir size
 - overwrite button icon disappears on white background, change its color to make it visible
 - make short/long duration of status bar messages configurable
 - ? store reference to lua in WMgr so that you could use statusbar message sends and show alerts from anywhere?
+- ? how to request elevation for my plugin?
+- add a button with overwrite delete confirmation to count recursively all paths to get # of files/folders/size to be deleted
 - add command to append to clipboard instead of replacing to allow paste from multiple tabs, not just one
 - add a command to clean xattr from files with our key for debugging purposes in case our move command got aborted and not cleaned up xattrs?
 - add log command argument to the function to show results
