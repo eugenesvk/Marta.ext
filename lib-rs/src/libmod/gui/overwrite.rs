@@ -95,8 +95,8 @@ use core::ops::Range;
 
 pub fn toggle_do_nothing() {}
 fn press_y(s:&str) {warn!("Y action from: {}",s);
-  dispatch_ui(Message::UseCb);
   dispatch_ui(Message::CloseSheet);
+  dispatch_ui(Message::UseCb);
 }
 fn press_n(s:&str) {/*trace!("N action from: {}",s);*/dispatch_ui(Message::CloseSheet);}
 
