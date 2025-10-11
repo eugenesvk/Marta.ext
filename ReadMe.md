@@ -9,7 +9,7 @@ File Manager for macOS
 
 ## Plugins
 
-#### Link
+### $\textcolor{blue}{\textrm{1}}\textcolor{grey}{\textrm{.}}$ Link
 Create 🔗Symbolic Links, ⤻Aliases, or ⤑Hard Links __in the same pane__ or __at the opposite/inactive pane__ with automatically generated names with:
 
   - user-configurable affixes (__Symlink🔗.txt__, __Alias⤻.app__, __Hardlink⤑.md__), single-char by default to delete easier when you move the links elsewhere
@@ -34,7 +34,7 @@ To customize the plugin behavior, paste the following configuration lines to you
 
 ['Link' plugin file](https://github.com/eugenesvk/Marta.ext/blob/main/Plugins/es¦file_link.lua)
 
-#### Tab deduplication
+### $\textcolor{blue}{\textrm{2}}\textcolor{grey}{\textrm{.}}$ Tab deduplication
 Close all duplicate tabs (except for the currently active one): 
 
   - semi-automatically: by remapping <kbd>⌘</kbd><kbd>W</kbd> (`"Cmd+W" "es¦tab.✗tab_n_dupe"`) to
