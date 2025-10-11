@@ -3,6 +3,8 @@ use crate::*;
 pub use gui	::*;
 pub mod objc_helper;
 pub use objc_helper::*;
+pub mod fs_rem;
+pub use fs_rem::*;
 
 use std     	::{//env,fs,
   path      	::{Path,PathBuf},
@@ -147,16 +149,179 @@ pub fn ask_overwrite(lua:&Lua, (ctx_a, path_to, args_force):(LuaAnyUserData, Pat
   // let s_lua:mlua::Value::String = path_to.into_lua(lua)?;
   // let _ = alert.call::<()>(s_lua.clone())?;
   */
+  use std::{ffi::OsString, path::PathBuf};
+  use uu_mv::{BackupMode, UpdateMode};
+  // 🗇🗍🗊🗐 suffix doesn't work with numbered backup
+  let overwrite_no                	= false;
+  let overwrite_ask               	= false;
+  let overwrite = if overwrite_no 	{uu_mv::OverwriteMode::NoClobber
+  } else          if overwrite_ask	{uu_mv::OverwriteMode::Interactive
+  } else                          	{uu_mv::OverwriteMode::Force};
+  let progress_bar                	= true;
+  let verbose                     	= false;
+  let arg_update                  	= false;
+  let update = if arg_update      	{UpdateMode::ReplaceIfOlder
+  } else                          	{UpdateMode::ReplaceAll};
+  let arg_backup = "no";
+  let backup = match arg_backup {
+    "no"	=> BackupMode::NoBackup,
+    "s" 	=> BackupMode::SimpleBackup,
+    "#" 	=> BackupMode::NumberedBackup,
+    "x" 	=> BackupMode::ExistingBackup,
+    _   	=> BackupMode::NoBackup,
+  };
+  let suffix = String::from("~");
+  let target_dir = Some(path_to.into_os_string());
+  //todo: how to do interactive intput from within a gui? redirect stdio?? or something
+
+  let options = uu_mv::Options {overwrite,progress_bar,verbose,suffix,backup,update, target_dir,no_target_dir:false,
+    strip_slashes:false, debug:false,};
+  let cc_paths_oss = cc_paths.into_iter().map(|p| p.into_os_string()).collect::<Vec<OsString>>();
+
+  if let Err(error) = uu_mv::mv(&cc_paths_oss, &options) {
+    let s_lua:LuaString = lua.create_string(format!("❗mv error"))?; let _ = pss.call::<()>(s_lua.clone()); return Ok(s_lua)
+    // return Err(ShellError::GenericError {
+    //   error: format!("{}", error),
+    //   msg: format!("{}", error),
+    //   span: None,
+    //   help: None,
+    //   inner: Vec::new(),
+    // });
+  }
+
+  // // Ask user confirmation for overwriting
+  // let win_id_objc:ShareId<Object> = get_win_id_objc(&nswin_lua)?; // convert pointer to Objc type
+  // WM.with(|wm| {
+  //   wm.save_marta(win_id_objc.clone()); //todo: move saving marta to open modal (check if saved)
+  //   wm.open_sheet(win_id_objc);
+  //   wm.on_message(Message::OpenOverwriteSheet); //todo: replace ↑
+  // });
+  // //TODO ↑ this returns after showing, how to block?
+
+  Ok(lua.create_string("Ok")?)
+}
+// todo: how to ask interactively about each item?
 
 
-  // Ask user confirmation for overwriting
+
+pub fn clipboard_trash(lua:&Lua, (ctx_a, is_confirm_a):(LuaAnyUserData, Option<LuaValue>)) -> LuaResult<LuaString> { // move clipboard files to trash, setting their extended attributes to the original path so that you could undo the operation later
+  // ctx_a = forwarded marta.ActionContext passed to action's apply function(), marta.sh/api/marta/actioncontext.type
+  // is_confirm_a = bool, whether to ask user's confirmation of the operation
+  // 0 Setup various helper constants
+  let g      	:LuaTable 	= lua.globals();
+  let marta  	:LuaTable 	= g.get("marta" 	)?;
+  let martax 	:LuaTable 	= g.get("martax"	)?;
+  let plug_id	:LuaString	= g.get("plugID"	)?;// requires global plugID in the init.lua
+  let pss    	:Function 	= g.get("pss"   	)?;// ...
+  let psl    	:Function 	= g.get("psl"   	)?;// ...
+
+  let alert	:Function	= martax.get("alert" )?;
+
+  let ctx_w  	:LuaAnyUserData	= ctx_a.get(ctxA::window      	)?;//
+  let ctx_g  	:LuaAnyUserData	= marta.get("globalContext"   	)?;//
+  let act_g  	:LuaAnyUserData	= ctx_g.get("actions"         	)?;//
+  // let fs_l	:LuaAnyUserData	= marta.localFileSystem       	--
+  let ctx_pa 	:LuaAnyUserData	= ctx_a.get(ctxA::activePane  	)?;//
+  let ctx_pn 	:LuaAnyUserData	= ctx_a.get(ctxA::inactivePane	)?;//
+  let model_a	:LuaAnyUserData	= ctx_pa.get(ctxP::model      	)?;// Active pane list model
+  let view_p 	:LuaAnyUserData	= ctx_pa.get(ctxP::view       	)?;//
+
+  // 1 Parse arguments passed from lua
+  let nswin_lua 	:LuaLightUserData	= ctx_w.get(ctxW::nsWindow	)?;//LightUserData<NSWindow>, equivalent to an unmanaged raw pointer
+  let nswin_rptr	:*mut c_void     	= nswin_lua.0; // get the pointer
+  if nswin_rptr.is_null() {let s_lua:LuaString = lua.create_string("✗ nswin_ptr.is_null")?;let _ = alert.call::<()>(s_lua.clone())?;
+    return Ok(lua.create_string("📋 got no pointer to the main window, can't create any dialogs…")?)
+  }
+
+  let is_confirm = match is_confirm_a {Some(LuaValue::Boolean(is_confirm_val)) => is_confirm_val,  _=>true};
+  if _d(1) {let s_rs:String = format!("got is_confirm_a: {} and is_confirm={}",is_confirm_a.is_some(),is_confirm);
+  let s_lua:LuaString = lua.create_string(&s_rs)?;let _ = alert.call::<()>(s_lua.clone())?;}
+
+  // 2 Check clipboard
+  let mut cc_res = String::new();
+  let cc_paths:Vec<std::path::PathBuf> = match clipboard_files::read() {
+    Ok (paths)	=> paths,
+    Err(e)    	=> {let s_lua:LuaString = lua.create_string(format!("⎋: 📋clipboard has no dir/file items"))?; let _ = psl.call::<()>(s_lua.clone()); return Ok(s_lua)},
+  };
+  cc_res.push_str(format!("📋clipboard has №{} dir/file items",cc_paths.len()).as_ref());
+  // todo: save the number to show in the dialog message box
+
+  // 3.1 Delete if no user confirmation is needed
+  if !is_confirm {
+    let _ = trash_all(&cc_paths);
+    return Ok(lua.create_string("Deleted")?)
+  }
+
+  // 3.2 Setup a callback to create a list of paths once a user confirmation is given
+  let s_lua:LuaString = lua.create_string(format!("📋clipboard cb_clipboard_trash"))?;
+  let cb_clipboard_trash = Box::new(move || -> Result<()> {
+    // let _ = psl.call::<()>(s_lua.clone());
+    // warn!("📋clipboard cb_clipboard_trash {}",&cc_paths.len());
+    let _ = trash_all(&cc_paths);
+    let _ = psl.call::<()>(format!("trash_all s_lua {}",&cc_paths.len()))?;
+    let _ = alert.call::<()>("sadfsdf")?;
+    // todo: print # of failed by reason and show a list in cacao gui? meanwhile just use the shorter lua wrappers
+    Ok(())
+  });
+
+  // 4 Ask user confirmation for overwriting (and pass our callback cb_clipboard_trash to actually delete)
   let win_id_objc:ShareId<Object> = get_win_id_objc(&nswin_lua)?; // convert pointer to Objc type
   WM.with(|wm| {
+    wm.save_cb(cb_clipboard_trash);
     wm.save_marta(win_id_objc.clone()); //todo: move saving marta to open modal (check if saved)
     wm.open_sheet(win_id_objc);
     wm.on_message(Message::OpenOverwriteSheet); //todo: replace ↑
   });
-  //TODO ↑ this returns after showing, how to block?
+
+  /*
+  warn!("move_cb_to"); // this creates a new event, outside of any spans.
+  // warn!("fn console(in_str)@Marta's Rust lua module es_rs.rs, in_str=‘{:?}’", path_to); // this creates a new event, outside of any spans.
+
+  // let sss:mlua::Value = path_to.into_os_string().into_lua(lua)?;
+  // let s_lua:LuaString = lua.create_string(sss)?;
+  // let s_lua:LuaString = lua.create_string(path_to.into_lua(lua)?)?;
+  // let s_lua:mlua::Value::String = path_to.into_lua(lua)?;
+  // let _ = alert.call::<()>(s_lua.clone())?;
+  use std::{ffi::OsString, path::PathBuf};
+  use uu_mv::{BackupMode, UpdateMode};
+  // 🗇🗍🗊🗐 suffix doesn't work with numbered backup
+  let overwrite_no                	= false;
+  let overwrite_ask               	= false;
+  let overwrite = if overwrite_no 	{uu_mv::OverwriteMode::NoClobber
+  } else          if overwrite_ask	{uu_mv::OverwriteMode::Interactive
+  } else                          	{uu_mv::OverwriteMode::Force};
+  let progress_bar                	= true;
+  let verbose                     	= false;
+  let arg_update                  	= false;
+  let update = if arg_update      	{UpdateMode::ReplaceIfOlder
+  } else                          	{UpdateMode::ReplaceAll};
+  let arg_backup = "no";
+  let backup = match arg_backup {
+    "no"	=> BackupMode::NoBackup,
+    "s" 	=> BackupMode::SimpleBackup,
+    "#" 	=> BackupMode::NumberedBackup,
+    "x" 	=> BackupMode::ExistingBackup,
+    _   	=> BackupMode::NoBackup,
+  };
+  let suffix = String::from("~");
+  let target_dir = Some(path_to.into_os_string());
+  //todo: how to do interactive intput from within a gui? redirect stdio?? or something
+
+  let options = uu_mv::Options {overwrite,progress_bar,verbose,suffix,backup,update, target_dir,no_target_dir:false,
+    strip_slashes:false, debug:false,};
+  let cc_paths_oss = cc_paths.into_iter().map(|p| p.into_os_string()).collect::<Vec<OsString>>();
+
+  if let Err(error) = uu_mv::mv(&cc_paths_oss, &options) {
+    let s_lua:LuaString = lua.create_string(format!("❗mv error"))?; let _ = pss.call::<()>(s_lua.clone()); return Ok(s_lua)
+    // return Err(ShellError::GenericError {
+    //   error: format!("{}", error),
+    //   msg: format!("{}", error),
+    //   span: None,
+    //   help: None,
+    //   inner: Vec::new(),
+    // });
+  }
+  */
 
   Ok(lua.create_string("Ok")?)
 }
