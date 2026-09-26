@@ -97,7 +97,7 @@ __Keybinds__: copy the `keyBindings` section from the [conf.marco](https://githu
 
 ## Known issues
 
-[Link](<https://github.com/eugenesvk/Marta.ext#Link>)
+[Link](#textcolorbluetextrm1textcolorgreytextrm-link)
 
   - Due to a lack of Marta alias/hardlink creation APIs (upvote the corresponding issues [alias](https://github.com/marta-file-manager/marta-issues/issues/351), [hardlink](https://github.com/marta-file-manager/marta-issues/issues/981)) you should install [alisma](https://eclecticlight.co/taccy-signet-precize-alifix-utiutility-alisma/) to create aliases (hardlinks are using the system `ln`)
     - [alisma 3a (Universal binary for El Capitan to Monterey)](https://eclecticlightdotcom.files.wordpress.com/2022/02/alisma3a.zip) or 
@@ -106,11 +106,11 @@ __Keybinds__: copy the `keyBindings` section from the [conf.marco](https://githu
   - After a hardlink is created the file list is not refreshed like it's when a symlink/alias is created, refresh manually to see the new file
   - Action names have the default icons even if the user specified custom ones, can't load user config on plugin load (see this [issue](https://github.com/marta-file-manager/marta-issues/issues/983)). Workaround: manually replace the icons in the `marta.action(` lines of your copy of the ['Link' plugin file](https://github.com/eugenesvk/Marta.ext/blob/main/Plugins/es¦file_link.lua)
 
-[Tab deduplication](<https://github.com/eugenesvk/Marta.ext#Tab-deduplication>)
+[Tab deduplication](#textcolorbluetextrm2textcolorgreytextrm-tab-deduplication)
 
   - Closing a tab with a mouse doesn't trigger anything; it also doesn't activate the left tab (see [this issue](https://github.com/marta-file-manager/marta-issues/issues/969))
 
-[Open alias](<https://github.com/eugenesvk/Marta.ext#Open-alias>)
+[Open alias](#textcolorbluetextrm3textcolorgreytextrm-open-alias)
 
   - When opening multiple folders in new tabs the displayed content might be from a different tab, switching back and forth should fix it
 
