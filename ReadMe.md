@@ -65,8 +65,8 @@ To customize the plugin behavior, paste the following configuration lines to you
 </details>
 
 To use the plugin add a key binding to `keyBindings { ⎀ }`
-  - `"Cmd+k"     "es¦🗁.open⤻alias"` using the plugin default or user configured values
-  - `"Cmd+j" {id "es¦🗁.open⤻alias" is_tab_multi true tab_max 4}` using per-command custom values
+  - `";"     "es¦🗁.open⤻alias"` using the plugin default or user configured values
+  - `"o" {id "es¦🗁.open⤻alias" is_tab_multi false tab_max 2}` using per-command custom values
 
 ['Open alias' plugin file](https://github.com/eugenesvk/Marta.ext/blob/main/Plugins/es¦🗁open⤻.lua)
 
