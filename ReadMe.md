@@ -45,6 +45,31 @@ Close all duplicate tabs (except for the currently active one):
 
 ['Tab deduplication' plugin file](https://github.com/eugenesvk/Marta.ext/blob/main/Plugins/es¦tab_✗dupe.lua)
 
+### $\textcolor{blue}{\textrm{3}}\textcolor{grey}{\textrm{.}}$ Open alias
+Opens ⤻Aliases to folders in Marta instead of the ≝handler like Finder ([bug report](https://github.com/marta-file-manager/marta-issues/issues/845)). Also works with multiple folder selections (including non-aliased) by opening them in new tabs unlike Marta's default open command, which only opens the first folder (configurable behavior via `is_tab_multi` up to `tab_max`).
+
+Note that opening an alias to folder replaces the original path in your url bar unlike with symlinks:
+  - `symlink = /original/path/symlink/path`
+  - `alias   =               /aliased/path`
+
+
+To customize the plugin behavior, paste the following configuration lines to you `behavior { actions { ⎀ }}` section and change them; the built-in [config editor](https://marta.sh/docs/configuration/editor/)[^1] contains helpful tips on what each option does and what values it accepts
+<details>
+  <summary>Click to expand config</summary>
+
+```
+  "es¦🗁.alias.is_tab_multi"	true
+  "es¦🗁.alias.tab_max"     	6
+```
+
+</details>
+
+To use the plugin add a key binding to `keyBindings { ⎀ }`
+  - `"Cmd+k"     "es¦🗁.open⤻alias"` using the plugin default or user configured values
+  - `"Cmd+j" {id "es¦🗁.open⤻alias" is_tab_multi true tab_max 4}` using per-command custom values
+
+['Open alias' plugin file](https://github.com/eugenesvk/Marta.ext/blob/main/Plugins/es¦🗁open⤻.lua)
+
 ## Theme
 
 ![Pane colors](<./img/Marta Pane.png>)
@@ -84,6 +109,10 @@ __Keybinds__: copy the `keyBindings` section from the [conf.marco](https://githu
 [Tab deduplication](<https://github.com/eugenesvk/Marta.ext#Tab-deduplication>)
 
   - Closing a tab with a mouse doesn't trigger anything; it also doesn't activate the left tab (see [this issue](https://github.com/marta-file-manager/marta-issues/issues/969))
+
+[Open alias](<https://github.com/eugenesvk/Marta.ext#Open-alias>)
+
+  - When opening multiple folders in new tabs the displayed content might be from a different tab, switching back and forth should fix it
 
 ## Credits
 
