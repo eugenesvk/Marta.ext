@@ -39,7 +39,7 @@ behavior {
   sizeFormat "adaptive"
   dateFormat  {normal "‘%y %b %e"}
   timeFormat  {normal "%k:%M"   separator " "}
-  volumeSpace {format "${availableSpace}🆓${availablePercent} use ${usedPercent} ${usedSpace}" show "always"}
+  volumeSpace {format "${availableSpace} ${availablePercent}   ${usedPercent} ${usedSpace}" show "always"}
 
   groupingSeparator	null
   decimalSeparator 	null
