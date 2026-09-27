@@ -242,8 +242,8 @@ keyBindings {
 
   "Ctrl+Alt+H" {id "core.open.directory" src "~"}
 
-  "k"               	"core.move.up"                   	"j"                 	"core.move.down"
-  "l"               	"core.move.left"                 	";"                 	"core.move.right"
+  "i"               	"core.move.up"                   	"k"                 	"core.move.down"
+  "j"               	"core.move.left"                 	"l"                 	"core.move.right"
   "Up"              	"core.move.up"                   	"Down"              	"core.move.down"
   "Alt+Up"          	"core.move.left"                 	"Alt+Down"          	"core.move.right"
   "Left"            	"core.move.left"                 	"Right"             	"core.move.right"
@@ -255,8 +255,8 @@ keyBindings {
   "Cmd+Left"        	"core.move.home"                 	"Cmd+Right"         	"core.move.end"
   "Shift+Home"      	"core.select.move.home"          	"Shift+End"         	"core.select.move.end"
   "Shift+Cmd+Left"  	"core.select.move.home"          	"Shift+Cmd+Right"   	"core.select.move.end"
-  "Shift+k"         	"core.select.move.up"            	"Shift+j"           	"core.select.move.down"
-  "Shift+l"         	"core.select.move.left"          	"Shift+;"           	"core.select.move.right"
+  "Shift+i"         	"core.select.move.up"            	"Shift+k"           	"core.select.move.down"
+  "Shift+j"         	"core.select.move.left"          	"Shift+l"           	"core.select.move.right"
   "Shift+Up"        	"core.select.move.up"            	"Shift+Down"        	"core.select.move.down"
   "Shift+Left"      	"core.select.move.left"          	"Shift+Right"       	"core.select.move.right"
   "Shift+PageUp"    	"core.select.move.page.up"       	"Shift+PageDown"    	"core.select.move.page.down"
