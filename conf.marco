@@ -1,6 +1,6 @@
 environment {
   terminal  	"iTerm"
-  textEditor	"/Applications/2 Play/1 Text/Sublime Text.app"
+  textEditor	"com.sublimetext.4"
 }
 behavior {
   theme "esWhite"
