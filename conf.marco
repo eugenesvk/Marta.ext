@@ -30,6 +30,8 @@ behavior {
     "es¦file.link.maxIterNo"        	0
     "es¦file.link.binAlias"         	"/usr/local/bin/alisma"
     "es¦file.link.binHard"          	"/opt/local/libexec/gnubin/ln"
+    "es¦🗁.alias.is_tab_multi"       	true
+    "es¦🗁.alias.tab_max"            	8
     core.trash.confirm              	true
     core.delete.confirm             	true
     core.preferences.use.text.editor	false
