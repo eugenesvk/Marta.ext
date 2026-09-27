@@ -238,7 +238,24 @@ fonts {
 keyBindings {
   "Cmd+X" "es¦cut.📋cut"
   "Cmd+=" "es¦cut.📋paste.move.cut"
-  "Alt+Cmd+q" {id "core.run.actions" actions ["core.tab.new" "core.tab.new"]}
+  "Cmd+-" "es¦cut.📋move.🗑trash"
+
+  "q"          	"es¦interop.rust"
+  "Shift+w"    	"es¦tab_in_rust.✗tab_n_dupe"
+  "Alt+i"          	"es¦file.ℹnf"
+  "w"          	"es¦file.ℹnf"
+  "Shift+q"    	"es¦test.notify"
+  "Cmd+s"      	"marta.test.plugin.show"
+  "Shift+Cmd+R"	"marta.example.fileinfo.show"
+  "Shift+Cmd+E"	"com.marta.example.helloworld.action"
+  "Shift+Alt+q"   {id "core.run.actions" actions {
+      "can_t duplicate actions, keys must be unique"   null
+      "core.move.down" null
+      "core.move.up"   null
+      "core.tab.new"   null
+  }}
+
+
 
   "e"	"core.actions"	"a"	"core.actions"	"Cmd+E"	"core.actions"	"Shift+Cmd+P"	null
 
