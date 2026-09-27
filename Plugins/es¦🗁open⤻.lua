@@ -8,7 +8,7 @@ local plugP	= ctxG.application.pluginFolder -- .rawValue BUG github.com/marta-fi
 
 marta.action({id="open⤻alias",name="Open, incl. alias⤻🗁",shortName="⤻Alias",menuName="Open+alias⤻🗁",
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
-  apply        = function(ctxA) open_alias({ctxA=ctxA,is_tab_multi,tab_max})  ; end})
+  apply        = function(ctxA) open_alias({ctxA=ctxA})  ; end})
 
 local cfgID = "alias"
 local cfgPP = plugID ..'.'.. cfgID ..'.' -- config path prefix
