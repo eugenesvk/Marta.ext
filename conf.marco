@@ -306,10 +306,12 @@ keyBindings {
   "Alt+."             	"core.clone.left"       	"Alt+/"          	"core.clone.right"
   "Alt+Cmd+Left"      	"core.clone.left"       	"Alt+Cmd+Right"  	"core.clone.right"
 
-  "o"           	"core.open" 	"i" "core.open"   	"Return"    "core.open" 	"Cmd+Return"  "core.open.with"
-  "h"           	"core.go.up"	                  	"Backspace" "core.go.up"
-  "u"           	"core.back" 	"y" "core.forward"	"Cmd+["     "core.back" 	"Cmd+]" "core.forward"	"z"     "core.back"	"x" "core.forward"
-  "Cmd+G"       	"core.go"   	"G" "core.go"
+  "o"           	{id "es¦🗁.open⤻alias" is_tab_multi false}
+  ";"           	"es¦🗁.open⤻alias"	"Return"    "core.open"	"Cmd+Return"  "core.open.with"	"Cmd+o"  "core.open.with"
+  "h"           	"core.go.up"     	                       	"Backspace" "core.go.up"
+  "u"           	"core.back"      	"y" "core.forward"     	"Cmd+["     "core.back"	"Cmd+]" "core.forward"	"z"     "core.back"	"x" "core.forward"
+  "Cmd+G"       	"core.go"        	"G" "core.go"
+  "Shift+;"     	"core.open"
   "Shift+o"     	{id "core.open.folder" mode "newTab"}
   "Shift+Return"	{id "core.open.folder" mode "newTab"}
   "Alt+o"       	{id "core.open.folder" mode "newTabBackground"}
