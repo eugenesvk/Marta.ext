@@ -11,6 +11,15 @@ behavior {
     showActionBar   	true
   }
   setCurrentPathAsWindowTitle	true
+  files {
+    defaultLocation    	"~"
+    dragDrop           	true
+    fileWatcher        	true
+    globalFilter       	{
+      alwaysShowFolders	true
+      name             	[ "^(?!\\.DS_Store$).*$" ]
+    }
+  }
 
   actions {
     "es¦file.link.affixSym"         	"🔗"
