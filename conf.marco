@@ -84,36 +84,28 @@ behavior {
 }
 
 gadgets [
-  {id          	"gadget.sublime.text"
-    name       	"Open in Sublime Text Editor"
-    type       	"application"
-    application	"/Applications/2 Play/1 Text/Sublime Text.app"
-    "files"    	["${active.selection.paths}"]
-  }
-  {id "gadget.action.my.application.runner"
-    name       	"My Application Runner"
-    type       	"application"
-    application	"iTerm"
-    "files"    	["${active.selection.paths}"]
-  }
-  {id "gadget.action.my.executable.runner"
-    name            	"My Executable Runner"
-    type            	"executable"
-    executable      	"/usr/local/bin/marta1"
+  { name            	"Open in Sublime Text Editor"	id  	"gadget.sublime.text"
+    application     	"com.sublimetext.4"          	type	"application"
+    "files"         	["${active.selection.paths}"]}
+  { name            	"My Application Runner"	id  	"gadget.action.my.application.runner"
+    application     	"iTerm"                	type	"application"
+    "files"         	["${active.selection.paths}"]}
+  { name            	"My Executable Runner" 	id "gadget.action.my.executable.runner"
+    executable      	"/usr/local/bin/marta1"	type	"executable"
     args            	["${active.selection.paths}" "--some-option" ]
-    workingDirectory	"${user.home}"
-  }
-  {id "gadget.help" name "ghelp" type "executable" executable "/" args [
-    "Variable name              "    "Description"
-    "${active.selection.paths}  "    "Selected item   paths (active   pane) (*)"
-    "${active.selection.names}  "    "Selected item   names (active   pane) (*)"
-    "${inactive.selection.paths}"    "Selected item   paths (inactive pane) (*)"
-    "${inactive.selection.names}"    "Selected item   names (inactive pane) (*)"
-    "${current.file.path}       "    "Current  file   path  (active   pane)    "
-    "${current.file.name}       "    "Current  file   name  (active   pane)    "
-    "${active.folder.path}      "    "Current  folder path  (active   pane)    "
-    "${inactive.folder.path}    "    "Current  folder path  (inactive pane)    "
-    "${user.home}               "    "User home directory" ]}
+    workingDirectory	"${user.home}"}
+  { name "_ghelp"   	id 	"gadget.help.cli"
+    executable      	"/"	type	"executable" args [
+    "${Variable name}        " "Description"
+    "active.selection.paths  " "Selected item   paths (active   pane) (*)"
+    "active.selection.names  " "Selected item   names (active   pane) (*)"
+    "inactive.selection.paths" "Selected item   paths (inactive pane) (*)"
+    "inactive.selection.names" "Selected item   names (inactive pane) (*)"
+    "current.file.path       " "Current  file   path  (active   pane)    "
+    "current.file.name       " "Current  file   name  (active   pane)    "
+    "active.folder.path      " "Current  folder path  (active   pane)    "
+    "inactive.folder.path    " "Current  folder path  (inactive pane)    "
+    "user.home               " "User home directory" ]}
 ]
 
 setup {
