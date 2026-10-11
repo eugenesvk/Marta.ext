@@ -88,11 +88,13 @@ function open_alias(arg)
 
   local err_m = ""
   local dir_count = 0
+  local sym_count = 0
   for i, tgtFI in ipairs(filesInf) do -- Iterate thru active=(selected¦cursor) files
     local file  	= tgtFI.file
     local name  	= tgtFI.name
     local path  	= tgtFI.path
     local is_dir	= tgtFI.isFolder -- open in a new tab since you can't open many dirs in Marta unlike files that call external apps
+    local is_sym	= tgtFI.isSymbolicLink -- same ↑
     local passthru = true -- use the builtin open command
 
     if tgtFI.isAlias then
@@ -102,21 +104,24 @@ function open_alias(arg)
         local _, info = target:readInfo("node")
         if info then
           path = info.path
-          file = info.file
+          if not is_sym or is_nav_orig then
+            file = info.file; end
           if info.isFolder then is_dir = true; passthru = false; end
         end
       else end
     end
 
-    if is_dir then
+    if     is_dir then
       dir_count = dir_count + 1
       if  is_tab_multi             	  then
         if     (dir_count > tab_max	) then -- don't open dirs above max count
-        elseif (dir_count > 1      	) then open_tab  (file)
+        elseif (dir_count > 1      	) then if is_sym
+          then                     	       open_dir_tab(file)
+          else                     	       open_tab  (file); end
         else                       	       open_dir  (file) end	--
       elseif   (dir_count > 1      	) then                     	-- ignore mutiple dirs without multitab option
       else                         	       open_dir  (file) end	-- open     1 dir
-    else                           	       martax.openFiles(file.path.rawValue) end -- open not a dir
+    else                                   martax.openFiles(file.path.rawValue); end -- open not a dir/symlink
     -- core.open/core.open.folder.tab  operate on ALL selected items, so will dupe effort and replicate the original bug
     -- similarly, core.navigate.original/….tab requires a custom context, at which point we have alias resolved and can use core.open.folder
   end
