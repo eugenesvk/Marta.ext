@@ -17,6 +17,9 @@ marta.action({id="📋paste.move.cut",name="Move ‘📋✄Cut’ / paste copied
 marta.action({id="📋paste.move.any",name="Paste & move 📋clipboard items to the active tab", -- (even if not added via ‘📋cut’, but ‘core.clipboard.copy’)
   isApplicable = function(ctxA) return ctxA.activePane.model.isLocalFileSystem end,
   apply        = function(ctxA) clipboard_cut_paste({ctxA=ctxA,op="move.any"})  ; end})
+marta.action({id="📋move.🗑trash",name="🗑Delete 📋clipboard items",
+  isApplicable = function(ctxA) return martax.clipboard.getString() ~= nil end,
+  apply        = function(ctxA) clipboard_trash({ctxA=ctxA,is_confirm=true})  ; end})
 
 local _d = 1
 
@@ -89,4 +92,31 @@ function clipboard_cut_paste(arg)
   --   if   (is_cut == true      ) then is_cut = false else dbg(2,"No items were ‘📋cut’, moving copied…") end
   --   libes_rs.move_to(path_to)
   -- end
+end
+
+function clipboard_trash(arg)
+  local ctxA    	= arg.ctxA	-- holds refs to PaneContext instances for active+inactive panes
+  local ctxW    	= ctxA.window
+  local ctxG    	= marta.globalContext	--
+  local actG    	= ctxG.actions
+  local fsL     	= marta.localFileSystem	--
+  local ctxPA   	= ctxA.activePane      	--
+  local ctxP_inA	= ctxA.inactivePane    	--
+  local modelA  	= ctxPA.model          	-- Active pane list model
+  local viewP   	= ctxPA.view           	--
+
+  function pss(msg) viewP:showNotification(msg,plugID,"short") end -- short-term "print" to the statusbar
+  function psl(msg) viewP:showNotification(msg,plugID,"long" ) end -- long-term  "print" to the statusbar
+  function dbg(l,msg) if (_d>=l) then pss(msg) end end -- short-term "print" to the statusbar if dbg≥level
+  function run_action(action) ctxW:runAction(actG:getById(action),ctxPA) end -- run marta actions
+
+  -- todo: get is_confirm value from user settings `core.trash.confirm` or use plugin specific config that can be overriden
+  local is_confirm = true
+  if     (arg.is_confirm ~= nil ) then is_confirm = true
+  elseif (arg.is_confirm == true) then is_confirm = true
+  else                                 is_confirm = false
+  end
+
+  local cb_res = libes_rs.clipboard_trash(ctxA, is_confirm)
+  -- psl("cb_res = "..cb_res)
 end
