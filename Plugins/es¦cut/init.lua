@@ -34,30 +34,45 @@ function clipboard_cut_paste(arg)
 
   function pss(msg) viewP:showNotification(msg,plugID,"short") end -- short-term "print" to the statusbar
   function psl(msg) viewP:showNotification(msg,plugID,"long" ) end -- long-term  "print" to the statusbar
-  function dbg(l,msg) if (_d>=l) then pss(msg) end end -- short-term "print" to the statusbar
-  function run_action(action) ctxW:runAction(actG:getById(action),ctxPA) end -- short-term "print" to the statusbar
+  function dbg(l,msg) if (_d>=l) then pss(msg) end end -- short-term "print" to the statusbar if dbg≥level
+  function run_action(action) ctxW:runAction(actG:getById(action),ctxPA) end -- run marta actions
 
+  local is_fs = modelA.isLocalFileSystem -- ignore non-folders, e.g., zip files
+  -- if not is_fs then dbg(1,plugID.."📋 can't run in a non-local filesystem"); return; end
+  local is_dir = false
+  local parentFdInf = modelA.folderInfo
+  local path_to
+  if   parentFdInf then
+    path_to = parentFdInf.path.rawValue
+    if parentFdInf.isFolder then is_dir = true end
+  end
+  local can_paste = is_fs and is_dir
+  -- if _d>=4 then pss("can_paste="..tostring(can_paste).." local_fs="..tostring(is_fs).." dir="..tostring(is_dir)) end
+  -- local cb_res = libes_rs.move_to(ctxA, path_to)
+  -- psl("cb_res = "..cb_res)
+
+  -- temporary testing
   -- local cb_alert = function(name) if name then martax.alert("Hello, " .. name .. "!") end end
   cb_alert = function(name) martax.alert(name) end
-  local cb_res = libes_rs.ask_overwrite(ctxA, cb_alert)
+  force = true -- force overwriting without asking for it
+  -- local cb_res = libes_rs.ask_overwrite(ctxA, path_to, force)
   -- psl("cb_res = "..cb_res)
   -- psl(type(ctxW.nsWindow)) -- userdata
   -- psl(type(cb_alert))
 
+  --FAILS since can't block action until the previous completes, so can't delete it
+  -- local ddd = run_action("core.clipboard.paste")
+  --   -- psl('ddd='..tostring(ddd))
+  --   psl(ddd)
+  -- -- how to wait till success ↑ before executing ↓?
+  -- run_action("core.delete")
 
-  -- local is_fs = modelA.isLocalFileSystem -- ignore non-folders, e.g., zip files
-  -- if not is_fs then dbg(1,plugID.."📋 can't run in a non-local filesystem"); return; end
-  -- local is_dir = false
-  -- local parentFdInf = modelA.folderInfo
-  -- local path_to
-  -- if   parentFdInf then
-  --   path_to = parentFdInf.path.rawValue
-  --   if parentFdInf.isFolder then is_dir = true end
-  -- end
-  -- local can_paste = is_fs and is_dir
-  -- if _d>=4 then pss("can_paste="..tostring(can_paste).." local_fs="..tostring(is_fs).." dir="..tostring(is_dir)) end
-  -- local cb_res = libes_rs.move_to(ctxA, path_to)
-  -- psl("cb_res = "..cb_res)
+
+
+
+
+
+
 
   -- psl(type(ctxA.args))
 
