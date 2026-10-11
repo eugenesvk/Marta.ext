@@ -8,14 +8,14 @@ local plugP	= ctxG.application.pluginFolder -- .rawValue BUG github.com/marta-fi
 package.cpath = package.cpath ..';'.. plugP..'/lib/?.dylib'
 local libes_rs	= require "libes_rs" -- name = `#[mlua::lua_module(name="es_rs")]` annotated fn at es_rs.lib.rs
 
-marta.action({id="📋cut",name="Cut the currently selected items to the 📋clipboard ()"  ,
+marta.action({id="📋cut",name="✄Cut selected items to the 📋clipboard",
   isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
   apply        = function(ctxA) clipboard_cut_paste({ctxA=ctxA,op="cut"})  ; end})
-marta.action({id="📋paste.move.cut",name="Move the previously ‘📋cut’ items to the currently active tab or paste copied items"  ,
-  isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
+marta.action({id="📋paste.move.cut",name="Move ‘📋✄Cut’ / paste copied items to the active tab",
+  isApplicable = function(ctxA) return ctxA.activePane.model.isLocalFileSystem end,
   apply        = function(ctxA) clipboard_cut_paste({ctxA=ctxA,op="move"})  ; end})
-marta.action({id="📋paste.move.any",name="Paste&move any items from the 📋clipboard to the currently active tab (even if not added via ‘📋cut’, but ‘core.clipboard.copy’)"  ,
-  isApplicable = function(ctxA) return ctxA.activePane.model.hasActiveFiles end,
+marta.action({id="📋paste.move.any",name="Paste & move 📋clipboard items to the active tab", -- (even if not added via ‘📋cut’, but ‘core.clipboard.copy’)
+  isApplicable = function(ctxA) return ctxA.activePane.model.isLocalFileSystem end,
   apply        = function(ctxA) clipboard_cut_paste({ctxA=ctxA,op="move.any"})  ; end})
 
 local _d = 1
