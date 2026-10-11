@@ -35,6 +35,7 @@ function open_alias(arg)
   function pss(msg) viewP:showNotification(msg,plugID,"short") end -- short-term "print" → statusbar
   function psl(msg) viewP:showNotification(msg,plugID,"long" ) end -- long -term "print" → statusbar
   function dbg(l,msg) if (_d>=l) then pss(msg) end end -- short-term "print" to the statusbar if dbg≥level
+  function _d0(  msg) if (_d>=0) then pss(msg) end end
   function _d1(  msg) if (_d>=1) then pss(msg) end end
   function _d2(  msg) if (_d>=2) then pss(msg) end end
   function _d3(  msg) if (_d>=3) then pss(msg) end end
