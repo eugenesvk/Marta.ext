@@ -32,6 +32,7 @@ behavior {
     "es¦file.link.binHard"          	"/opt/local/libexec/gnubin/ln"
     "es¦🗁.alias.is_tab_multi"       	true
     "es¦🗁.alias.tab_max"            	8
+    "es¦🗁.alias.is_nav_orig"        	false
     core.trash.confirm              	true
     core.delete.confirm             	true
     core.preferences.use.text.editor	false
