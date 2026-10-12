@@ -83,6 +83,15 @@ function open_alias(arg)
     }
     run_act_ctx("core.open.folder",my_ctxA)
   end
+  function open_dir_tab(file   ) -- create custom context to pass to Marta's open folder action to use a  new tab
+    -- martax.alert("opening dir in a new tab = " ..file.path.rawValue)
+    local my_ctxA = {window=ctxW, toWeak = function() ctxA:toWeak() end,
+      activePane  =ctxA.  activePane,
+      inactivePane=ctxA.inactivePane,
+      args = {src = file.path.rawValue}, -- Dictionary<String, Any>
+    }
+    run_act_ctx("core.open.folder.tab",my_ctxA)
+  end
 
   if #filesInf == 0 then _d1("open⤻alias: no selection") return end -- skip an empty dir
 
