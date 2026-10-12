@@ -52,12 +52,14 @@ Note that opening an alias to folder replaces the original path in your url bar 
   - `symlink = /original/path/symlink/path`
   - `alias   =               /aliased/path`
 
+Opening a symlink retains the default Marta behavior unless `is_nav_orig` is `true`)
 
 To customize the plugin behavior, paste the following configuration lines to you `behavior { actions { ⎀ }}` section and change them; the built-in [config editor](https://marta.sh/docs/configuration/editor/)[^1] contains helpful tips on what each option does and what values it accepts
 <details>
   <summary>Click to expand config</summary>
 
 ```
+  "es¦🗁.alias.is_nav_orig" 	false
   "es¦🗁.alias.is_tab_multi"	true
   "es¦🗁.alias.tab_max"     	6
 ```
@@ -66,7 +68,7 @@ To customize the plugin behavior, paste the following configuration lines to you
 
 To use the plugin add a key binding to `keyBindings { ⎀ }`
   - `";"     "es¦🗁.open⤻alias"` using the plugin default or user configured values
-  - `"o" {id "es¦🗁.open⤻alias" is_tab_multi false tab_max 2}` using per-command custom values
+  - `"o" {id "es¦🗁.open⤻alias" is_nav_orig false  is_tab_multi false tab_max 2}` using per-command custom values
 
 ['Open alias' plugin file](https://github.com/eugenesvk/Marta.ext/blob/main/Plugins/es¦🗁open⤻.lua)
 
