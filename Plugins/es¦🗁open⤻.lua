@@ -14,6 +14,8 @@ local cfgID = "alias"
 local cfgPP = plugID ..'.'.. cfgID ..'.' -- config path prefix
 marta.configurationKey("behavior","actions",cfgPP .. "is_tab_multi",{typeConstraints={"boolean"},examples={"t̳r̳u̳e̳","false"},
   description = "Open 2nd+ (alias⤻) folder in a new tab (d̳e̳f̳, up to 'tab_max')",})
+marta.configurationKey("behavior","actions",cfgPP .. "is_nav_orig",{typeConstraints={"boolean"},examples={"true","f̳a̳l̳s̳e̳"},
+  description = "Open symlink target (d̳e̳f̳)",})
 marta.configurationKey("behavior","actions",cfgPP .. "tab_max"     ,{typeConstraints={"int"    },examples={"6̳"   ,"1"    },
   description = "When multiple (aliases⤻) folders selected, open up to this many in new tabs (d̳e̳f̳, inclusive)",})
 
@@ -43,15 +45,19 @@ function open_alias(arg)
   -- Get and validate user configuration values
   local cfgDef,cfgPath,cfgBeh,cfgAct, cfgTMulti,cfgTMax, is_tab_multi,tab_max
 
-  cfgDef      	 = {["is_tab_multi"]=true,["tab_max"]=6,}
-  cfgAct      	 = ctxG:get("behavior","actions") -- crashes without the extra path element
-  if cfgAct   	~= nil then
-    cfgTMulti 	 = cfgAct[cfgPP .. "is_tab_multi"  ]
-    cfgTMax   	 = cfgAct[cfgPP .. "tab_max"    ] end
+  cfgDef     	 = {["is_tab_multi"]=true,["tab_max"]=6,["is_nav_orig"]=false}
+  cfgAct     	 = ctxG:get("behavior","actions") -- crashes without the extra path element
+  if cfgAct  	~= nil then
+    cfgTMulti	 = cfgAct[cfgPP .. "is_tab_multi"]
+    cfgNavOrg	 = cfgAct[cfgPP .. "is_nav_orig" ]
+    cfgTMax  	 = cfgAct[cfgPP .. "tab_max"     ] end
   -- function argument → config → ≝
   if is_tab_multi	==nil then is_tab_multi	=arg_u.is_tab_multi    	end
   if is_tab_multi	==nil then is_tab_multi	=cfgTMulti             	end
   if is_tab_multi	==nil then is_tab_multi	=cfgDef['is_tab_multi']	end
+  if is_nav_orig 	==nil then is_nav_orig 	=arg_u.is_nav_orig     	end
+  if is_nav_orig 	==nil then is_nav_orig 	=cfgNavOrg             	end
+  if is_nav_orig 	==nil then is_nav_orig 	=cfgDef['is_nav_orig'] 	end
   if tab_max     	==nil then tab_max     	=arg_u.tab_max         	end
   if tab_max     	==nil then tab_max     	=cfgTMax               	end
   if tab_max     	==nil then tab_max     	=cfgDef['tab_max']     	end
@@ -59,11 +65,14 @@ function open_alias(arg)
   local _s = " config, using ≝'"
   if (type(is_tab_multi	) ~= "boolean"            	)                               	--
     then   is_tab_multi	   = cfgDef['is_tab_multi'	];pss(_e..cfgPP.."is_tab_multi’"	.._s..is_tab_multi.."’") end
+  if (type(is_nav_orig 	) ~= "boolean"            	)                               	--
+    then   is_nav_orig 	   = cfgDef['is_nav_orig' 	];pss(_e..cfgPP.."is_nav_orig’" 	.._s..is_nav_orig.."’") end
   if (type(tab_max     	) ~= "number"             	)                               	--
     or (not            	isint(tab_max             	)                               	--
     or (   tab_max     	< 0)                      	)                               	--
     then   tab_max     	   = cfgDef['tab_max'     	];pss(_e..cfgPP.."tab_max’"     	.._s..tab_max.."’" ) end
   if _d>=2 then psl("res= " ..tostring(is_tab_multi).. " UsrArg=" .. tostring(arg_u.is_tab_multi) .. " UsrCfg=" .. tostring(cfgTMulti) .. " ≝" .. tostring(cfgDef['is_tab_multi'])) end
+  if _d>=2 then psl("res= " ..tostring(is_nav_orig ).. " UsrArg=" .. tostring(arg_u.is_nav_orig ) .. " UsrCfg=" .. tostring(cfgNavOrg) .. " ≝" .. tostring(cfgDef['is_nav_orig' ])) end
   if _d>=3 then martax.alert("Config vs Validated",(tostring(cfgTMulti) or '✗') ..'|'.. (tostring(cfgTMax) or '✗')) end
 
 
